@@ -19,6 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     /// <summary>
@@ -29,9 +32,9 @@ namespace UnitsNet.CustomCode.Extensions
         /// <summary>
         ///     Gets <see cref="Molarity" /> from <see cref="Density" />.
         /// </summary>
-        public static Molarity ToMolarity(this Density density, Mass molecularWeight)
+        public static Molarity<double, DoubleCalculator> ToMolarity(this Density<double, DoubleCalculator> density, Mass<double, DoubleCalculator> molecularWeight)
         {
-            return Density.ToMolarity(density, molecularWeight);
+            return Density<double, DoubleCalculator>.ToMolarity(density, molecularWeight);
         }
     }
 }

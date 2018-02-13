@@ -19,6 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     /// <summary>
@@ -35,9 +38,9 @@ namespace UnitsNet.CustomCode.Extensions
         ///         <c>var power = powerRatio.ToPower();</c>
         ///     </example>
         /// </remarks>
-        public static Power ToPower(this PowerRatio powerRatio)
+        public static Power<double, DoubleCalculator> ToPower(this PowerRatio<double, DoubleCalculator> powerRatio)
         {
-            return PowerRatio.ToPower(powerRatio);
+            return PowerRatio<double, DoubleCalculator>.ToPower(powerRatio);
         }
 
         /// <summary>
@@ -45,9 +48,9 @@ namespace UnitsNet.CustomCode.Extensions
         /// </summary>
         /// <param name="powerRatio">The power ratio.</param>
         /// <param name="impedance">The input impedance of the load. This is usually 50, 75 or 600 ohms.</param>
-        public static AmplitudeRatio ToAmplitudeRatio(this PowerRatio powerRatio, ElectricResistance impedance)
+        public static AmplitudeRatio<double, DoubleCalculator> ToAmplitudeRatio(this PowerRatio<double, DoubleCalculator> powerRatio, ElectricResistance<double, DoubleCalculator> impedance)
         {
-            return PowerRatio.ToAmplitudeRatio(powerRatio, impedance);
+            return PowerRatio<double, DoubleCalculator>.ToAmplitudeRatio(powerRatio, impedance);
         }
     }
 }

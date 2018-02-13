@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -8,7 +8,9 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Molarity
 #else
-    public partial struct Molarity
+    public partial class Molarity<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
@@ -17,7 +19,7 @@ namespace UnitsNet
 #else
         public
 #endif
-            Molarity(Density density, Mass molecularWeight)
+            Molarity(Density<T, C> density, Mass<T, C> molecularWeight)
             : this()
         {
             _molesPerCubicMeter = density.KilogramsPerCubicMeter / molecularWeight.Kilograms;
@@ -28,9 +30,9 @@ namespace UnitsNet
         /// </summary>
         /// <param name="density"></param>
         /// <param name="molecularWeight"></param>
-        public static Molarity FromDensity(Density density, Mass molecularWeight)
+        public static Molarity<T, C> FromDensity(Density<T, C> density, Mass<T, C> molecularWeight)
         {
-            return new Molarity(density, molecularWeight);
+            return new Molarity<T, C>(density, molecularWeight);
         }
 
         /// <summary>
@@ -39,9 +41,9 @@ namespace UnitsNet
         /// <param name="molarity"></param>
         /// <param name="molecularWeight"></param>
         /// <returns></returns>
-        public static Density ToDensity(Molarity molarity, Mass molecularWeight)
+        public static Density<T, C> ToDensity(Molarity<T, C> molarity, Mass<T, C> molecularWeight)
         {
-            return Density.FromKilogramsPerCubicMeter(molarity.MolesPerCubicMeter * molecularWeight.Kilograms);
+            return Density<T, C>.FromKilogramsPerCubicMeter(molarity.MolesPerCubicMeter * molecularWeight.Kilograms);
         }
     }
 }

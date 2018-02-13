@@ -29,7 +29,7 @@ using Culture=System.String;
 using Culture=System.IFormatProvider;
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -37,7 +37,9 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Length
 #else
-    public partial struct Length
+    public partial class Length<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         private const double FeetToInches = 12;
@@ -49,9 +51,9 @@ namespace UnitsNet
         {
             get
             {
-                double totalInches = Inches;
-                double wholeFeet = Math.Floor(totalInches/FeetToInches);
-                double inches = totalInches%FeetToInches;
+                var totalInches = Inches;
+                var wholeFeet = new C().ConvertToDouble(new C().Floor(totalInches/FeetToInches));
+                var inches = new C().ConvertToDouble(totalInches) % FeetToInches;
 
                 return new FeetInches(wholeFeet, inches);
             }
@@ -60,56 +62,56 @@ namespace UnitsNet
         /// <summary>
         ///     Get length from combination of feet and inches.
         /// </summary>
-        public static Length FromFeetInches(double feet, double inches)
+        public static Length<T, C> FromFeetInches(double feet, double inches)
         {
             return FromInches(FeetToInches*feet + inches);
         }
 
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Speed operator /(Length length, TimeSpan timeSpan)
+        public static Speed<T, C> operator /(Length<T, C> length, TimeSpan timeSpan)
         {
-            return Speed.FromMetersPerSecond(length.Meters/timeSpan.TotalSeconds);
+            return Speed<T, C>.FromMetersPerSecond(length.Meters/timeSpan.TotalSeconds);
         }
 
-        public static Speed operator /(Length length, Duration duration)
+        public static Speed<T, C> operator /(Length<T, C> length, Duration<T, C> duration)
         {
-            return Speed.FromMetersPerSecond(length.Meters/duration.Seconds);
+            return Speed<T, C>.FromMetersPerSecond(length.Meters/duration.Seconds);
         }
 
-        public static Duration operator /(Length length, Speed speed)
+        public static Duration<T, C> operator /(Length<T, C> length, Speed<T, C> speed)
         {
-            return Duration.FromSeconds(length.Meters/speed.MetersPerSecond);
+            return Duration<T, C>.FromSeconds(length.Meters/speed.MetersPerSecond);
         }
 
-        public static Area operator *(Length length1, Length length2)
+        public static Area<T, C> operator *(Length<T, C> length1, Length<T, C> length2)
         {
-            return Area.FromSquareMeters(length1.Meters*length2.Meters);
+            return Area<T, C>.FromSquareMeters(length1.Meters*length2.Meters);
         }
 
-        public static Volume operator *(Area area, Length length)
+        public static Volume<T, C> operator *(Area<T, C> area, Length<T, C> length)
         {
-            return Volume.FromCubicMeters(area.SquareMeters*length.Meters);
+            return Volume<T, C>.FromCubicMeters(area.SquareMeters*length.Meters);
         }
 
-        public static Volume operator *(Length length, Area area)
+        public static Volume<T, C> operator *(Length<T, C> length, Area<T, C> area)
         {
-            return Volume.FromCubicMeters(area.SquareMeters*length.Meters);
+            return Volume<T, C>.FromCubicMeters(area.SquareMeters*length.Meters);
         }
 
-        public static Torque operator *(Force force, Length length)
+        public static Torque<T, C> operator *(Force<T, C> force, Length<T, C> length)
         {
-            return Torque.FromNewtonMeters(force.Newtons*length.Meters);
+            return Torque<T, C>.FromNewtonMeters(force.Newtons*length.Meters);
         }
 
-        public static Torque operator *(Length length, Force force)
+        public static Torque<T, C> operator *(Length<T, C> length, Force<T, C> force)
         {
-            return Torque.FromNewtonMeters(force.Newtons*length.Meters);
+            return Torque<T, C>.FromNewtonMeters(force.Newtons*length.Meters);
         }
 
-        public static KinematicViscosity operator *(Length length, Speed speed)
+        public static KinematicViscosity<T, C> operator *(Length<T, C> length, Speed<T, C> speed)
         {
-            return KinematicViscosity.FromSquareMetersPerSecond(length.Meters*speed.MetersPerSecond);
+            return KinematicViscosity<T, C>.FromSquareMetersPerSecond(length.Meters*speed.MetersPerSecond);
         }
 #endif
     }

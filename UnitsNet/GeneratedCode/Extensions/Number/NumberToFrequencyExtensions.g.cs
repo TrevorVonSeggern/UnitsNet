@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,238 +48,133 @@ namespace UnitsNet.Extensions.NumberToFrequency
         #region CyclePerHour
 
         /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
-        public static Frequency CyclesPerHour(this int value) => Frequency.FromCyclesPerHour(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double?)"/>
-        public static Frequency? CyclesPerHour(this int? value) => Frequency.FromCyclesPerHour(value);
+        public static Frequency CyclesPerHour(this int value) => (Frequency)Frequency.FromCyclesPerHour(value);
+	
+        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
+        public static Frequency CyclesPerHour(this long value) => (Frequency)Frequency.FromCyclesPerHour(value);
 
         /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
-        public static Frequency CyclesPerHour(this long value) => Frequency.FromCyclesPerHour(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double?)"/>
-        public static Frequency? CyclesPerHour(this long? value) => Frequency.FromCyclesPerHour(value);
+        public static Frequency CyclesPerHour(this double value) => (Frequency)Frequency.FromCyclesPerHour(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
-        public static Frequency CyclesPerHour(this double value) => Frequency.FromCyclesPerHour(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double?)"/>
-        public static Frequency? CyclesPerHour(this double? value) => Frequency.FromCyclesPerHour(value);
+        public static Frequency CyclesPerHour(this float value) => (Frequency)Frequency.FromCyclesPerHour(value);
 
         /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
-        public static Frequency CyclesPerHour(this float value) => Frequency.FromCyclesPerHour(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double?)"/>
-        public static Frequency? CyclesPerHour(this float? value) => Frequency.FromCyclesPerHour(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double)"/>
-        public static Frequency CyclesPerHour(this decimal value) => Frequency.FromCyclesPerHour(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerHour(double?)"/>
-        public static Frequency? CyclesPerHour(this decimal? value) => Frequency.FromCyclesPerHour(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency CyclesPerHour(this decimal value) => (Frequency)Frequency.FromCyclesPerHour(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CyclePerMinute
 
         /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
-        public static Frequency CyclesPerMinute(this int value) => Frequency.FromCyclesPerMinute(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double?)"/>
-        public static Frequency? CyclesPerMinute(this int? value) => Frequency.FromCyclesPerMinute(value);
+        public static Frequency CyclesPerMinute(this int value) => (Frequency)Frequency.FromCyclesPerMinute(value);
+	
+        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
+        public static Frequency CyclesPerMinute(this long value) => (Frequency)Frequency.FromCyclesPerMinute(value);
 
         /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
-        public static Frequency CyclesPerMinute(this long value) => Frequency.FromCyclesPerMinute(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double?)"/>
-        public static Frequency? CyclesPerMinute(this long? value) => Frequency.FromCyclesPerMinute(value);
+        public static Frequency CyclesPerMinute(this double value) => (Frequency)Frequency.FromCyclesPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
-        public static Frequency CyclesPerMinute(this double value) => Frequency.FromCyclesPerMinute(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double?)"/>
-        public static Frequency? CyclesPerMinute(this double? value) => Frequency.FromCyclesPerMinute(value);
+        public static Frequency CyclesPerMinute(this float value) => (Frequency)Frequency.FromCyclesPerMinute(value);
 
         /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
-        public static Frequency CyclesPerMinute(this float value) => Frequency.FromCyclesPerMinute(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double?)"/>
-        public static Frequency? CyclesPerMinute(this float? value) => Frequency.FromCyclesPerMinute(value);
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double)"/>
-        public static Frequency CyclesPerMinute(this decimal value) => Frequency.FromCyclesPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromCyclesPerMinute(double?)"/>
-        public static Frequency? CyclesPerMinute(this decimal? value) => Frequency.FromCyclesPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency CyclesPerMinute(this decimal value) => (Frequency)Frequency.FromCyclesPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Gigahertz
 
         /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
-        public static Frequency Gigahertz(this int value) => Frequency.FromGigahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double?)"/>
-        public static Frequency? Gigahertz(this int? value) => Frequency.FromGigahertz(value);
+        public static Frequency Gigahertz(this int value) => (Frequency)Frequency.FromGigahertz(value);
+	
+        /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
+        public static Frequency Gigahertz(this long value) => (Frequency)Frequency.FromGigahertz(value);
 
         /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
-        public static Frequency Gigahertz(this long value) => Frequency.FromGigahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double?)"/>
-        public static Frequency? Gigahertz(this long? value) => Frequency.FromGigahertz(value);
+        public static Frequency Gigahertz(this double value) => (Frequency)Frequency.FromGigahertz(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
-        public static Frequency Gigahertz(this double value) => Frequency.FromGigahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double?)"/>
-        public static Frequency? Gigahertz(this double? value) => Frequency.FromGigahertz(value);
+        public static Frequency Gigahertz(this float value) => (Frequency)Frequency.FromGigahertz(value);
 
         /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
-        public static Frequency Gigahertz(this float value) => Frequency.FromGigahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double?)"/>
-        public static Frequency? Gigahertz(this float? value) => Frequency.FromGigahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double)"/>
-        public static Frequency Gigahertz(this decimal value) => Frequency.FromGigahertz(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromGigahertz(double?)"/>
-        public static Frequency? Gigahertz(this decimal? value) => Frequency.FromGigahertz(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency Gigahertz(this decimal value) => (Frequency)Frequency.FromGigahertz(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Hertz
 
         /// <inheritdoc cref="Frequency.FromHertz(double)"/>
-        public static Frequency Hertz(this int value) => Frequency.FromHertz(value);
-
-        /// <inheritdoc cref="Frequency.FromHertz(double?)"/>
-        public static Frequency? Hertz(this int? value) => Frequency.FromHertz(value);
+        public static Frequency Hertz(this int value) => (Frequency)Frequency.FromHertz(value);
+	
+        /// <inheritdoc cref="Frequency.FromHertz(double)"/>
+        public static Frequency Hertz(this long value) => (Frequency)Frequency.FromHertz(value);
 
         /// <inheritdoc cref="Frequency.FromHertz(double)"/>
-        public static Frequency Hertz(this long value) => Frequency.FromHertz(value);
-
-        /// <inheritdoc cref="Frequency.FromHertz(double?)"/>
-        public static Frequency? Hertz(this long? value) => Frequency.FromHertz(value);
+        public static Frequency Hertz(this double value) => (Frequency)Frequency.FromHertz(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromHertz(double)"/>
-        public static Frequency Hertz(this double value) => Frequency.FromHertz(value);
-
-        /// <inheritdoc cref="Frequency.FromHertz(double?)"/>
-        public static Frequency? Hertz(this double? value) => Frequency.FromHertz(value);
+        public static Frequency Hertz(this float value) => (Frequency)Frequency.FromHertz(value);
 
         /// <inheritdoc cref="Frequency.FromHertz(double)"/>
-        public static Frequency Hertz(this float value) => Frequency.FromHertz(value);
-
-        /// <inheritdoc cref="Frequency.FromHertz(double?)"/>
-        public static Frequency? Hertz(this float? value) => Frequency.FromHertz(value);
-
-        /// <inheritdoc cref="Frequency.FromHertz(double)"/>
-        public static Frequency Hertz(this decimal value) => Frequency.FromHertz(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromHertz(double?)"/>
-        public static Frequency? Hertz(this decimal? value) => Frequency.FromHertz(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency Hertz(this decimal value) => (Frequency)Frequency.FromHertz(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Kilohertz
 
         /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
-        public static Frequency Kilohertz(this int value) => Frequency.FromKilohertz(value);
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double?)"/>
-        public static Frequency? Kilohertz(this int? value) => Frequency.FromKilohertz(value);
+        public static Frequency Kilohertz(this int value) => (Frequency)Frequency.FromKilohertz(value);
+	
+        /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
+        public static Frequency Kilohertz(this long value) => (Frequency)Frequency.FromKilohertz(value);
 
         /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
-        public static Frequency Kilohertz(this long value) => Frequency.FromKilohertz(value);
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double?)"/>
-        public static Frequency? Kilohertz(this long? value) => Frequency.FromKilohertz(value);
+        public static Frequency Kilohertz(this double value) => (Frequency)Frequency.FromKilohertz(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
-        public static Frequency Kilohertz(this double value) => Frequency.FromKilohertz(value);
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double?)"/>
-        public static Frequency? Kilohertz(this double? value) => Frequency.FromKilohertz(value);
+        public static Frequency Kilohertz(this float value) => (Frequency)Frequency.FromKilohertz(value);
 
         /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
-        public static Frequency Kilohertz(this float value) => Frequency.FromKilohertz(value);
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double?)"/>
-        public static Frequency? Kilohertz(this float? value) => Frequency.FromKilohertz(value);
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double)"/>
-        public static Frequency Kilohertz(this decimal value) => Frequency.FromKilohertz(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromKilohertz(double?)"/>
-        public static Frequency? Kilohertz(this decimal? value) => Frequency.FromKilohertz(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency Kilohertz(this decimal value) => (Frequency)Frequency.FromKilohertz(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Megahertz
 
         /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
-        public static Frequency Megahertz(this int value) => Frequency.FromMegahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double?)"/>
-        public static Frequency? Megahertz(this int? value) => Frequency.FromMegahertz(value);
+        public static Frequency Megahertz(this int value) => (Frequency)Frequency.FromMegahertz(value);
+	
+        /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
+        public static Frequency Megahertz(this long value) => (Frequency)Frequency.FromMegahertz(value);
 
         /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
-        public static Frequency Megahertz(this long value) => Frequency.FromMegahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double?)"/>
-        public static Frequency? Megahertz(this long? value) => Frequency.FromMegahertz(value);
+        public static Frequency Megahertz(this double value) => (Frequency)Frequency.FromMegahertz(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
-        public static Frequency Megahertz(this double value) => Frequency.FromMegahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double?)"/>
-        public static Frequency? Megahertz(this double? value) => Frequency.FromMegahertz(value);
+        public static Frequency Megahertz(this float value) => (Frequency)Frequency.FromMegahertz(value);
 
         /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
-        public static Frequency Megahertz(this float value) => Frequency.FromMegahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double?)"/>
-        public static Frequency? Megahertz(this float? value) => Frequency.FromMegahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double)"/>
-        public static Frequency Megahertz(this decimal value) => Frequency.FromMegahertz(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromMegahertz(double?)"/>
-        public static Frequency? Megahertz(this decimal? value) => Frequency.FromMegahertz(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency Megahertz(this decimal value) => (Frequency)Frequency.FromMegahertz(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Terahertz
 
         /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
-        public static Frequency Terahertz(this int value) => Frequency.FromTerahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double?)"/>
-        public static Frequency? Terahertz(this int? value) => Frequency.FromTerahertz(value);
+        public static Frequency Terahertz(this int value) => (Frequency)Frequency.FromTerahertz(value);
+	
+        /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
+        public static Frequency Terahertz(this long value) => (Frequency)Frequency.FromTerahertz(value);
 
         /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
-        public static Frequency Terahertz(this long value) => Frequency.FromTerahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double?)"/>
-        public static Frequency? Terahertz(this long? value) => Frequency.FromTerahertz(value);
+        public static Frequency Terahertz(this double value) => (Frequency)Frequency.FromTerahertz(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
-        public static Frequency Terahertz(this double value) => Frequency.FromTerahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double?)"/>
-        public static Frequency? Terahertz(this double? value) => Frequency.FromTerahertz(value);
+        public static Frequency Terahertz(this float value) => (Frequency)Frequency.FromTerahertz(value);
 
         /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
-        public static Frequency Terahertz(this float value) => Frequency.FromTerahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double?)"/>
-        public static Frequency? Terahertz(this float? value) => Frequency.FromTerahertz(value);
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double)"/>
-        public static Frequency Terahertz(this decimal value) => Frequency.FromTerahertz(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Frequency.FromTerahertz(double?)"/>
-        public static Frequency? Terahertz(this decimal? value) => Frequency.FromTerahertz(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Frequency Terahertz(this decimal value) => (Frequency)Frequency.FromTerahertz(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

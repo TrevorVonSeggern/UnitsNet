@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,272 +48,152 @@ namespace UnitsNet.Extensions.NumberToKinematicViscosity
         #region Centistokes
 
         /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
-        public static KinematicViscosity Centistokes(this int value) => KinematicViscosity.FromCentistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double?)"/>
-        public static KinematicViscosity? Centistokes(this int? value) => KinematicViscosity.FromCentistokes(value);
+        public static KinematicViscosity Centistokes(this int value) => (KinematicViscosity)KinematicViscosity.FromCentistokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
+        public static KinematicViscosity Centistokes(this long value) => (KinematicViscosity)KinematicViscosity.FromCentistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
-        public static KinematicViscosity Centistokes(this long value) => KinematicViscosity.FromCentistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double?)"/>
-        public static KinematicViscosity? Centistokes(this long? value) => KinematicViscosity.FromCentistokes(value);
+        public static KinematicViscosity Centistokes(this double value) => (KinematicViscosity)KinematicViscosity.FromCentistokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
-        public static KinematicViscosity Centistokes(this double value) => KinematicViscosity.FromCentistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double?)"/>
-        public static KinematicViscosity? Centistokes(this double? value) => KinematicViscosity.FromCentistokes(value);
+        public static KinematicViscosity Centistokes(this float value) => (KinematicViscosity)KinematicViscosity.FromCentistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
-        public static KinematicViscosity Centistokes(this float value) => KinematicViscosity.FromCentistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double?)"/>
-        public static KinematicViscosity? Centistokes(this float? value) => KinematicViscosity.FromCentistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double)"/>
-        public static KinematicViscosity Centistokes(this decimal value) => KinematicViscosity.FromCentistokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromCentistokes(double?)"/>
-        public static KinematicViscosity? Centistokes(this decimal? value) => KinematicViscosity.FromCentistokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Centistokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromCentistokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Decistokes
 
         /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
-        public static KinematicViscosity Decistokes(this int value) => KinematicViscosity.FromDecistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double?)"/>
-        public static KinematicViscosity? Decistokes(this int? value) => KinematicViscosity.FromDecistokes(value);
+        public static KinematicViscosity Decistokes(this int value) => (KinematicViscosity)KinematicViscosity.FromDecistokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
+        public static KinematicViscosity Decistokes(this long value) => (KinematicViscosity)KinematicViscosity.FromDecistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
-        public static KinematicViscosity Decistokes(this long value) => KinematicViscosity.FromDecistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double?)"/>
-        public static KinematicViscosity? Decistokes(this long? value) => KinematicViscosity.FromDecistokes(value);
+        public static KinematicViscosity Decistokes(this double value) => (KinematicViscosity)KinematicViscosity.FromDecistokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
-        public static KinematicViscosity Decistokes(this double value) => KinematicViscosity.FromDecistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double?)"/>
-        public static KinematicViscosity? Decistokes(this double? value) => KinematicViscosity.FromDecistokes(value);
+        public static KinematicViscosity Decistokes(this float value) => (KinematicViscosity)KinematicViscosity.FromDecistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
-        public static KinematicViscosity Decistokes(this float value) => KinematicViscosity.FromDecistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double?)"/>
-        public static KinematicViscosity? Decistokes(this float? value) => KinematicViscosity.FromDecistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double)"/>
-        public static KinematicViscosity Decistokes(this decimal value) => KinematicViscosity.FromDecistokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromDecistokes(double?)"/>
-        public static KinematicViscosity? Decistokes(this decimal? value) => KinematicViscosity.FromDecistokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Decistokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromDecistokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Kilostokes
 
         /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
-        public static KinematicViscosity Kilostokes(this int value) => KinematicViscosity.FromKilostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double?)"/>
-        public static KinematicViscosity? Kilostokes(this int? value) => KinematicViscosity.FromKilostokes(value);
+        public static KinematicViscosity Kilostokes(this int value) => (KinematicViscosity)KinematicViscosity.FromKilostokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
+        public static KinematicViscosity Kilostokes(this long value) => (KinematicViscosity)KinematicViscosity.FromKilostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
-        public static KinematicViscosity Kilostokes(this long value) => KinematicViscosity.FromKilostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double?)"/>
-        public static KinematicViscosity? Kilostokes(this long? value) => KinematicViscosity.FromKilostokes(value);
+        public static KinematicViscosity Kilostokes(this double value) => (KinematicViscosity)KinematicViscosity.FromKilostokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
-        public static KinematicViscosity Kilostokes(this double value) => KinematicViscosity.FromKilostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double?)"/>
-        public static KinematicViscosity? Kilostokes(this double? value) => KinematicViscosity.FromKilostokes(value);
+        public static KinematicViscosity Kilostokes(this float value) => (KinematicViscosity)KinematicViscosity.FromKilostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
-        public static KinematicViscosity Kilostokes(this float value) => KinematicViscosity.FromKilostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double?)"/>
-        public static KinematicViscosity? Kilostokes(this float? value) => KinematicViscosity.FromKilostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double)"/>
-        public static KinematicViscosity Kilostokes(this decimal value) => KinematicViscosity.FromKilostokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromKilostokes(double?)"/>
-        public static KinematicViscosity? Kilostokes(this decimal? value) => KinematicViscosity.FromKilostokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Kilostokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromKilostokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Microstokes
 
         /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
-        public static KinematicViscosity Microstokes(this int value) => KinematicViscosity.FromMicrostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double?)"/>
-        public static KinematicViscosity? Microstokes(this int? value) => KinematicViscosity.FromMicrostokes(value);
+        public static KinematicViscosity Microstokes(this int value) => (KinematicViscosity)KinematicViscosity.FromMicrostokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
+        public static KinematicViscosity Microstokes(this long value) => (KinematicViscosity)KinematicViscosity.FromMicrostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
-        public static KinematicViscosity Microstokes(this long value) => KinematicViscosity.FromMicrostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double?)"/>
-        public static KinematicViscosity? Microstokes(this long? value) => KinematicViscosity.FromMicrostokes(value);
+        public static KinematicViscosity Microstokes(this double value) => (KinematicViscosity)KinematicViscosity.FromMicrostokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
-        public static KinematicViscosity Microstokes(this double value) => KinematicViscosity.FromMicrostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double?)"/>
-        public static KinematicViscosity? Microstokes(this double? value) => KinematicViscosity.FromMicrostokes(value);
+        public static KinematicViscosity Microstokes(this float value) => (KinematicViscosity)KinematicViscosity.FromMicrostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
-        public static KinematicViscosity Microstokes(this float value) => KinematicViscosity.FromMicrostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double?)"/>
-        public static KinematicViscosity? Microstokes(this float? value) => KinematicViscosity.FromMicrostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double)"/>
-        public static KinematicViscosity Microstokes(this decimal value) => KinematicViscosity.FromMicrostokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromMicrostokes(double?)"/>
-        public static KinematicViscosity? Microstokes(this decimal? value) => KinematicViscosity.FromMicrostokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Microstokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromMicrostokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Millistokes
 
         /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
-        public static KinematicViscosity Millistokes(this int value) => KinematicViscosity.FromMillistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double?)"/>
-        public static KinematicViscosity? Millistokes(this int? value) => KinematicViscosity.FromMillistokes(value);
+        public static KinematicViscosity Millistokes(this int value) => (KinematicViscosity)KinematicViscosity.FromMillistokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
+        public static KinematicViscosity Millistokes(this long value) => (KinematicViscosity)KinematicViscosity.FromMillistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
-        public static KinematicViscosity Millistokes(this long value) => KinematicViscosity.FromMillistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double?)"/>
-        public static KinematicViscosity? Millistokes(this long? value) => KinematicViscosity.FromMillistokes(value);
+        public static KinematicViscosity Millistokes(this double value) => (KinematicViscosity)KinematicViscosity.FromMillistokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
-        public static KinematicViscosity Millistokes(this double value) => KinematicViscosity.FromMillistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double?)"/>
-        public static KinematicViscosity? Millistokes(this double? value) => KinematicViscosity.FromMillistokes(value);
+        public static KinematicViscosity Millistokes(this float value) => (KinematicViscosity)KinematicViscosity.FromMillistokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
-        public static KinematicViscosity Millistokes(this float value) => KinematicViscosity.FromMillistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double?)"/>
-        public static KinematicViscosity? Millistokes(this float? value) => KinematicViscosity.FromMillistokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double)"/>
-        public static KinematicViscosity Millistokes(this decimal value) => KinematicViscosity.FromMillistokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromMillistokes(double?)"/>
-        public static KinematicViscosity? Millistokes(this decimal? value) => KinematicViscosity.FromMillistokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Millistokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromMillistokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanostokes
 
         /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
-        public static KinematicViscosity Nanostokes(this int value) => KinematicViscosity.FromNanostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double?)"/>
-        public static KinematicViscosity? Nanostokes(this int? value) => KinematicViscosity.FromNanostokes(value);
+        public static KinematicViscosity Nanostokes(this int value) => (KinematicViscosity)KinematicViscosity.FromNanostokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
+        public static KinematicViscosity Nanostokes(this long value) => (KinematicViscosity)KinematicViscosity.FromNanostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
-        public static KinematicViscosity Nanostokes(this long value) => KinematicViscosity.FromNanostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double?)"/>
-        public static KinematicViscosity? Nanostokes(this long? value) => KinematicViscosity.FromNanostokes(value);
+        public static KinematicViscosity Nanostokes(this double value) => (KinematicViscosity)KinematicViscosity.FromNanostokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
-        public static KinematicViscosity Nanostokes(this double value) => KinematicViscosity.FromNanostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double?)"/>
-        public static KinematicViscosity? Nanostokes(this double? value) => KinematicViscosity.FromNanostokes(value);
+        public static KinematicViscosity Nanostokes(this float value) => (KinematicViscosity)KinematicViscosity.FromNanostokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
-        public static KinematicViscosity Nanostokes(this float value) => KinematicViscosity.FromNanostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double?)"/>
-        public static KinematicViscosity? Nanostokes(this float? value) => KinematicViscosity.FromNanostokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double)"/>
-        public static KinematicViscosity Nanostokes(this decimal value) => KinematicViscosity.FromNanostokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromNanostokes(double?)"/>
-        public static KinematicViscosity? Nanostokes(this decimal? value) => KinematicViscosity.FromNanostokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Nanostokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromNanostokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareMeterPerSecond
 
         /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
-        public static KinematicViscosity SquareMetersPerSecond(this int value) => KinematicViscosity.FromSquareMetersPerSecond(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double?)"/>
-        public static KinematicViscosity? SquareMetersPerSecond(this int? value) => KinematicViscosity.FromSquareMetersPerSecond(value);
+        public static KinematicViscosity SquareMetersPerSecond(this int value) => (KinematicViscosity)KinematicViscosity.FromSquareMetersPerSecond(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
+        public static KinematicViscosity SquareMetersPerSecond(this long value) => (KinematicViscosity)KinematicViscosity.FromSquareMetersPerSecond(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
-        public static KinematicViscosity SquareMetersPerSecond(this long value) => KinematicViscosity.FromSquareMetersPerSecond(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double?)"/>
-        public static KinematicViscosity? SquareMetersPerSecond(this long? value) => KinematicViscosity.FromSquareMetersPerSecond(value);
+        public static KinematicViscosity SquareMetersPerSecond(this double value) => (KinematicViscosity)KinematicViscosity.FromSquareMetersPerSecond(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
-        public static KinematicViscosity SquareMetersPerSecond(this double value) => KinematicViscosity.FromSquareMetersPerSecond(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double?)"/>
-        public static KinematicViscosity? SquareMetersPerSecond(this double? value) => KinematicViscosity.FromSquareMetersPerSecond(value);
+        public static KinematicViscosity SquareMetersPerSecond(this float value) => (KinematicViscosity)KinematicViscosity.FromSquareMetersPerSecond(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
-        public static KinematicViscosity SquareMetersPerSecond(this float value) => KinematicViscosity.FromSquareMetersPerSecond(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double?)"/>
-        public static KinematicViscosity? SquareMetersPerSecond(this float? value) => KinematicViscosity.FromSquareMetersPerSecond(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double)"/>
-        public static KinematicViscosity SquareMetersPerSecond(this decimal value) => KinematicViscosity.FromSquareMetersPerSecond(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromSquareMetersPerSecond(double?)"/>
-        public static KinematicViscosity? SquareMetersPerSecond(this decimal? value) => KinematicViscosity.FromSquareMetersPerSecond(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity SquareMetersPerSecond(this decimal value) => (KinematicViscosity)KinematicViscosity.FromSquareMetersPerSecond(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Stokes
 
         /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
-        public static KinematicViscosity Stokes(this int value) => KinematicViscosity.FromStokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double?)"/>
-        public static KinematicViscosity? Stokes(this int? value) => KinematicViscosity.FromStokes(value);
+        public static KinematicViscosity Stokes(this int value) => (KinematicViscosity)KinematicViscosity.FromStokes(value);
+	
+        /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
+        public static KinematicViscosity Stokes(this long value) => (KinematicViscosity)KinematicViscosity.FromStokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
-        public static KinematicViscosity Stokes(this long value) => KinematicViscosity.FromStokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double?)"/>
-        public static KinematicViscosity? Stokes(this long? value) => KinematicViscosity.FromStokes(value);
+        public static KinematicViscosity Stokes(this double value) => (KinematicViscosity)KinematicViscosity.FromStokes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
-        public static KinematicViscosity Stokes(this double value) => KinematicViscosity.FromStokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double?)"/>
-        public static KinematicViscosity? Stokes(this double? value) => KinematicViscosity.FromStokes(value);
+        public static KinematicViscosity Stokes(this float value) => (KinematicViscosity)KinematicViscosity.FromStokes(value);
 
         /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
-        public static KinematicViscosity Stokes(this float value) => KinematicViscosity.FromStokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double?)"/>
-        public static KinematicViscosity? Stokes(this float? value) => KinematicViscosity.FromStokes(value);
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double)"/>
-        public static KinematicViscosity Stokes(this decimal value) => KinematicViscosity.FromStokes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="KinematicViscosity.FromStokes(double?)"/>
-        public static KinematicViscosity? Stokes(this decimal? value) => KinematicViscosity.FromStokes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static KinematicViscosity Stokes(this decimal value) => (KinematicViscosity)KinematicViscosity.FromStokes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,34 +48,19 @@ namespace UnitsNet.Extensions.NumberToSpecificVolume
         #region CubicMeterPerKilogram
 
         /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
-        public static SpecificVolume CubicMetersPerKilogram(this int value) => SpecificVolume.FromCubicMetersPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double?)"/>
-        public static SpecificVolume? CubicMetersPerKilogram(this int? value) => SpecificVolume.FromCubicMetersPerKilogram(value);
+        public static SpecificVolume CubicMetersPerKilogram(this int value) => (SpecificVolume)SpecificVolume.FromCubicMetersPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
+        public static SpecificVolume CubicMetersPerKilogram(this long value) => (SpecificVolume)SpecificVolume.FromCubicMetersPerKilogram(value);
 
         /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
-        public static SpecificVolume CubicMetersPerKilogram(this long value) => SpecificVolume.FromCubicMetersPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double?)"/>
-        public static SpecificVolume? CubicMetersPerKilogram(this long? value) => SpecificVolume.FromCubicMetersPerKilogram(value);
+        public static SpecificVolume CubicMetersPerKilogram(this double value) => (SpecificVolume)SpecificVolume.FromCubicMetersPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
-        public static SpecificVolume CubicMetersPerKilogram(this double value) => SpecificVolume.FromCubicMetersPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double?)"/>
-        public static SpecificVolume? CubicMetersPerKilogram(this double? value) => SpecificVolume.FromCubicMetersPerKilogram(value);
+        public static SpecificVolume CubicMetersPerKilogram(this float value) => (SpecificVolume)SpecificVolume.FromCubicMetersPerKilogram(value);
 
         /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
-        public static SpecificVolume CubicMetersPerKilogram(this float value) => SpecificVolume.FromCubicMetersPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double?)"/>
-        public static SpecificVolume? CubicMetersPerKilogram(this float? value) => SpecificVolume.FromCubicMetersPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double)"/>
-        public static SpecificVolume CubicMetersPerKilogram(this decimal value) => SpecificVolume.FromCubicMetersPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificVolume.FromCubicMetersPerKilogram(double?)"/>
-        public static SpecificVolume? CubicMetersPerKilogram(this decimal? value) => SpecificVolume.FromCubicMetersPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificVolume CubicMetersPerKilogram(this decimal value) => (SpecificVolume)SpecificVolume.FromCubicMetersPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

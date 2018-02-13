@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,34 +48,19 @@ namespace UnitsNet.Extensions.NumberToLapseRate
         #region DegreeCelsiusPerKilometer
 
         /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
-        public static LapseRate DegreesCelciusPerKilometer(this int value) => LapseRate.FromDegreesCelciusPerKilometer(value);
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double?)"/>
-        public static LapseRate? DegreesCelciusPerKilometer(this int? value) => LapseRate.FromDegreesCelciusPerKilometer(value);
+        public static LapseRate DegreesCelciusPerKilometer(this int value) => (LapseRate)LapseRate.FromDegreesCelciusPerKilometer(value);
+	
+        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
+        public static LapseRate DegreesCelciusPerKilometer(this long value) => (LapseRate)LapseRate.FromDegreesCelciusPerKilometer(value);
 
         /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
-        public static LapseRate DegreesCelciusPerKilometer(this long value) => LapseRate.FromDegreesCelciusPerKilometer(value);
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double?)"/>
-        public static LapseRate? DegreesCelciusPerKilometer(this long? value) => LapseRate.FromDegreesCelciusPerKilometer(value);
+        public static LapseRate DegreesCelciusPerKilometer(this double value) => (LapseRate)LapseRate.FromDegreesCelciusPerKilometer(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
-        public static LapseRate DegreesCelciusPerKilometer(this double value) => LapseRate.FromDegreesCelciusPerKilometer(value);
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double?)"/>
-        public static LapseRate? DegreesCelciusPerKilometer(this double? value) => LapseRate.FromDegreesCelciusPerKilometer(value);
+        public static LapseRate DegreesCelciusPerKilometer(this float value) => (LapseRate)LapseRate.FromDegreesCelciusPerKilometer(value);
 
         /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
-        public static LapseRate DegreesCelciusPerKilometer(this float value) => LapseRate.FromDegreesCelciusPerKilometer(value);
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double?)"/>
-        public static LapseRate? DegreesCelciusPerKilometer(this float? value) => LapseRate.FromDegreesCelciusPerKilometer(value);
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double)"/>
-        public static LapseRate DegreesCelciusPerKilometer(this decimal value) => LapseRate.FromDegreesCelciusPerKilometer(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="LapseRate.FromDegreesCelciusPerKilometer(double?)"/>
-        public static LapseRate? DegreesCelciusPerKilometer(this decimal? value) => LapseRate.FromDegreesCelciusPerKilometer(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static LapseRate DegreesCelciusPerKilometer(this decimal value) => (LapseRate)LapseRate.FromDegreesCelciusPerKilometer(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

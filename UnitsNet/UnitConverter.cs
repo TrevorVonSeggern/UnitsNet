@@ -29,7 +29,7 @@ using Culture = System.String;
 using FromValue = System.Double;
 #else
 using Culture = System.IFormatProvider;
-using FromValue = UnitsNet.QuantityValue;
+using FromValue = UnitsNet.QuantityValue<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator>;
 #endif
 
 namespace UnitsNet

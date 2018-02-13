@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,136 +48,76 @@ namespace UnitsNet.Extensions.NumberToElectricResistance
         #region Kiloohm
 
         /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
-        public static ElectricResistance Kiloohms(this int value) => ElectricResistance.FromKiloohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double?)"/>
-        public static ElectricResistance? Kiloohms(this int? value) => ElectricResistance.FromKiloohms(value);
+        public static ElectricResistance Kiloohms(this int value) => (ElectricResistance)ElectricResistance.FromKiloohms(value);
+	
+        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
+        public static ElectricResistance Kiloohms(this long value) => (ElectricResistance)ElectricResistance.FromKiloohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
-        public static ElectricResistance Kiloohms(this long value) => ElectricResistance.FromKiloohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double?)"/>
-        public static ElectricResistance? Kiloohms(this long? value) => ElectricResistance.FromKiloohms(value);
+        public static ElectricResistance Kiloohms(this double value) => (ElectricResistance)ElectricResistance.FromKiloohms(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
-        public static ElectricResistance Kiloohms(this double value) => ElectricResistance.FromKiloohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double?)"/>
-        public static ElectricResistance? Kiloohms(this double? value) => ElectricResistance.FromKiloohms(value);
+        public static ElectricResistance Kiloohms(this float value) => (ElectricResistance)ElectricResistance.FromKiloohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
-        public static ElectricResistance Kiloohms(this float value) => ElectricResistance.FromKiloohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double?)"/>
-        public static ElectricResistance? Kiloohms(this float? value) => ElectricResistance.FromKiloohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double)"/>
-        public static ElectricResistance Kiloohms(this decimal value) => ElectricResistance.FromKiloohms(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricResistance.FromKiloohms(double?)"/>
-        public static ElectricResistance? Kiloohms(this decimal? value) => ElectricResistance.FromKiloohms(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricResistance Kiloohms(this decimal value) => (ElectricResistance)ElectricResistance.FromKiloohms(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Megaohm
 
         /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
-        public static ElectricResistance Megaohms(this int value) => ElectricResistance.FromMegaohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double?)"/>
-        public static ElectricResistance? Megaohms(this int? value) => ElectricResistance.FromMegaohms(value);
+        public static ElectricResistance Megaohms(this int value) => (ElectricResistance)ElectricResistance.FromMegaohms(value);
+	
+        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
+        public static ElectricResistance Megaohms(this long value) => (ElectricResistance)ElectricResistance.FromMegaohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
-        public static ElectricResistance Megaohms(this long value) => ElectricResistance.FromMegaohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double?)"/>
-        public static ElectricResistance? Megaohms(this long? value) => ElectricResistance.FromMegaohms(value);
+        public static ElectricResistance Megaohms(this double value) => (ElectricResistance)ElectricResistance.FromMegaohms(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
-        public static ElectricResistance Megaohms(this double value) => ElectricResistance.FromMegaohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double?)"/>
-        public static ElectricResistance? Megaohms(this double? value) => ElectricResistance.FromMegaohms(value);
+        public static ElectricResistance Megaohms(this float value) => (ElectricResistance)ElectricResistance.FromMegaohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
-        public static ElectricResistance Megaohms(this float value) => ElectricResistance.FromMegaohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double?)"/>
-        public static ElectricResistance? Megaohms(this float? value) => ElectricResistance.FromMegaohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double)"/>
-        public static ElectricResistance Megaohms(this decimal value) => ElectricResistance.FromMegaohms(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricResistance.FromMegaohms(double?)"/>
-        public static ElectricResistance? Megaohms(this decimal? value) => ElectricResistance.FromMegaohms(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricResistance Megaohms(this decimal value) => (ElectricResistance)ElectricResistance.FromMegaohms(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Milliohm
 
         /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
-        public static ElectricResistance Milliohms(this int value) => ElectricResistance.FromMilliohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double?)"/>
-        public static ElectricResistance? Milliohms(this int? value) => ElectricResistance.FromMilliohms(value);
+        public static ElectricResistance Milliohms(this int value) => (ElectricResistance)ElectricResistance.FromMilliohms(value);
+	
+        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
+        public static ElectricResistance Milliohms(this long value) => (ElectricResistance)ElectricResistance.FromMilliohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
-        public static ElectricResistance Milliohms(this long value) => ElectricResistance.FromMilliohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double?)"/>
-        public static ElectricResistance? Milliohms(this long? value) => ElectricResistance.FromMilliohms(value);
+        public static ElectricResistance Milliohms(this double value) => (ElectricResistance)ElectricResistance.FromMilliohms(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
-        public static ElectricResistance Milliohms(this double value) => ElectricResistance.FromMilliohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double?)"/>
-        public static ElectricResistance? Milliohms(this double? value) => ElectricResistance.FromMilliohms(value);
+        public static ElectricResistance Milliohms(this float value) => (ElectricResistance)ElectricResistance.FromMilliohms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
-        public static ElectricResistance Milliohms(this float value) => ElectricResistance.FromMilliohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double?)"/>
-        public static ElectricResistance? Milliohms(this float? value) => ElectricResistance.FromMilliohms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double)"/>
-        public static ElectricResistance Milliohms(this decimal value) => ElectricResistance.FromMilliohms(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricResistance.FromMilliohms(double?)"/>
-        public static ElectricResistance? Milliohms(this decimal? value) => ElectricResistance.FromMilliohms(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricResistance Milliohms(this decimal value) => (ElectricResistance)ElectricResistance.FromMilliohms(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Ohm
 
         /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
-        public static ElectricResistance Ohms(this int value) => ElectricResistance.FromOhms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double?)"/>
-        public static ElectricResistance? Ohms(this int? value) => ElectricResistance.FromOhms(value);
+        public static ElectricResistance Ohms(this int value) => (ElectricResistance)ElectricResistance.FromOhms(value);
+	
+        /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
+        public static ElectricResistance Ohms(this long value) => (ElectricResistance)ElectricResistance.FromOhms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
-        public static ElectricResistance Ohms(this long value) => ElectricResistance.FromOhms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double?)"/>
-        public static ElectricResistance? Ohms(this long? value) => ElectricResistance.FromOhms(value);
+        public static ElectricResistance Ohms(this double value) => (ElectricResistance)ElectricResistance.FromOhms(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
-        public static ElectricResistance Ohms(this double value) => ElectricResistance.FromOhms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double?)"/>
-        public static ElectricResistance? Ohms(this double? value) => ElectricResistance.FromOhms(value);
+        public static ElectricResistance Ohms(this float value) => (ElectricResistance)ElectricResistance.FromOhms(value);
 
         /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
-        public static ElectricResistance Ohms(this float value) => ElectricResistance.FromOhms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double?)"/>
-        public static ElectricResistance? Ohms(this float? value) => ElectricResistance.FromOhms(value);
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double)"/>
-        public static ElectricResistance Ohms(this decimal value) => ElectricResistance.FromOhms(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricResistance.FromOhms(double?)"/>
-        public static ElectricResistance? Ohms(this decimal? value) => ElectricResistance.FromOhms(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricResistance Ohms(this decimal value) => (ElectricResistance)ElectricResistance.FromOhms(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,578 +48,323 @@ namespace UnitsNet.Extensions.NumberToFlow
         #region CentilitersPerMinute
 
         /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
-        public static Flow CentilitersPerMinute(this int value) => Flow.FromCentilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double?)"/>
-        public static Flow? CentilitersPerMinute(this int? value) => Flow.FromCentilitersPerMinute(value);
+        public static Flow CentilitersPerMinute(this int value) => (Flow)Flow.FromCentilitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
+        public static Flow CentilitersPerMinute(this long value) => (Flow)Flow.FromCentilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
-        public static Flow CentilitersPerMinute(this long value) => Flow.FromCentilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double?)"/>
-        public static Flow? CentilitersPerMinute(this long? value) => Flow.FromCentilitersPerMinute(value);
+        public static Flow CentilitersPerMinute(this double value) => (Flow)Flow.FromCentilitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
-        public static Flow CentilitersPerMinute(this double value) => Flow.FromCentilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double?)"/>
-        public static Flow? CentilitersPerMinute(this double? value) => Flow.FromCentilitersPerMinute(value);
+        public static Flow CentilitersPerMinute(this float value) => (Flow)Flow.FromCentilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
-        public static Flow CentilitersPerMinute(this float value) => Flow.FromCentilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double?)"/>
-        public static Flow? CentilitersPerMinute(this float? value) => Flow.FromCentilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double)"/>
-        public static Flow CentilitersPerMinute(this decimal value) => Flow.FromCentilitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCentilitersPerMinute(double?)"/>
-        public static Flow? CentilitersPerMinute(this decimal? value) => Flow.FromCentilitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CentilitersPerMinute(this decimal value) => (Flow)Flow.FromCentilitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CubicDecimeterPerMinute
 
         /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
-        public static Flow CubicDecimetersPerMinute(this int value) => Flow.FromCubicDecimetersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double?)"/>
-        public static Flow? CubicDecimetersPerMinute(this int? value) => Flow.FromCubicDecimetersPerMinute(value);
+        public static Flow CubicDecimetersPerMinute(this int value) => (Flow)Flow.FromCubicDecimetersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
+        public static Flow CubicDecimetersPerMinute(this long value) => (Flow)Flow.FromCubicDecimetersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
-        public static Flow CubicDecimetersPerMinute(this long value) => Flow.FromCubicDecimetersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double?)"/>
-        public static Flow? CubicDecimetersPerMinute(this long? value) => Flow.FromCubicDecimetersPerMinute(value);
+        public static Flow CubicDecimetersPerMinute(this double value) => (Flow)Flow.FromCubicDecimetersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
-        public static Flow CubicDecimetersPerMinute(this double value) => Flow.FromCubicDecimetersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double?)"/>
-        public static Flow? CubicDecimetersPerMinute(this double? value) => Flow.FromCubicDecimetersPerMinute(value);
+        public static Flow CubicDecimetersPerMinute(this float value) => (Flow)Flow.FromCubicDecimetersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
-        public static Flow CubicDecimetersPerMinute(this float value) => Flow.FromCubicDecimetersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double?)"/>
-        public static Flow? CubicDecimetersPerMinute(this float? value) => Flow.FromCubicDecimetersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double)"/>
-        public static Flow CubicDecimetersPerMinute(this decimal value) => Flow.FromCubicDecimetersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCubicDecimetersPerMinute(double?)"/>
-        public static Flow? CubicDecimetersPerMinute(this decimal? value) => Flow.FromCubicDecimetersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CubicDecimetersPerMinute(this decimal value) => (Flow)Flow.FromCubicDecimetersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CubicFootPerHour
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
-        public static Flow CubicFeetPerHour(this int value) => Flow.FromCubicFeetPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double?)"/>
-        public static Flow? CubicFeetPerHour(this int? value) => Flow.FromCubicFeetPerHour(value);
+        public static Flow CubicFeetPerHour(this int value) => (Flow)Flow.FromCubicFeetPerHour(value);
+	
+        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
+        public static Flow CubicFeetPerHour(this long value) => (Flow)Flow.FromCubicFeetPerHour(value);
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
-        public static Flow CubicFeetPerHour(this long value) => Flow.FromCubicFeetPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double?)"/>
-        public static Flow? CubicFeetPerHour(this long? value) => Flow.FromCubicFeetPerHour(value);
+        public static Flow CubicFeetPerHour(this double value) => (Flow)Flow.FromCubicFeetPerHour(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
-        public static Flow CubicFeetPerHour(this double value) => Flow.FromCubicFeetPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double?)"/>
-        public static Flow? CubicFeetPerHour(this double? value) => Flow.FromCubicFeetPerHour(value);
+        public static Flow CubicFeetPerHour(this float value) => (Flow)Flow.FromCubicFeetPerHour(value);
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
-        public static Flow CubicFeetPerHour(this float value) => Flow.FromCubicFeetPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double?)"/>
-        public static Flow? CubicFeetPerHour(this float? value) => Flow.FromCubicFeetPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double)"/>
-        public static Flow CubicFeetPerHour(this decimal value) => Flow.FromCubicFeetPerHour(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerHour(double?)"/>
-        public static Flow? CubicFeetPerHour(this decimal? value) => Flow.FromCubicFeetPerHour(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CubicFeetPerHour(this decimal value) => (Flow)Flow.FromCubicFeetPerHour(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CubicFootPerSecond
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
-        public static Flow CubicFeetPerSecond(this int value) => Flow.FromCubicFeetPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double?)"/>
-        public static Flow? CubicFeetPerSecond(this int? value) => Flow.FromCubicFeetPerSecond(value);
+        public static Flow CubicFeetPerSecond(this int value) => (Flow)Flow.FromCubicFeetPerSecond(value);
+	
+        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
+        public static Flow CubicFeetPerSecond(this long value) => (Flow)Flow.FromCubicFeetPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
-        public static Flow CubicFeetPerSecond(this long value) => Flow.FromCubicFeetPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double?)"/>
-        public static Flow? CubicFeetPerSecond(this long? value) => Flow.FromCubicFeetPerSecond(value);
+        public static Flow CubicFeetPerSecond(this double value) => (Flow)Flow.FromCubicFeetPerSecond(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
-        public static Flow CubicFeetPerSecond(this double value) => Flow.FromCubicFeetPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double?)"/>
-        public static Flow? CubicFeetPerSecond(this double? value) => Flow.FromCubicFeetPerSecond(value);
+        public static Flow CubicFeetPerSecond(this float value) => (Flow)Flow.FromCubicFeetPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
-        public static Flow CubicFeetPerSecond(this float value) => Flow.FromCubicFeetPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double?)"/>
-        public static Flow? CubicFeetPerSecond(this float? value) => Flow.FromCubicFeetPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double)"/>
-        public static Flow CubicFeetPerSecond(this decimal value) => Flow.FromCubicFeetPerSecond(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCubicFeetPerSecond(double?)"/>
-        public static Flow? CubicFeetPerSecond(this decimal? value) => Flow.FromCubicFeetPerSecond(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CubicFeetPerSecond(this decimal value) => (Flow)Flow.FromCubicFeetPerSecond(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CubicMeterPerHour
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
-        public static Flow CubicMetersPerHour(this int value) => Flow.FromCubicMetersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double?)"/>
-        public static Flow? CubicMetersPerHour(this int? value) => Flow.FromCubicMetersPerHour(value);
+        public static Flow CubicMetersPerHour(this int value) => (Flow)Flow.FromCubicMetersPerHour(value);
+	
+        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
+        public static Flow CubicMetersPerHour(this long value) => (Flow)Flow.FromCubicMetersPerHour(value);
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
-        public static Flow CubicMetersPerHour(this long value) => Flow.FromCubicMetersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double?)"/>
-        public static Flow? CubicMetersPerHour(this long? value) => Flow.FromCubicMetersPerHour(value);
+        public static Flow CubicMetersPerHour(this double value) => (Flow)Flow.FromCubicMetersPerHour(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
-        public static Flow CubicMetersPerHour(this double value) => Flow.FromCubicMetersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double?)"/>
-        public static Flow? CubicMetersPerHour(this double? value) => Flow.FromCubicMetersPerHour(value);
+        public static Flow CubicMetersPerHour(this float value) => (Flow)Flow.FromCubicMetersPerHour(value);
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
-        public static Flow CubicMetersPerHour(this float value) => Flow.FromCubicMetersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double?)"/>
-        public static Flow? CubicMetersPerHour(this float? value) => Flow.FromCubicMetersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double)"/>
-        public static Flow CubicMetersPerHour(this decimal value) => Flow.FromCubicMetersPerHour(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerHour(double?)"/>
-        public static Flow? CubicMetersPerHour(this decimal? value) => Flow.FromCubicMetersPerHour(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CubicMetersPerHour(this decimal value) => (Flow)Flow.FromCubicMetersPerHour(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CubicMeterPerSecond
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
-        public static Flow CubicMetersPerSecond(this int value) => Flow.FromCubicMetersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double?)"/>
-        public static Flow? CubicMetersPerSecond(this int? value) => Flow.FromCubicMetersPerSecond(value);
+        public static Flow CubicMetersPerSecond(this int value) => (Flow)Flow.FromCubicMetersPerSecond(value);
+	
+        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
+        public static Flow CubicMetersPerSecond(this long value) => (Flow)Flow.FromCubicMetersPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
-        public static Flow CubicMetersPerSecond(this long value) => Flow.FromCubicMetersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double?)"/>
-        public static Flow? CubicMetersPerSecond(this long? value) => Flow.FromCubicMetersPerSecond(value);
+        public static Flow CubicMetersPerSecond(this double value) => (Flow)Flow.FromCubicMetersPerSecond(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
-        public static Flow CubicMetersPerSecond(this double value) => Flow.FromCubicMetersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double?)"/>
-        public static Flow? CubicMetersPerSecond(this double? value) => Flow.FromCubicMetersPerSecond(value);
+        public static Flow CubicMetersPerSecond(this float value) => (Flow)Flow.FromCubicMetersPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
-        public static Flow CubicMetersPerSecond(this float value) => Flow.FromCubicMetersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double?)"/>
-        public static Flow? CubicMetersPerSecond(this float? value) => Flow.FromCubicMetersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double)"/>
-        public static Flow CubicMetersPerSecond(this decimal value) => Flow.FromCubicMetersPerSecond(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromCubicMetersPerSecond(double?)"/>
-        public static Flow? CubicMetersPerSecond(this decimal? value) => Flow.FromCubicMetersPerSecond(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow CubicMetersPerSecond(this decimal value) => (Flow)Flow.FromCubicMetersPerSecond(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecilitersPerMinute
 
         /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
-        public static Flow DecilitersPerMinute(this int value) => Flow.FromDecilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double?)"/>
-        public static Flow? DecilitersPerMinute(this int? value) => Flow.FromDecilitersPerMinute(value);
+        public static Flow DecilitersPerMinute(this int value) => (Flow)Flow.FromDecilitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
+        public static Flow DecilitersPerMinute(this long value) => (Flow)Flow.FromDecilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
-        public static Flow DecilitersPerMinute(this long value) => Flow.FromDecilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double?)"/>
-        public static Flow? DecilitersPerMinute(this long? value) => Flow.FromDecilitersPerMinute(value);
+        public static Flow DecilitersPerMinute(this double value) => (Flow)Flow.FromDecilitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
-        public static Flow DecilitersPerMinute(this double value) => Flow.FromDecilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double?)"/>
-        public static Flow? DecilitersPerMinute(this double? value) => Flow.FromDecilitersPerMinute(value);
+        public static Flow DecilitersPerMinute(this float value) => (Flow)Flow.FromDecilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
-        public static Flow DecilitersPerMinute(this float value) => Flow.FromDecilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double?)"/>
-        public static Flow? DecilitersPerMinute(this float? value) => Flow.FromDecilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double)"/>
-        public static Flow DecilitersPerMinute(this decimal value) => Flow.FromDecilitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromDecilitersPerMinute(double?)"/>
-        public static Flow? DecilitersPerMinute(this decimal? value) => Flow.FromDecilitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow DecilitersPerMinute(this decimal value) => (Flow)Flow.FromDecilitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilolitersPerMinute
 
         /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
-        public static Flow KilolitersPerMinute(this int value) => Flow.FromKilolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double?)"/>
-        public static Flow? KilolitersPerMinute(this int? value) => Flow.FromKilolitersPerMinute(value);
+        public static Flow KilolitersPerMinute(this int value) => (Flow)Flow.FromKilolitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
+        public static Flow KilolitersPerMinute(this long value) => (Flow)Flow.FromKilolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
-        public static Flow KilolitersPerMinute(this long value) => Flow.FromKilolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double?)"/>
-        public static Flow? KilolitersPerMinute(this long? value) => Flow.FromKilolitersPerMinute(value);
+        public static Flow KilolitersPerMinute(this double value) => (Flow)Flow.FromKilolitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
-        public static Flow KilolitersPerMinute(this double value) => Flow.FromKilolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double?)"/>
-        public static Flow? KilolitersPerMinute(this double? value) => Flow.FromKilolitersPerMinute(value);
+        public static Flow KilolitersPerMinute(this float value) => (Flow)Flow.FromKilolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
-        public static Flow KilolitersPerMinute(this float value) => Flow.FromKilolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double?)"/>
-        public static Flow? KilolitersPerMinute(this float? value) => Flow.FromKilolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double)"/>
-        public static Flow KilolitersPerMinute(this decimal value) => Flow.FromKilolitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromKilolitersPerMinute(double?)"/>
-        public static Flow? KilolitersPerMinute(this decimal? value) => Flow.FromKilolitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow KilolitersPerMinute(this decimal value) => (Flow)Flow.FromKilolitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region LitersPerHour
 
         /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
-        public static Flow LitersPerHour(this int value) => Flow.FromLitersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double?)"/>
-        public static Flow? LitersPerHour(this int? value) => Flow.FromLitersPerHour(value);
+        public static Flow LitersPerHour(this int value) => (Flow)Flow.FromLitersPerHour(value);
+	
+        /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
+        public static Flow LitersPerHour(this long value) => (Flow)Flow.FromLitersPerHour(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
-        public static Flow LitersPerHour(this long value) => Flow.FromLitersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double?)"/>
-        public static Flow? LitersPerHour(this long? value) => Flow.FromLitersPerHour(value);
+        public static Flow LitersPerHour(this double value) => (Flow)Flow.FromLitersPerHour(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
-        public static Flow LitersPerHour(this double value) => Flow.FromLitersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double?)"/>
-        public static Flow? LitersPerHour(this double? value) => Flow.FromLitersPerHour(value);
+        public static Flow LitersPerHour(this float value) => (Flow)Flow.FromLitersPerHour(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
-        public static Flow LitersPerHour(this float value) => Flow.FromLitersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double?)"/>
-        public static Flow? LitersPerHour(this float? value) => Flow.FromLitersPerHour(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double)"/>
-        public static Flow LitersPerHour(this decimal value) => Flow.FromLitersPerHour(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromLitersPerHour(double?)"/>
-        public static Flow? LitersPerHour(this decimal? value) => Flow.FromLitersPerHour(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow LitersPerHour(this decimal value) => (Flow)Flow.FromLitersPerHour(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region LitersPerMinute
 
         /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
-        public static Flow LitersPerMinute(this int value) => Flow.FromLitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double?)"/>
-        public static Flow? LitersPerMinute(this int? value) => Flow.FromLitersPerMinute(value);
+        public static Flow LitersPerMinute(this int value) => (Flow)Flow.FromLitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
+        public static Flow LitersPerMinute(this long value) => (Flow)Flow.FromLitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
-        public static Flow LitersPerMinute(this long value) => Flow.FromLitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double?)"/>
-        public static Flow? LitersPerMinute(this long? value) => Flow.FromLitersPerMinute(value);
+        public static Flow LitersPerMinute(this double value) => (Flow)Flow.FromLitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
-        public static Flow LitersPerMinute(this double value) => Flow.FromLitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double?)"/>
-        public static Flow? LitersPerMinute(this double? value) => Flow.FromLitersPerMinute(value);
+        public static Flow LitersPerMinute(this float value) => (Flow)Flow.FromLitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
-        public static Flow LitersPerMinute(this float value) => Flow.FromLitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double?)"/>
-        public static Flow? LitersPerMinute(this float? value) => Flow.FromLitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double)"/>
-        public static Flow LitersPerMinute(this decimal value) => Flow.FromLitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromLitersPerMinute(double?)"/>
-        public static Flow? LitersPerMinute(this decimal? value) => Flow.FromLitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow LitersPerMinute(this decimal value) => (Flow)Flow.FromLitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region LitersPerSecond
 
         /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
-        public static Flow LitersPerSecond(this int value) => Flow.FromLitersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double?)"/>
-        public static Flow? LitersPerSecond(this int? value) => Flow.FromLitersPerSecond(value);
+        public static Flow LitersPerSecond(this int value) => (Flow)Flow.FromLitersPerSecond(value);
+	
+        /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
+        public static Flow LitersPerSecond(this long value) => (Flow)Flow.FromLitersPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
-        public static Flow LitersPerSecond(this long value) => Flow.FromLitersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double?)"/>
-        public static Flow? LitersPerSecond(this long? value) => Flow.FromLitersPerSecond(value);
+        public static Flow LitersPerSecond(this double value) => (Flow)Flow.FromLitersPerSecond(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
-        public static Flow LitersPerSecond(this double value) => Flow.FromLitersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double?)"/>
-        public static Flow? LitersPerSecond(this double? value) => Flow.FromLitersPerSecond(value);
+        public static Flow LitersPerSecond(this float value) => (Flow)Flow.FromLitersPerSecond(value);
 
         /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
-        public static Flow LitersPerSecond(this float value) => Flow.FromLitersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double?)"/>
-        public static Flow? LitersPerSecond(this float? value) => Flow.FromLitersPerSecond(value);
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double)"/>
-        public static Flow LitersPerSecond(this decimal value) => Flow.FromLitersPerSecond(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromLitersPerSecond(double?)"/>
-        public static Flow? LitersPerSecond(this decimal? value) => Flow.FromLitersPerSecond(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow LitersPerSecond(this decimal value) => (Flow)Flow.FromLitersPerSecond(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MicrolitersPerMinute
 
         /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
-        public static Flow MicrolitersPerMinute(this int value) => Flow.FromMicrolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double?)"/>
-        public static Flow? MicrolitersPerMinute(this int? value) => Flow.FromMicrolitersPerMinute(value);
+        public static Flow MicrolitersPerMinute(this int value) => (Flow)Flow.FromMicrolitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
+        public static Flow MicrolitersPerMinute(this long value) => (Flow)Flow.FromMicrolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
-        public static Flow MicrolitersPerMinute(this long value) => Flow.FromMicrolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double?)"/>
-        public static Flow? MicrolitersPerMinute(this long? value) => Flow.FromMicrolitersPerMinute(value);
+        public static Flow MicrolitersPerMinute(this double value) => (Flow)Flow.FromMicrolitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
-        public static Flow MicrolitersPerMinute(this double value) => Flow.FromMicrolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double?)"/>
-        public static Flow? MicrolitersPerMinute(this double? value) => Flow.FromMicrolitersPerMinute(value);
+        public static Flow MicrolitersPerMinute(this float value) => (Flow)Flow.FromMicrolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
-        public static Flow MicrolitersPerMinute(this float value) => Flow.FromMicrolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double?)"/>
-        public static Flow? MicrolitersPerMinute(this float? value) => Flow.FromMicrolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double)"/>
-        public static Flow MicrolitersPerMinute(this decimal value) => Flow.FromMicrolitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromMicrolitersPerMinute(double?)"/>
-        public static Flow? MicrolitersPerMinute(this decimal? value) => Flow.FromMicrolitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow MicrolitersPerMinute(this decimal value) => (Flow)Flow.FromMicrolitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MillilitersPerMinute
 
         /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
-        public static Flow MillilitersPerMinute(this int value) => Flow.FromMillilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double?)"/>
-        public static Flow? MillilitersPerMinute(this int? value) => Flow.FromMillilitersPerMinute(value);
+        public static Flow MillilitersPerMinute(this int value) => (Flow)Flow.FromMillilitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
+        public static Flow MillilitersPerMinute(this long value) => (Flow)Flow.FromMillilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
-        public static Flow MillilitersPerMinute(this long value) => Flow.FromMillilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double?)"/>
-        public static Flow? MillilitersPerMinute(this long? value) => Flow.FromMillilitersPerMinute(value);
+        public static Flow MillilitersPerMinute(this double value) => (Flow)Flow.FromMillilitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
-        public static Flow MillilitersPerMinute(this double value) => Flow.FromMillilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double?)"/>
-        public static Flow? MillilitersPerMinute(this double? value) => Flow.FromMillilitersPerMinute(value);
+        public static Flow MillilitersPerMinute(this float value) => (Flow)Flow.FromMillilitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
-        public static Flow MillilitersPerMinute(this float value) => Flow.FromMillilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double?)"/>
-        public static Flow? MillilitersPerMinute(this float? value) => Flow.FromMillilitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double)"/>
-        public static Flow MillilitersPerMinute(this decimal value) => Flow.FromMillilitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromMillilitersPerMinute(double?)"/>
-        public static Flow? MillilitersPerMinute(this decimal? value) => Flow.FromMillilitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow MillilitersPerMinute(this decimal value) => (Flow)Flow.FromMillilitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MillionUsGallonsPerDay
 
         /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
-        public static Flow MillionUsGallonsPerDay(this int value) => Flow.FromMillionUsGallonsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double?)"/>
-        public static Flow? MillionUsGallonsPerDay(this int? value) => Flow.FromMillionUsGallonsPerDay(value);
+        public static Flow MillionUsGallonsPerDay(this int value) => (Flow)Flow.FromMillionUsGallonsPerDay(value);
+	
+        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
+        public static Flow MillionUsGallonsPerDay(this long value) => (Flow)Flow.FromMillionUsGallonsPerDay(value);
 
         /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
-        public static Flow MillionUsGallonsPerDay(this long value) => Flow.FromMillionUsGallonsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double?)"/>
-        public static Flow? MillionUsGallonsPerDay(this long? value) => Flow.FromMillionUsGallonsPerDay(value);
+        public static Flow MillionUsGallonsPerDay(this double value) => (Flow)Flow.FromMillionUsGallonsPerDay(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
-        public static Flow MillionUsGallonsPerDay(this double value) => Flow.FromMillionUsGallonsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double?)"/>
-        public static Flow? MillionUsGallonsPerDay(this double? value) => Flow.FromMillionUsGallonsPerDay(value);
+        public static Flow MillionUsGallonsPerDay(this float value) => (Flow)Flow.FromMillionUsGallonsPerDay(value);
 
         /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
-        public static Flow MillionUsGallonsPerDay(this float value) => Flow.FromMillionUsGallonsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double?)"/>
-        public static Flow? MillionUsGallonsPerDay(this float? value) => Flow.FromMillionUsGallonsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double)"/>
-        public static Flow MillionUsGallonsPerDay(this decimal value) => Flow.FromMillionUsGallonsPerDay(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromMillionUsGallonsPerDay(double?)"/>
-        public static Flow? MillionUsGallonsPerDay(this decimal? value) => Flow.FromMillionUsGallonsPerDay(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow MillionUsGallonsPerDay(this decimal value) => (Flow)Flow.FromMillionUsGallonsPerDay(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region NanolitersPerMinute
 
         /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
-        public static Flow NanolitersPerMinute(this int value) => Flow.FromNanolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double?)"/>
-        public static Flow? NanolitersPerMinute(this int? value) => Flow.FromNanolitersPerMinute(value);
+        public static Flow NanolitersPerMinute(this int value) => (Flow)Flow.FromNanolitersPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
+        public static Flow NanolitersPerMinute(this long value) => (Flow)Flow.FromNanolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
-        public static Flow NanolitersPerMinute(this long value) => Flow.FromNanolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double?)"/>
-        public static Flow? NanolitersPerMinute(this long? value) => Flow.FromNanolitersPerMinute(value);
+        public static Flow NanolitersPerMinute(this double value) => (Flow)Flow.FromNanolitersPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
-        public static Flow NanolitersPerMinute(this double value) => Flow.FromNanolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double?)"/>
-        public static Flow? NanolitersPerMinute(this double? value) => Flow.FromNanolitersPerMinute(value);
+        public static Flow NanolitersPerMinute(this float value) => (Flow)Flow.FromNanolitersPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
-        public static Flow NanolitersPerMinute(this float value) => Flow.FromNanolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double?)"/>
-        public static Flow? NanolitersPerMinute(this float? value) => Flow.FromNanolitersPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double)"/>
-        public static Flow NanolitersPerMinute(this decimal value) => Flow.FromNanolitersPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromNanolitersPerMinute(double?)"/>
-        public static Flow? NanolitersPerMinute(this decimal? value) => Flow.FromNanolitersPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow NanolitersPerMinute(this decimal value) => (Flow)Flow.FromNanolitersPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region OilBarrelsPerDay
 
         /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
-        public static Flow OilBarrelsPerDay(this int value) => Flow.FromOilBarrelsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double?)"/>
-        public static Flow? OilBarrelsPerDay(this int? value) => Flow.FromOilBarrelsPerDay(value);
+        public static Flow OilBarrelsPerDay(this int value) => (Flow)Flow.FromOilBarrelsPerDay(value);
+	
+        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
+        public static Flow OilBarrelsPerDay(this long value) => (Flow)Flow.FromOilBarrelsPerDay(value);
 
         /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
-        public static Flow OilBarrelsPerDay(this long value) => Flow.FromOilBarrelsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double?)"/>
-        public static Flow? OilBarrelsPerDay(this long? value) => Flow.FromOilBarrelsPerDay(value);
+        public static Flow OilBarrelsPerDay(this double value) => (Flow)Flow.FromOilBarrelsPerDay(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
-        public static Flow OilBarrelsPerDay(this double value) => Flow.FromOilBarrelsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double?)"/>
-        public static Flow? OilBarrelsPerDay(this double? value) => Flow.FromOilBarrelsPerDay(value);
+        public static Flow OilBarrelsPerDay(this float value) => (Flow)Flow.FromOilBarrelsPerDay(value);
 
         /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
-        public static Flow OilBarrelsPerDay(this float value) => Flow.FromOilBarrelsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double?)"/>
-        public static Flow? OilBarrelsPerDay(this float? value) => Flow.FromOilBarrelsPerDay(value);
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double)"/>
-        public static Flow OilBarrelsPerDay(this decimal value) => Flow.FromOilBarrelsPerDay(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromOilBarrelsPerDay(double?)"/>
-        public static Flow? OilBarrelsPerDay(this decimal? value) => Flow.FromOilBarrelsPerDay(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow OilBarrelsPerDay(this decimal value) => (Flow)Flow.FromOilBarrelsPerDay(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region UsGallonsPerMinute
 
         /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
-        public static Flow UsGallonsPerMinute(this int value) => Flow.FromUsGallonsPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double?)"/>
-        public static Flow? UsGallonsPerMinute(this int? value) => Flow.FromUsGallonsPerMinute(value);
+        public static Flow UsGallonsPerMinute(this int value) => (Flow)Flow.FromUsGallonsPerMinute(value);
+	
+        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
+        public static Flow UsGallonsPerMinute(this long value) => (Flow)Flow.FromUsGallonsPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
-        public static Flow UsGallonsPerMinute(this long value) => Flow.FromUsGallonsPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double?)"/>
-        public static Flow? UsGallonsPerMinute(this long? value) => Flow.FromUsGallonsPerMinute(value);
+        public static Flow UsGallonsPerMinute(this double value) => (Flow)Flow.FromUsGallonsPerMinute(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
-        public static Flow UsGallonsPerMinute(this double value) => Flow.FromUsGallonsPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double?)"/>
-        public static Flow? UsGallonsPerMinute(this double? value) => Flow.FromUsGallonsPerMinute(value);
+        public static Flow UsGallonsPerMinute(this float value) => (Flow)Flow.FromUsGallonsPerMinute(value);
 
         /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
-        public static Flow UsGallonsPerMinute(this float value) => Flow.FromUsGallonsPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double?)"/>
-        public static Flow? UsGallonsPerMinute(this float? value) => Flow.FromUsGallonsPerMinute(value);
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double)"/>
-        public static Flow UsGallonsPerMinute(this decimal value) => Flow.FromUsGallonsPerMinute(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Flow.FromUsGallonsPerMinute(double?)"/>
-        public static Flow? UsGallonsPerMinute(this decimal? value) => Flow.FromUsGallonsPerMinute(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Flow UsGallonsPerMinute(this decimal value) => (Flow)Flow.FromUsGallonsPerMinute(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

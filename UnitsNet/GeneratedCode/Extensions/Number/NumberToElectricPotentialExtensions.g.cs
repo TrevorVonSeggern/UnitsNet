@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,170 +48,95 @@ namespace UnitsNet.Extensions.NumberToElectricPotential
         #region Kilovolt
 
         /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
-        public static ElectricPotential Kilovolts(this int value) => ElectricPotential.FromKilovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double?)"/>
-        public static ElectricPotential? Kilovolts(this int? value) => ElectricPotential.FromKilovolts(value);
+        public static ElectricPotential Kilovolts(this int value) => (ElectricPotential)ElectricPotential.FromKilovolts(value);
+	
+        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
+        public static ElectricPotential Kilovolts(this long value) => (ElectricPotential)ElectricPotential.FromKilovolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
-        public static ElectricPotential Kilovolts(this long value) => ElectricPotential.FromKilovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double?)"/>
-        public static ElectricPotential? Kilovolts(this long? value) => ElectricPotential.FromKilovolts(value);
+        public static ElectricPotential Kilovolts(this double value) => (ElectricPotential)ElectricPotential.FromKilovolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
-        public static ElectricPotential Kilovolts(this double value) => ElectricPotential.FromKilovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double?)"/>
-        public static ElectricPotential? Kilovolts(this double? value) => ElectricPotential.FromKilovolts(value);
+        public static ElectricPotential Kilovolts(this float value) => (ElectricPotential)ElectricPotential.FromKilovolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
-        public static ElectricPotential Kilovolts(this float value) => ElectricPotential.FromKilovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double?)"/>
-        public static ElectricPotential? Kilovolts(this float? value) => ElectricPotential.FromKilovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double)"/>
-        public static ElectricPotential Kilovolts(this decimal value) => ElectricPotential.FromKilovolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricPotential.FromKilovolts(double?)"/>
-        public static ElectricPotential? Kilovolts(this decimal? value) => ElectricPotential.FromKilovolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricPotential Kilovolts(this decimal value) => (ElectricPotential)ElectricPotential.FromKilovolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Megavolt
 
         /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
-        public static ElectricPotential Megavolts(this int value) => ElectricPotential.FromMegavolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double?)"/>
-        public static ElectricPotential? Megavolts(this int? value) => ElectricPotential.FromMegavolts(value);
+        public static ElectricPotential Megavolts(this int value) => (ElectricPotential)ElectricPotential.FromMegavolts(value);
+	
+        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
+        public static ElectricPotential Megavolts(this long value) => (ElectricPotential)ElectricPotential.FromMegavolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
-        public static ElectricPotential Megavolts(this long value) => ElectricPotential.FromMegavolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double?)"/>
-        public static ElectricPotential? Megavolts(this long? value) => ElectricPotential.FromMegavolts(value);
+        public static ElectricPotential Megavolts(this double value) => (ElectricPotential)ElectricPotential.FromMegavolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
-        public static ElectricPotential Megavolts(this double value) => ElectricPotential.FromMegavolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double?)"/>
-        public static ElectricPotential? Megavolts(this double? value) => ElectricPotential.FromMegavolts(value);
+        public static ElectricPotential Megavolts(this float value) => (ElectricPotential)ElectricPotential.FromMegavolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
-        public static ElectricPotential Megavolts(this float value) => ElectricPotential.FromMegavolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double?)"/>
-        public static ElectricPotential? Megavolts(this float? value) => ElectricPotential.FromMegavolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double)"/>
-        public static ElectricPotential Megavolts(this decimal value) => ElectricPotential.FromMegavolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricPotential.FromMegavolts(double?)"/>
-        public static ElectricPotential? Megavolts(this decimal? value) => ElectricPotential.FromMegavolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricPotential Megavolts(this decimal value) => (ElectricPotential)ElectricPotential.FromMegavolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Microvolt
 
         /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
-        public static ElectricPotential Microvolts(this int value) => ElectricPotential.FromMicrovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double?)"/>
-        public static ElectricPotential? Microvolts(this int? value) => ElectricPotential.FromMicrovolts(value);
+        public static ElectricPotential Microvolts(this int value) => (ElectricPotential)ElectricPotential.FromMicrovolts(value);
+	
+        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
+        public static ElectricPotential Microvolts(this long value) => (ElectricPotential)ElectricPotential.FromMicrovolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
-        public static ElectricPotential Microvolts(this long value) => ElectricPotential.FromMicrovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double?)"/>
-        public static ElectricPotential? Microvolts(this long? value) => ElectricPotential.FromMicrovolts(value);
+        public static ElectricPotential Microvolts(this double value) => (ElectricPotential)ElectricPotential.FromMicrovolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
-        public static ElectricPotential Microvolts(this double value) => ElectricPotential.FromMicrovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double?)"/>
-        public static ElectricPotential? Microvolts(this double? value) => ElectricPotential.FromMicrovolts(value);
+        public static ElectricPotential Microvolts(this float value) => (ElectricPotential)ElectricPotential.FromMicrovolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
-        public static ElectricPotential Microvolts(this float value) => ElectricPotential.FromMicrovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double?)"/>
-        public static ElectricPotential? Microvolts(this float? value) => ElectricPotential.FromMicrovolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double)"/>
-        public static ElectricPotential Microvolts(this decimal value) => ElectricPotential.FromMicrovolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricPotential.FromMicrovolts(double?)"/>
-        public static ElectricPotential? Microvolts(this decimal? value) => ElectricPotential.FromMicrovolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricPotential Microvolts(this decimal value) => (ElectricPotential)ElectricPotential.FromMicrovolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Millivolt
 
         /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
-        public static ElectricPotential Millivolts(this int value) => ElectricPotential.FromMillivolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double?)"/>
-        public static ElectricPotential? Millivolts(this int? value) => ElectricPotential.FromMillivolts(value);
+        public static ElectricPotential Millivolts(this int value) => (ElectricPotential)ElectricPotential.FromMillivolts(value);
+	
+        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
+        public static ElectricPotential Millivolts(this long value) => (ElectricPotential)ElectricPotential.FromMillivolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
-        public static ElectricPotential Millivolts(this long value) => ElectricPotential.FromMillivolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double?)"/>
-        public static ElectricPotential? Millivolts(this long? value) => ElectricPotential.FromMillivolts(value);
+        public static ElectricPotential Millivolts(this double value) => (ElectricPotential)ElectricPotential.FromMillivolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
-        public static ElectricPotential Millivolts(this double value) => ElectricPotential.FromMillivolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double?)"/>
-        public static ElectricPotential? Millivolts(this double? value) => ElectricPotential.FromMillivolts(value);
+        public static ElectricPotential Millivolts(this float value) => (ElectricPotential)ElectricPotential.FromMillivolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
-        public static ElectricPotential Millivolts(this float value) => ElectricPotential.FromMillivolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double?)"/>
-        public static ElectricPotential? Millivolts(this float? value) => ElectricPotential.FromMillivolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double)"/>
-        public static ElectricPotential Millivolts(this decimal value) => ElectricPotential.FromMillivolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricPotential.FromMillivolts(double?)"/>
-        public static ElectricPotential? Millivolts(this decimal? value) => ElectricPotential.FromMillivolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricPotential Millivolts(this decimal value) => (ElectricPotential)ElectricPotential.FromMillivolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Volt
 
         /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
-        public static ElectricPotential Volts(this int value) => ElectricPotential.FromVolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double?)"/>
-        public static ElectricPotential? Volts(this int? value) => ElectricPotential.FromVolts(value);
+        public static ElectricPotential Volts(this int value) => (ElectricPotential)ElectricPotential.FromVolts(value);
+	
+        /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
+        public static ElectricPotential Volts(this long value) => (ElectricPotential)ElectricPotential.FromVolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
-        public static ElectricPotential Volts(this long value) => ElectricPotential.FromVolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double?)"/>
-        public static ElectricPotential? Volts(this long? value) => ElectricPotential.FromVolts(value);
+        public static ElectricPotential Volts(this double value) => (ElectricPotential)ElectricPotential.FromVolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
-        public static ElectricPotential Volts(this double value) => ElectricPotential.FromVolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double?)"/>
-        public static ElectricPotential? Volts(this double? value) => ElectricPotential.FromVolts(value);
+        public static ElectricPotential Volts(this float value) => (ElectricPotential)ElectricPotential.FromVolts(value);
 
         /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
-        public static ElectricPotential Volts(this float value) => ElectricPotential.FromVolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double?)"/>
-        public static ElectricPotential? Volts(this float? value) => ElectricPotential.FromVolts(value);
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double)"/>
-        public static ElectricPotential Volts(this decimal value) => ElectricPotential.FromVolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricPotential.FromVolts(double?)"/>
-        public static ElectricPotential? Volts(this decimal? value) => ElectricPotential.FromVolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricPotential Volts(this decimal value) => (ElectricPotential)ElectricPotential.FromVolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

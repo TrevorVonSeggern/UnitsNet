@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,340 +48,190 @@ namespace UnitsNet.Extensions.NumberToForce
         #region Decanewton
 
         /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
-        public static Force Decanewtons(this int value) => Force.FromDecanewtons(value);
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double?)"/>
-        public static Force? Decanewtons(this int? value) => Force.FromDecanewtons(value);
+        public static Force Decanewtons(this int value) => (Force)Force.FromDecanewtons(value);
+	
+        /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
+        public static Force Decanewtons(this long value) => (Force)Force.FromDecanewtons(value);
 
         /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
-        public static Force Decanewtons(this long value) => Force.FromDecanewtons(value);
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double?)"/>
-        public static Force? Decanewtons(this long? value) => Force.FromDecanewtons(value);
+        public static Force Decanewtons(this double value) => (Force)Force.FromDecanewtons(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
-        public static Force Decanewtons(this double value) => Force.FromDecanewtons(value);
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double?)"/>
-        public static Force? Decanewtons(this double? value) => Force.FromDecanewtons(value);
+        public static Force Decanewtons(this float value) => (Force)Force.FromDecanewtons(value);
 
         /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
-        public static Force Decanewtons(this float value) => Force.FromDecanewtons(value);
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double?)"/>
-        public static Force? Decanewtons(this float? value) => Force.FromDecanewtons(value);
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double)"/>
-        public static Force Decanewtons(this decimal value) => Force.FromDecanewtons(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromDecanewtons(double?)"/>
-        public static Force? Decanewtons(this decimal? value) => Force.FromDecanewtons(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Decanewtons(this decimal value) => (Force)Force.FromDecanewtons(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Dyn
 
         /// <inheritdoc cref="Force.FromDyne(double)"/>
-        public static Force Dyne(this int value) => Force.FromDyne(value);
-
-        /// <inheritdoc cref="Force.FromDyne(double?)"/>
-        public static Force? Dyne(this int? value) => Force.FromDyne(value);
+        public static Force Dyne(this int value) => (Force)Force.FromDyne(value);
+	
+        /// <inheritdoc cref="Force.FromDyne(double)"/>
+        public static Force Dyne(this long value) => (Force)Force.FromDyne(value);
 
         /// <inheritdoc cref="Force.FromDyne(double)"/>
-        public static Force Dyne(this long value) => Force.FromDyne(value);
-
-        /// <inheritdoc cref="Force.FromDyne(double?)"/>
-        public static Force? Dyne(this long? value) => Force.FromDyne(value);
+        public static Force Dyne(this double value) => (Force)Force.FromDyne(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromDyne(double)"/>
-        public static Force Dyne(this double value) => Force.FromDyne(value);
-
-        /// <inheritdoc cref="Force.FromDyne(double?)"/>
-        public static Force? Dyne(this double? value) => Force.FromDyne(value);
+        public static Force Dyne(this float value) => (Force)Force.FromDyne(value);
 
         /// <inheritdoc cref="Force.FromDyne(double)"/>
-        public static Force Dyne(this float value) => Force.FromDyne(value);
-
-        /// <inheritdoc cref="Force.FromDyne(double?)"/>
-        public static Force? Dyne(this float? value) => Force.FromDyne(value);
-
-        /// <inheritdoc cref="Force.FromDyne(double)"/>
-        public static Force Dyne(this decimal value) => Force.FromDyne(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromDyne(double?)"/>
-        public static Force? Dyne(this decimal? value) => Force.FromDyne(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Dyne(this decimal value) => (Force)Force.FromDyne(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilogramForce
 
         /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
-        public static Force KilogramsForce(this int value) => Force.FromKilogramsForce(value);
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double?)"/>
-        public static Force? KilogramsForce(this int? value) => Force.FromKilogramsForce(value);
+        public static Force KilogramsForce(this int value) => (Force)Force.FromKilogramsForce(value);
+	
+        /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
+        public static Force KilogramsForce(this long value) => (Force)Force.FromKilogramsForce(value);
 
         /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
-        public static Force KilogramsForce(this long value) => Force.FromKilogramsForce(value);
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double?)"/>
-        public static Force? KilogramsForce(this long? value) => Force.FromKilogramsForce(value);
+        public static Force KilogramsForce(this double value) => (Force)Force.FromKilogramsForce(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
-        public static Force KilogramsForce(this double value) => Force.FromKilogramsForce(value);
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double?)"/>
-        public static Force? KilogramsForce(this double? value) => Force.FromKilogramsForce(value);
+        public static Force KilogramsForce(this float value) => (Force)Force.FromKilogramsForce(value);
 
         /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
-        public static Force KilogramsForce(this float value) => Force.FromKilogramsForce(value);
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double?)"/>
-        public static Force? KilogramsForce(this float? value) => Force.FromKilogramsForce(value);
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double)"/>
-        public static Force KilogramsForce(this decimal value) => Force.FromKilogramsForce(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromKilogramsForce(double?)"/>
-        public static Force? KilogramsForce(this decimal? value) => Force.FromKilogramsForce(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force KilogramsForce(this decimal value) => (Force)Force.FromKilogramsForce(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Kilonewton
 
         /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
-        public static Force Kilonewtons(this int value) => Force.FromKilonewtons(value);
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double?)"/>
-        public static Force? Kilonewtons(this int? value) => Force.FromKilonewtons(value);
+        public static Force Kilonewtons(this int value) => (Force)Force.FromKilonewtons(value);
+	
+        /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
+        public static Force Kilonewtons(this long value) => (Force)Force.FromKilonewtons(value);
 
         /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
-        public static Force Kilonewtons(this long value) => Force.FromKilonewtons(value);
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double?)"/>
-        public static Force? Kilonewtons(this long? value) => Force.FromKilonewtons(value);
+        public static Force Kilonewtons(this double value) => (Force)Force.FromKilonewtons(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
-        public static Force Kilonewtons(this double value) => Force.FromKilonewtons(value);
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double?)"/>
-        public static Force? Kilonewtons(this double? value) => Force.FromKilonewtons(value);
+        public static Force Kilonewtons(this float value) => (Force)Force.FromKilonewtons(value);
 
         /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
-        public static Force Kilonewtons(this float value) => Force.FromKilonewtons(value);
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double?)"/>
-        public static Force? Kilonewtons(this float? value) => Force.FromKilonewtons(value);
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double)"/>
-        public static Force Kilonewtons(this decimal value) => Force.FromKilonewtons(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromKilonewtons(double?)"/>
-        public static Force? Kilonewtons(this decimal? value) => Force.FromKilonewtons(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Kilonewtons(this decimal value) => (Force)Force.FromKilonewtons(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KiloPond
 
         /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
-        public static Force KiloPonds(this int value) => Force.FromKiloPonds(value);
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double?)"/>
-        public static Force? KiloPonds(this int? value) => Force.FromKiloPonds(value);
+        public static Force KiloPonds(this int value) => (Force)Force.FromKiloPonds(value);
+	
+        /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
+        public static Force KiloPonds(this long value) => (Force)Force.FromKiloPonds(value);
 
         /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
-        public static Force KiloPonds(this long value) => Force.FromKiloPonds(value);
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double?)"/>
-        public static Force? KiloPonds(this long? value) => Force.FromKiloPonds(value);
+        public static Force KiloPonds(this double value) => (Force)Force.FromKiloPonds(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
-        public static Force KiloPonds(this double value) => Force.FromKiloPonds(value);
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double?)"/>
-        public static Force? KiloPonds(this double? value) => Force.FromKiloPonds(value);
+        public static Force KiloPonds(this float value) => (Force)Force.FromKiloPonds(value);
 
         /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
-        public static Force KiloPonds(this float value) => Force.FromKiloPonds(value);
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double?)"/>
-        public static Force? KiloPonds(this float? value) => Force.FromKiloPonds(value);
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double)"/>
-        public static Force KiloPonds(this decimal value) => Force.FromKiloPonds(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromKiloPonds(double?)"/>
-        public static Force? KiloPonds(this decimal? value) => Force.FromKiloPonds(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force KiloPonds(this decimal value) => (Force)Force.FromKiloPonds(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Meganewton
 
         /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
-        public static Force Meganewtons(this int value) => Force.FromMeganewtons(value);
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double?)"/>
-        public static Force? Meganewtons(this int? value) => Force.FromMeganewtons(value);
+        public static Force Meganewtons(this int value) => (Force)Force.FromMeganewtons(value);
+	
+        /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
+        public static Force Meganewtons(this long value) => (Force)Force.FromMeganewtons(value);
 
         /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
-        public static Force Meganewtons(this long value) => Force.FromMeganewtons(value);
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double?)"/>
-        public static Force? Meganewtons(this long? value) => Force.FromMeganewtons(value);
+        public static Force Meganewtons(this double value) => (Force)Force.FromMeganewtons(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
-        public static Force Meganewtons(this double value) => Force.FromMeganewtons(value);
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double?)"/>
-        public static Force? Meganewtons(this double? value) => Force.FromMeganewtons(value);
+        public static Force Meganewtons(this float value) => (Force)Force.FromMeganewtons(value);
 
         /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
-        public static Force Meganewtons(this float value) => Force.FromMeganewtons(value);
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double?)"/>
-        public static Force? Meganewtons(this float? value) => Force.FromMeganewtons(value);
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double)"/>
-        public static Force Meganewtons(this decimal value) => Force.FromMeganewtons(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromMeganewtons(double?)"/>
-        public static Force? Meganewtons(this decimal? value) => Force.FromMeganewtons(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Meganewtons(this decimal value) => (Force)Force.FromMeganewtons(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Newton
 
         /// <inheritdoc cref="Force.FromNewtons(double)"/>
-        public static Force Newtons(this int value) => Force.FromNewtons(value);
-
-        /// <inheritdoc cref="Force.FromNewtons(double?)"/>
-        public static Force? Newtons(this int? value) => Force.FromNewtons(value);
+        public static Force Newtons(this int value) => (Force)Force.FromNewtons(value);
+	
+        /// <inheritdoc cref="Force.FromNewtons(double)"/>
+        public static Force Newtons(this long value) => (Force)Force.FromNewtons(value);
 
         /// <inheritdoc cref="Force.FromNewtons(double)"/>
-        public static Force Newtons(this long value) => Force.FromNewtons(value);
-
-        /// <inheritdoc cref="Force.FromNewtons(double?)"/>
-        public static Force? Newtons(this long? value) => Force.FromNewtons(value);
+        public static Force Newtons(this double value) => (Force)Force.FromNewtons(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromNewtons(double)"/>
-        public static Force Newtons(this double value) => Force.FromNewtons(value);
-
-        /// <inheritdoc cref="Force.FromNewtons(double?)"/>
-        public static Force? Newtons(this double? value) => Force.FromNewtons(value);
+        public static Force Newtons(this float value) => (Force)Force.FromNewtons(value);
 
         /// <inheritdoc cref="Force.FromNewtons(double)"/>
-        public static Force Newtons(this float value) => Force.FromNewtons(value);
-
-        /// <inheritdoc cref="Force.FromNewtons(double?)"/>
-        public static Force? Newtons(this float? value) => Force.FromNewtons(value);
-
-        /// <inheritdoc cref="Force.FromNewtons(double)"/>
-        public static Force Newtons(this decimal value) => Force.FromNewtons(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromNewtons(double?)"/>
-        public static Force? Newtons(this decimal? value) => Force.FromNewtons(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Newtons(this decimal value) => (Force)Force.FromNewtons(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Poundal
 
         /// <inheritdoc cref="Force.FromPoundals(double)"/>
-        public static Force Poundals(this int value) => Force.FromPoundals(value);
-
-        /// <inheritdoc cref="Force.FromPoundals(double?)"/>
-        public static Force? Poundals(this int? value) => Force.FromPoundals(value);
+        public static Force Poundals(this int value) => (Force)Force.FromPoundals(value);
+	
+        /// <inheritdoc cref="Force.FromPoundals(double)"/>
+        public static Force Poundals(this long value) => (Force)Force.FromPoundals(value);
 
         /// <inheritdoc cref="Force.FromPoundals(double)"/>
-        public static Force Poundals(this long value) => Force.FromPoundals(value);
-
-        /// <inheritdoc cref="Force.FromPoundals(double?)"/>
-        public static Force? Poundals(this long? value) => Force.FromPoundals(value);
+        public static Force Poundals(this double value) => (Force)Force.FromPoundals(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromPoundals(double)"/>
-        public static Force Poundals(this double value) => Force.FromPoundals(value);
-
-        /// <inheritdoc cref="Force.FromPoundals(double?)"/>
-        public static Force? Poundals(this double? value) => Force.FromPoundals(value);
+        public static Force Poundals(this float value) => (Force)Force.FromPoundals(value);
 
         /// <inheritdoc cref="Force.FromPoundals(double)"/>
-        public static Force Poundals(this float value) => Force.FromPoundals(value);
-
-        /// <inheritdoc cref="Force.FromPoundals(double?)"/>
-        public static Force? Poundals(this float? value) => Force.FromPoundals(value);
-
-        /// <inheritdoc cref="Force.FromPoundals(double)"/>
-        public static Force Poundals(this decimal value) => Force.FromPoundals(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromPoundals(double?)"/>
-        public static Force? Poundals(this decimal? value) => Force.FromPoundals(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force Poundals(this decimal value) => (Force)Force.FromPoundals(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region PoundForce
 
         /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
-        public static Force PoundsForce(this int value) => Force.FromPoundsForce(value);
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double?)"/>
-        public static Force? PoundsForce(this int? value) => Force.FromPoundsForce(value);
+        public static Force PoundsForce(this int value) => (Force)Force.FromPoundsForce(value);
+	
+        /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
+        public static Force PoundsForce(this long value) => (Force)Force.FromPoundsForce(value);
 
         /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
-        public static Force PoundsForce(this long value) => Force.FromPoundsForce(value);
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double?)"/>
-        public static Force? PoundsForce(this long? value) => Force.FromPoundsForce(value);
+        public static Force PoundsForce(this double value) => (Force)Force.FromPoundsForce(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
-        public static Force PoundsForce(this double value) => Force.FromPoundsForce(value);
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double?)"/>
-        public static Force? PoundsForce(this double? value) => Force.FromPoundsForce(value);
+        public static Force PoundsForce(this float value) => (Force)Force.FromPoundsForce(value);
 
         /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
-        public static Force PoundsForce(this float value) => Force.FromPoundsForce(value);
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double?)"/>
-        public static Force? PoundsForce(this float? value) => Force.FromPoundsForce(value);
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double)"/>
-        public static Force PoundsForce(this decimal value) => Force.FromPoundsForce(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromPoundsForce(double?)"/>
-        public static Force? PoundsForce(this decimal? value) => Force.FromPoundsForce(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force PoundsForce(this decimal value) => (Force)Force.FromPoundsForce(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region TonneForce
 
         /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
-        public static Force TonnesForce(this int value) => Force.FromTonnesForce(value);
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double?)"/>
-        public static Force? TonnesForce(this int? value) => Force.FromTonnesForce(value);
+        public static Force TonnesForce(this int value) => (Force)Force.FromTonnesForce(value);
+	
+        /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
+        public static Force TonnesForce(this long value) => (Force)Force.FromTonnesForce(value);
 
         /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
-        public static Force TonnesForce(this long value) => Force.FromTonnesForce(value);
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double?)"/>
-        public static Force? TonnesForce(this long? value) => Force.FromTonnesForce(value);
+        public static Force TonnesForce(this double value) => (Force)Force.FromTonnesForce(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
-        public static Force TonnesForce(this double value) => Force.FromTonnesForce(value);
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double?)"/>
-        public static Force? TonnesForce(this double? value) => Force.FromTonnesForce(value);
+        public static Force TonnesForce(this float value) => (Force)Force.FromTonnesForce(value);
 
         /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
-        public static Force TonnesForce(this float value) => Force.FromTonnesForce(value);
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double?)"/>
-        public static Force? TonnesForce(this float? value) => Force.FromTonnesForce(value);
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double)"/>
-        public static Force TonnesForce(this decimal value) => Force.FromTonnesForce(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Force.FromTonnesForce(double?)"/>
-        public static Force? TonnesForce(this decimal? value) => Force.FromTonnesForce(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Force TonnesForce(this decimal value) => (Force)Force.FromTonnesForce(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

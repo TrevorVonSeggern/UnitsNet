@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     In physics, mass (from Greek μᾶζα "barley cake, lump [of dough]") is a property of a physical system or body, giving rise to the phenomena of the body's resistance to being accelerated by a force and the strength of its mutual gravitational attraction with other bodies. Instruments such as mass balances or scales use those phenomena to measure mass. The SI unit of mass is the kilogram (kg).
     /// </summary>
@@ -63,1555 +64,1159 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class Mass : UnitsNet.Generic.Mass<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class Mass
+		public sealed partial class Mass
 #else
-    public partial struct Mass : IComparable, IComparable<Mass>
+		public partial class Mass <T, C> : IComparable, IComparable<Mass<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of Mass.
-        /// </summary>
-        private readonly double _kilograms;
+		{
+			/// <summary>
+			///     Base unit of Mass.
+			/// </summary>
+			private readonly Number<T, C> _kilograms;
 
-        // Windows Runtime Component requires a default constructor
+			public Mass() : this(new Number<T,C>())
+			{
+			}
+
+			public Mass(T kilograms)
+			{
+				_kilograms = (kilograms);
+			}
+
+			public Mass(Number<T, C> kilograms)
+			{
+				_kilograms = (kilograms);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.Mass;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static MassUnit BaseUnit
+			{
+				get { return MassUnit.Kilogram; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the Mass quantity.
+			/// </summary>
+			public static MassUnit[] Units { get; } = Enum.GetValues(typeof(MassUnit)).Cast<MassUnit>().ToArray();
+
+			/// <summary>
+			///     Get Mass in Centigrams.
+			/// </summary>
+			public Number<T, C> Centigrams
+			{
+				get { return (_kilograms*1e3) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Decagrams.
+			/// </summary>
+			public Number<T, C> Decagrams
+			{
+				get { return (_kilograms*1e3) / 1e1d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Decigrams.
+			/// </summary>
+			public Number<T, C> Decigrams
+			{
+				get { return (_kilograms*1e3) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Grams.
+			/// </summary>
+			public Number<T, C> Grams
+			{
+				get { return _kilograms*1e3; }
+			}
+
+			/// <summary>
+			///     Get Mass in Hectograms.
+			/// </summary>
+			public Number<T, C> Hectograms
+			{
+				get { return (_kilograms*1e3) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Kilograms.
+			/// </summary>
+			public Number<T, C> Kilograms
+			{
+				get { return (_kilograms*1e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Kilopounds.
+			/// </summary>
+			public Number<T, C> Kilopounds
+			{
+				get { return (_kilograms/0.45359237) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Kilotonnes.
+			/// </summary>
+			public Number<T, C> Kilotonnes
+			{
+				get { return (_kilograms/1e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Mass in LongHundredweight.
+			/// </summary>
+			public Number<T, C> LongHundredweight
+			{
+				get { return _kilograms*0.01968413055222121; }
+			}
+
+			/// <summary>
+			///     Get Mass in LongTons.
+			/// </summary>
+			public Number<T, C> LongTons
+			{
+				get { return _kilograms/1016.0469088; }
+			}
+
+			/// <summary>
+			///     Get Mass in Megapounds.
+			/// </summary>
+			public Number<T, C> Megapounds
+			{
+				get { return (_kilograms/0.45359237) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Megatonnes.
+			/// </summary>
+			public Number<T, C> Megatonnes
+			{
+				get { return (_kilograms/1e3) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Micrograms.
+			/// </summary>
+			public Number<T, C> Micrograms
+			{
+				get { return (_kilograms*1e3) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Milligrams.
+			/// </summary>
+			public Number<T, C> Milligrams
+			{
+				get { return (_kilograms*1e3) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Nanograms.
+			/// </summary>
+			public Number<T, C> Nanograms
+			{
+				get { return (_kilograms*1e3) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get Mass in Ounces.
+			/// </summary>
+			public Number<T, C> Ounces
+			{
+				get { return _kilograms*35.2739619; }
+			}
+
+			/// <summary>
+			///     Get Mass in Pounds.
+			/// </summary>
+			public Number<T, C> Pounds
+			{
+				get { return _kilograms/0.45359237; }
+			}
+
+			/// <summary>
+			///     Get Mass in ShortHundredweight.
+			/// </summary>
+			public Number<T, C> ShortHundredweight
+			{
+				get { return _kilograms*0.022046226218487758; }
+			}
+
+			/// <summary>
+			///     Get Mass in ShortTons.
+			/// </summary>
+			public Number<T, C> ShortTons
+			{
+				get { return _kilograms/907.18474; }
+			}
+
+			/// <summary>
+			///     Get Mass in Stone.
+			/// </summary>
+			public Number<T, C> Stone
+			{
+				get { return _kilograms*0.1574731728702698; }
+			}
+
+			/// <summary>
+			///     Get Mass in Tonnes.
+			/// </summary>
+			public Number<T, C> Tonnes
+			{
+				get { return _kilograms/1e3; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static Mass<T, C> Zero
+			{
+				get { return new Mass<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get Mass from Centigrams.
+			/// </summary>
 #if WINDOWS_UWP
-        public Mass() : this(0)
-        {
-        }
-#endif
-
-        public Mass(double kilograms)
-        {
-            _kilograms = Convert.ToDouble(kilograms);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromCentigrams(Number<T, C> centigrams)
+			{
+				Number<T,C> value = (Number<T,C>) centigrams;
+				return new Mass<T, C>((value/1e3) * 1e-2d);
+			}
 #else
-        public
+			public static Mass<T, C> FromCentigrams(Number<T, C> centigrams)
+			{
+				Number<T,C> value = (Number<T,C>) centigrams;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e-2d));
+			}
 #endif
-        Mass(long kilograms)
-        {
-            _kilograms = Convert.ToDouble(kilograms);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get Mass from Decagrams.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromDecagrams(Number<T, C> decagrams)
+			{
+				Number<T,C> value = (Number<T,C>) decagrams;
+				return new Mass<T, C>((value/1e3) * 1e1d);
+			}
 #else
-        public
+			public static Mass<T, C> FromDecagrams(Number<T, C> decagrams)
+			{
+				Number<T,C> value = (Number<T,C>) decagrams;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e1d));
+			}
 #endif
-        Mass(decimal kilograms)
-        {
-            _kilograms = Convert.ToDouble(kilograms);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.Mass;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static MassUnit BaseUnit
-        {
-            get { return MassUnit.Kilogram; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the Mass quantity.
-        /// </summary>
-        public static MassUnit[] Units { get; } = Enum.GetValues(typeof(MassUnit)).Cast<MassUnit>().ToArray();
-
-        /// <summary>
-        ///     Get Mass in Centigrams.
-        /// </summary>
-        public double Centigrams
-        {
-            get { return (_kilograms*1e3) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Decagrams.
-        /// </summary>
-        public double Decagrams
-        {
-            get { return (_kilograms*1e3) / 1e1d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Decigrams.
-        /// </summary>
-        public double Decigrams
-        {
-            get { return (_kilograms*1e3) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Grams.
-        /// </summary>
-        public double Grams
-        {
-            get { return _kilograms*1e3; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Hectograms.
-        /// </summary>
-        public double Hectograms
-        {
-            get { return (_kilograms*1e3) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Kilograms.
-        /// </summary>
-        public double Kilograms
-        {
-            get { return (_kilograms*1e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Kilopounds.
-        /// </summary>
-        public double Kilopounds
-        {
-            get { return (_kilograms/0.45359237) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Kilotonnes.
-        /// </summary>
-        public double Kilotonnes
-        {
-            get { return (_kilograms/1e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in LongHundredweight.
-        /// </summary>
-        public double LongHundredweight
-        {
-            get { return _kilograms*0.01968413055222121; }
-        }
-
-        /// <summary>
-        ///     Get Mass in LongTons.
-        /// </summary>
-        public double LongTons
-        {
-            get { return _kilograms/1016.0469088; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Megapounds.
-        /// </summary>
-        public double Megapounds
-        {
-            get { return (_kilograms/0.45359237) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Megatonnes.
-        /// </summary>
-        public double Megatonnes
-        {
-            get { return (_kilograms/1e3) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Micrograms.
-        /// </summary>
-        public double Micrograms
-        {
-            get { return (_kilograms*1e3) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Milligrams.
-        /// </summary>
-        public double Milligrams
-        {
-            get { return (_kilograms*1e3) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Nanograms.
-        /// </summary>
-        public double Nanograms
-        {
-            get { return (_kilograms*1e3) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Ounces.
-        /// </summary>
-        public double Ounces
-        {
-            get { return _kilograms*35.2739619; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Pounds.
-        /// </summary>
-        public double Pounds
-        {
-            get { return _kilograms/0.45359237; }
-        }
-
-        /// <summary>
-        ///     Get Mass in ShortHundredweight.
-        /// </summary>
-        public double ShortHundredweight
-        {
-            get { return _kilograms*0.022046226218487758; }
-        }
-
-        /// <summary>
-        ///     Get Mass in ShortTons.
-        /// </summary>
-        public double ShortTons
-        {
-            get { return _kilograms/907.18474; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Stone.
-        /// </summary>
-        public double Stone
-        {
-            get { return _kilograms*0.1574731728702698; }
-        }
-
-        /// <summary>
-        ///     Get Mass in Tonnes.
-        /// </summary>
-        public double Tonnes
-        {
-            get { return _kilograms/1e3; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static Mass Zero
-        {
-            get { return new Mass(); }
-        }
-
-        /// <summary>
-        ///     Get Mass from Centigrams.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Decigrams.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromCentigrams(double centigrams)
-        {
-            double value = (double) centigrams;
-            return new Mass((value/1e3) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromDecigrams(Number<T, C> decigrams)
+			{
+				Number<T,C> value = (Number<T,C>) decigrams;
+				return new Mass<T, C>((value/1e3) * 1e-1d);
+			}
 #else
-        public static Mass FromCentigrams(QuantityValue centigrams)
-        {
-            double value = (double) centigrams;
-            return new Mass(((value/1e3) * 1e-2d));
-        }
+			public static Mass<T, C> FromDecigrams(Number<T, C> decigrams)
+			{
+				Number<T,C> value = (Number<T,C>) decigrams;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Decagrams.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Grams.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromDecagrams(double decagrams)
-        {
-            double value = (double) decagrams;
-            return new Mass((value/1e3) * 1e1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromGrams(Number<T, C> grams)
+			{
+				Number<T,C> value = (Number<T,C>) grams;
+				return new Mass<T, C>(value/1e3);
+			}
 #else
-        public static Mass FromDecagrams(QuantityValue decagrams)
-        {
-            double value = (double) decagrams;
-            return new Mass(((value/1e3) * 1e1d));
-        }
+			public static Mass<T, C> FromGrams(Number<T, C> grams)
+			{
+				Number<T,C> value = (Number<T,C>) grams;
+				return new Mass<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Decigrams.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Hectograms.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromDecigrams(double decigrams)
-        {
-            double value = (double) decigrams;
-            return new Mass((value/1e3) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromHectograms(Number<T, C> hectograms)
+			{
+				Number<T,C> value = (Number<T,C>) hectograms;
+				return new Mass<T, C>((value/1e3) * 1e2d);
+			}
 #else
-        public static Mass FromDecigrams(QuantityValue decigrams)
-        {
-            double value = (double) decigrams;
-            return new Mass(((value/1e3) * 1e-1d));
-        }
+			public static Mass<T, C> FromHectograms(Number<T, C> hectograms)
+			{
+				Number<T,C> value = (Number<T,C>) hectograms;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Grams.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Kilograms.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromGrams(double grams)
-        {
-            double value = (double) grams;
-            return new Mass(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromKilograms(Number<T, C> kilograms)
+			{
+				Number<T,C> value = (Number<T,C>) kilograms;
+				return new Mass<T, C>((value/1e3) * 1e3d);
+			}
 #else
-        public static Mass FromGrams(QuantityValue grams)
-        {
-            double value = (double) grams;
-            return new Mass((value/1e3));
-        }
+			public static Mass<T, C> FromKilograms(Number<T, C> kilograms)
+			{
+				Number<T,C> value = (Number<T,C>) kilograms;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Hectograms.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Kilopounds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromHectograms(double hectograms)
-        {
-            double value = (double) hectograms;
-            return new Mass((value/1e3) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromKilopounds(Number<T, C> kilopounds)
+			{
+				Number<T,C> value = (Number<T,C>) kilopounds;
+				return new Mass<T, C>((value*0.45359237) * 1e3d);
+			}
 #else
-        public static Mass FromHectograms(QuantityValue hectograms)
-        {
-            double value = (double) hectograms;
-            return new Mass(((value/1e3) * 1e2d));
-        }
+			public static Mass<T, C> FromKilopounds(Number<T, C> kilopounds)
+			{
+				Number<T,C> value = (Number<T,C>) kilopounds;
+				return new Mass<T, C>(new Number<T,C>((value*0.45359237) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Kilograms.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Kilotonnes.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromKilograms(double kilograms)
-        {
-            double value = (double) kilograms;
-            return new Mass((value/1e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromKilotonnes(Number<T, C> kilotonnes)
+			{
+				Number<T,C> value = (Number<T,C>) kilotonnes;
+				return new Mass<T, C>((value*1e3) * 1e3d);
+			}
 #else
-        public static Mass FromKilograms(QuantityValue kilograms)
-        {
-            double value = (double) kilograms;
-            return new Mass(((value/1e3) * 1e3d));
-        }
+			public static Mass<T, C> FromKilotonnes(Number<T, C> kilotonnes)
+			{
+				Number<T,C> value = (Number<T,C>) kilotonnes;
+				return new Mass<T, C>(new Number<T,C>((value*1e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Kilopounds.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from LongHundredweight.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromKilopounds(double kilopounds)
-        {
-            double value = (double) kilopounds;
-            return new Mass((value*0.45359237) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromLongHundredweight(Number<T, C> longhundredweight)
+			{
+				Number<T,C> value = (Number<T,C>) longhundredweight;
+				return new Mass<T, C>(value/0.01968413055222121);
+			}
 #else
-        public static Mass FromKilopounds(QuantityValue kilopounds)
-        {
-            double value = (double) kilopounds;
-            return new Mass(((value*0.45359237) * 1e3d));
-        }
+			public static Mass<T, C> FromLongHundredweight(Number<T, C> longhundredweight)
+			{
+				Number<T,C> value = (Number<T,C>) longhundredweight;
+				return new Mass<T, C>(new Number<T,C>(value/0.01968413055222121));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Kilotonnes.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from LongTons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromKilotonnes(double kilotonnes)
-        {
-            double value = (double) kilotonnes;
-            return new Mass((value*1e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromLongTons(Number<T, C> longtons)
+			{
+				Number<T,C> value = (Number<T,C>) longtons;
+				return new Mass<T, C>(value*1016.0469088);
+			}
 #else
-        public static Mass FromKilotonnes(QuantityValue kilotonnes)
-        {
-            double value = (double) kilotonnes;
-            return new Mass(((value*1e3) * 1e3d));
-        }
+			public static Mass<T, C> FromLongTons(Number<T, C> longtons)
+			{
+				Number<T,C> value = (Number<T,C>) longtons;
+				return new Mass<T, C>(new Number<T,C>(value*1016.0469088));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from LongHundredweight.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Megapounds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromLongHundredweight(double longhundredweight)
-        {
-            double value = (double) longhundredweight;
-            return new Mass(value/0.01968413055222121);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromMegapounds(Number<T, C> megapounds)
+			{
+				Number<T,C> value = (Number<T,C>) megapounds;
+				return new Mass<T, C>((value*0.45359237) * 1e6d);
+			}
 #else
-        public static Mass FromLongHundredweight(QuantityValue longhundredweight)
-        {
-            double value = (double) longhundredweight;
-            return new Mass((value/0.01968413055222121));
-        }
+			public static Mass<T, C> FromMegapounds(Number<T, C> megapounds)
+			{
+				Number<T,C> value = (Number<T,C>) megapounds;
+				return new Mass<T, C>(new Number<T,C>((value*0.45359237) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from LongTons.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Megatonnes.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromLongTons(double longtons)
-        {
-            double value = (double) longtons;
-            return new Mass(value*1016.0469088);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromMegatonnes(Number<T, C> megatonnes)
+			{
+				Number<T,C> value = (Number<T,C>) megatonnes;
+				return new Mass<T, C>((value*1e3) * 1e6d);
+			}
 #else
-        public static Mass FromLongTons(QuantityValue longtons)
-        {
-            double value = (double) longtons;
-            return new Mass((value*1016.0469088));
-        }
+			public static Mass<T, C> FromMegatonnes(Number<T, C> megatonnes)
+			{
+				Number<T,C> value = (Number<T,C>) megatonnes;
+				return new Mass<T, C>(new Number<T,C>((value*1e3) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Megapounds.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Micrograms.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromMegapounds(double megapounds)
-        {
-            double value = (double) megapounds;
-            return new Mass((value*0.45359237) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromMicrograms(Number<T, C> micrograms)
+			{
+				Number<T,C> value = (Number<T,C>) micrograms;
+				return new Mass<T, C>((value/1e3) * 1e-6d);
+			}
 #else
-        public static Mass FromMegapounds(QuantityValue megapounds)
-        {
-            double value = (double) megapounds;
-            return new Mass(((value*0.45359237) * 1e6d));
-        }
+			public static Mass<T, C> FromMicrograms(Number<T, C> micrograms)
+			{
+				Number<T,C> value = (Number<T,C>) micrograms;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Megatonnes.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Milligrams.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromMegatonnes(double megatonnes)
-        {
-            double value = (double) megatonnes;
-            return new Mass((value*1e3) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromMilligrams(Number<T, C> milligrams)
+			{
+				Number<T,C> value = (Number<T,C>) milligrams;
+				return new Mass<T, C>((value/1e3) * 1e-3d);
+			}
 #else
-        public static Mass FromMegatonnes(QuantityValue megatonnes)
-        {
-            double value = (double) megatonnes;
-            return new Mass(((value*1e3) * 1e6d));
-        }
+			public static Mass<T, C> FromMilligrams(Number<T, C> milligrams)
+			{
+				Number<T,C> value = (Number<T,C>) milligrams;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Micrograms.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Nanograms.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromMicrograms(double micrograms)
-        {
-            double value = (double) micrograms;
-            return new Mass((value/1e3) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromNanograms(Number<T, C> nanograms)
+			{
+				Number<T,C> value = (Number<T,C>) nanograms;
+				return new Mass<T, C>((value/1e3) * 1e-9d);
+			}
 #else
-        public static Mass FromMicrograms(QuantityValue micrograms)
-        {
-            double value = (double) micrograms;
-            return new Mass(((value/1e3) * 1e-6d));
-        }
+			public static Mass<T, C> FromNanograms(Number<T, C> nanograms)
+			{
+				Number<T,C> value = (Number<T,C>) nanograms;
+				return new Mass<T, C>(new Number<T,C>((value/1e3) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Milligrams.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Ounces.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromMilligrams(double milligrams)
-        {
-            double value = (double) milligrams;
-            return new Mass((value/1e3) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromOunces(Number<T, C> ounces)
+			{
+				Number<T,C> value = (Number<T,C>) ounces;
+				return new Mass<T, C>(value/35.2739619);
+			}
 #else
-        public static Mass FromMilligrams(QuantityValue milligrams)
-        {
-            double value = (double) milligrams;
-            return new Mass(((value/1e3) * 1e-3d));
-        }
+			public static Mass<T, C> FromOunces(Number<T, C> ounces)
+			{
+				Number<T,C> value = (Number<T,C>) ounces;
+				return new Mass<T, C>(new Number<T,C>(value/35.2739619));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Nanograms.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Pounds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromNanograms(double nanograms)
-        {
-            double value = (double) nanograms;
-            return new Mass((value/1e3) * 1e-9d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromPounds(Number<T, C> pounds)
+			{
+				Number<T,C> value = (Number<T,C>) pounds;
+				return new Mass<T, C>(value*0.45359237);
+			}
 #else
-        public static Mass FromNanograms(QuantityValue nanograms)
-        {
-            double value = (double) nanograms;
-            return new Mass(((value/1e3) * 1e-9d));
-        }
+			public static Mass<T, C> FromPounds(Number<T, C> pounds)
+			{
+				Number<T,C> value = (Number<T,C>) pounds;
+				return new Mass<T, C>(new Number<T,C>(value*0.45359237));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Ounces.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from ShortHundredweight.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromOunces(double ounces)
-        {
-            double value = (double) ounces;
-            return new Mass(value/35.2739619);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromShortHundredweight(Number<T, C> shorthundredweight)
+			{
+				Number<T,C> value = (Number<T,C>) shorthundredweight;
+				return new Mass<T, C>(value/0.022046226218487758);
+			}
 #else
-        public static Mass FromOunces(QuantityValue ounces)
-        {
-            double value = (double) ounces;
-            return new Mass((value/35.2739619));
-        }
+			public static Mass<T, C> FromShortHundredweight(Number<T, C> shorthundredweight)
+			{
+				Number<T,C> value = (Number<T,C>) shorthundredweight;
+				return new Mass<T, C>(new Number<T,C>(value/0.022046226218487758));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Pounds.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from ShortTons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromPounds(double pounds)
-        {
-            double value = (double) pounds;
-            return new Mass(value*0.45359237);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromShortTons(Number<T, C> shorttons)
+			{
+				Number<T,C> value = (Number<T,C>) shorttons;
+				return new Mass<T, C>(value*907.18474);
+			}
 #else
-        public static Mass FromPounds(QuantityValue pounds)
-        {
-            double value = (double) pounds;
-            return new Mass((value*0.45359237));
-        }
+			public static Mass<T, C> FromShortTons(Number<T, C> shorttons)
+			{
+				Number<T,C> value = (Number<T,C>) shorttons;
+				return new Mass<T, C>(new Number<T,C>(value*907.18474));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from ShortHundredweight.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Stone.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromShortHundredweight(double shorthundredweight)
-        {
-            double value = (double) shorthundredweight;
-            return new Mass(value/0.022046226218487758);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromStone(Number<T, C> stone)
+			{
+				Number<T,C> value = (Number<T,C>) stone;
+				return new Mass<T, C>(value/0.1574731728702698);
+			}
 #else
-        public static Mass FromShortHundredweight(QuantityValue shorthundredweight)
-        {
-            double value = (double) shorthundredweight;
-            return new Mass((value/0.022046226218487758));
-        }
+			public static Mass<T, C> FromStone(Number<T, C> stone)
+			{
+				Number<T,C> value = (Number<T,C>) stone;
+				return new Mass<T, C>(new Number<T,C>(value/0.1574731728702698));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from ShortTons.
-        /// </summary>
+			/// <summary>
+			///     Get Mass from Tonnes.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromShortTons(double shorttons)
-        {
-            double value = (double) shorttons;
-            return new Mass(value*907.18474);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Mass<T, C> FromTonnes(Number<T, C> tonnes)
+			{
+				Number<T,C> value = (Number<T,C>) tonnes;
+				return new Mass<T, C>(value*1e3);
+			}
 #else
-        public static Mass FromShortTons(QuantityValue shorttons)
-        {
-            double value = (double) shorttons;
-            return new Mass((value*907.18474));
-        }
+			public static Mass<T, C> FromTonnes(Number<T, C> tonnes)
+			{
+				Number<T,C> value = (Number<T,C>) tonnes;
+				return new Mass<T, C>(new Number<T,C>(value*1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Mass from Stone.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="MassUnit" /> to <see cref="Mass" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>Mass unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromStone(double stone)
-        {
-            double value = (double) stone;
-            return new Mass(value/0.1574731728702698);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static Mass<T, C> From(double value, MassUnit fromUnit)
 #else
-        public static Mass FromStone(QuantityValue stone)
-        {
-            double value = (double) stone;
-            return new Mass((value/0.1574731728702698));
-        }
+			public static Mass<T, C> From(Number<T, C> value, MassUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case MassUnit.Centigram:
+						return FromCentigrams(value);
+					case MassUnit.Decagram:
+						return FromDecagrams(value);
+					case MassUnit.Decigram:
+						return FromDecigrams(value);
+					case MassUnit.Gram:
+						return FromGrams(value);
+					case MassUnit.Hectogram:
+						return FromHectograms(value);
+					case MassUnit.Kilogram:
+						return FromKilograms(value);
+					case MassUnit.Kilopound:
+						return FromKilopounds(value);
+					case MassUnit.Kilotonne:
+						return FromKilotonnes(value);
+					case MassUnit.LongHundredweight:
+						return FromLongHundredweight(value);
+					case MassUnit.LongTon:
+						return FromLongTons(value);
+					case MassUnit.Megapound:
+						return FromMegapounds(value);
+					case MassUnit.Megatonne:
+						return FromMegatonnes(value);
+					case MassUnit.Microgram:
+						return FromMicrograms(value);
+					case MassUnit.Milligram:
+						return FromMilligrams(value);
+					case MassUnit.Nanogram:
+						return FromNanograms(value);
+					case MassUnit.Ounce:
+						return FromOunces(value);
+					case MassUnit.Pound:
+						return FromPounds(value);
+					case MassUnit.ShortHundredweight:
+						return FromShortHundredweight(value);
+					case MassUnit.ShortTon:
+						return FromShortTons(value);
+					case MassUnit.Stone:
+						return FromStone(value);
+					case MassUnit.Tonne:
+						return FromTonnes(value);
 
-        /// <summary>
-        ///     Get Mass from Tonnes.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Mass FromTonnes(double tonnes)
-        {
-            double value = (double) tonnes;
-            return new Mass(value*1e3);
-        }
-#else
-        public static Mass FromTonnes(QuantityValue tonnes)
-        {
-            double value = (double) tonnes;
-            return new Mass((value*1e3));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MassUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MassUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable Mass from nullable Centigrams.
-        /// </summary>
-        public static Mass? FromCentigrams(QuantityValue? centigrams)
-        {
-            if (centigrams.HasValue)
-            {
-                return FromCentigrams(centigrams.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator -(Mass<T, C> right)
+			{
+				return new Mass<T, C>(-right._kilograms);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Decagrams.
-        /// </summary>
-        public static Mass? FromDecagrams(QuantityValue? decagrams)
-        {
-            if (decagrams.HasValue)
-            {
-                return FromDecagrams(decagrams.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator +(Mass<T, C> left, Mass<T, C> right)
+			{
+				return new Mass<T, C>(left._kilograms + right._kilograms);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Decigrams.
-        /// </summary>
-        public static Mass? FromDecigrams(QuantityValue? decigrams)
-        {
-            if (decigrams.HasValue)
-            {
-                return FromDecigrams(decigrams.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator -(Mass<T, C> left, Mass<T, C> right)
+			{
+				return new Mass<T, C>(left._kilograms - right._kilograms);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Grams.
-        /// </summary>
-        public static Mass? FromGrams(QuantityValue? grams)
-        {
-            if (grams.HasValue)
-            {
-                return FromGrams(grams.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator *(Number<T, C> left, Mass<T, C> right)
+			{
+				return new Mass<T, C>(left*right._kilograms);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Hectograms.
-        /// </summary>
-        public static Mass? FromHectograms(QuantityValue? hectograms)
-        {
-            if (hectograms.HasValue)
-            {
-                return FromHectograms(hectograms.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator *(Mass<T, C> left, double right)
+			{
+				return new Mass<T, C>(left._kilograms*right);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Kilograms.
-        /// </summary>
-        public static Mass? FromKilograms(QuantityValue? kilograms)
-        {
-            if (kilograms.HasValue)
-            {
-                return FromKilograms(kilograms.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Mass<T, C> operator /(Mass<T, C> left, double right)
+			{
+				return new Mass<T, C>(left._kilograms/right);
+			}
 
-        /// <summary>
-        ///     Get nullable Mass from nullable Kilopounds.
-        /// </summary>
-        public static Mass? FromKilopounds(QuantityValue? kilopounds)
-        {
-            if (kilopounds.HasValue)
-            {
-                return FromKilopounds(kilopounds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Kilotonnes.
-        /// </summary>
-        public static Mass? FromKilotonnes(QuantityValue? kilotonnes)
-        {
-            if (kilotonnes.HasValue)
-            {
-                return FromKilotonnes(kilotonnes.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable LongHundredweight.
-        /// </summary>
-        public static Mass? FromLongHundredweight(QuantityValue? longhundredweight)
-        {
-            if (longhundredweight.HasValue)
-            {
-                return FromLongHundredweight(longhundredweight.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable LongTons.
-        /// </summary>
-        public static Mass? FromLongTons(QuantityValue? longtons)
-        {
-            if (longtons.HasValue)
-            {
-                return FromLongTons(longtons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Megapounds.
-        /// </summary>
-        public static Mass? FromMegapounds(QuantityValue? megapounds)
-        {
-            if (megapounds.HasValue)
-            {
-                return FromMegapounds(megapounds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Megatonnes.
-        /// </summary>
-        public static Mass? FromMegatonnes(QuantityValue? megatonnes)
-        {
-            if (megatonnes.HasValue)
-            {
-                return FromMegatonnes(megatonnes.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Micrograms.
-        /// </summary>
-        public static Mass? FromMicrograms(QuantityValue? micrograms)
-        {
-            if (micrograms.HasValue)
-            {
-                return FromMicrograms(micrograms.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Milligrams.
-        /// </summary>
-        public static Mass? FromMilligrams(QuantityValue? milligrams)
-        {
-            if (milligrams.HasValue)
-            {
-                return FromMilligrams(milligrams.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Nanograms.
-        /// </summary>
-        public static Mass? FromNanograms(QuantityValue? nanograms)
-        {
-            if (nanograms.HasValue)
-            {
-                return FromNanograms(nanograms.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Ounces.
-        /// </summary>
-        public static Mass? FromOunces(QuantityValue? ounces)
-        {
-            if (ounces.HasValue)
-            {
-                return FromOunces(ounces.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Pounds.
-        /// </summary>
-        public static Mass? FromPounds(QuantityValue? pounds)
-        {
-            if (pounds.HasValue)
-            {
-                return FromPounds(pounds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable ShortHundredweight.
-        /// </summary>
-        public static Mass? FromShortHundredweight(QuantityValue? shorthundredweight)
-        {
-            if (shorthundredweight.HasValue)
-            {
-                return FromShortHundredweight(shorthundredweight.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable ShortTons.
-        /// </summary>
-        public static Mass? FromShortTons(QuantityValue? shorttons)
-        {
-            if (shorttons.HasValue)
-            {
-                return FromShortTons(shorttons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Stone.
-        /// </summary>
-        public static Mass? FromStone(QuantityValue? stone)
-        {
-            if (stone.HasValue)
-            {
-                return FromStone(stone.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Mass from nullable Tonnes.
-        /// </summary>
-        public static Mass? FromTonnes(QuantityValue? tonnes)
-        {
-            if (tonnes.HasValue)
-            {
-                return FromTonnes(tonnes.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(Mass<T, C> left, Mass<T, C> right)
+			{
+				return Convert.ToDouble(left._kilograms/right._kilograms);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MassUnit" /> to <see cref="Mass" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Mass unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is Mass<T, C>)) throw new ArgumentException("Expected type Mass.", "obj");
+				return CompareTo((Mass<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static Mass From(double value, MassUnit fromUnit)
+			internal
 #else
-        public static Mass From(QuantityValue value, MassUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case MassUnit.Centigram:
-                    return FromCentigrams(value);
-                case MassUnit.Decagram:
-                    return FromDecagrams(value);
-                case MassUnit.Decigram:
-                    return FromDecigrams(value);
-                case MassUnit.Gram:
-                    return FromGrams(value);
-                case MassUnit.Hectogram:
-                    return FromHectograms(value);
-                case MassUnit.Kilogram:
-                    return FromKilograms(value);
-                case MassUnit.Kilopound:
-                    return FromKilopounds(value);
-                case MassUnit.Kilotonne:
-                    return FromKilotonnes(value);
-                case MassUnit.LongHundredweight:
-                    return FromLongHundredweight(value);
-                case MassUnit.LongTon:
-                    return FromLongTons(value);
-                case MassUnit.Megapound:
-                    return FromMegapounds(value);
-                case MassUnit.Megatonne:
-                    return FromMegatonnes(value);
-                case MassUnit.Microgram:
-                    return FromMicrograms(value);
-                case MassUnit.Milligram:
-                    return FromMilligrams(value);
-                case MassUnit.Nanogram:
-                    return FromNanograms(value);
-                case MassUnit.Ounce:
-                    return FromOunces(value);
-                case MassUnit.Pound:
-                    return FromPounds(value);
-                case MassUnit.ShortHundredweight:
-                    return FromShortHundredweight(value);
-                case MassUnit.ShortTon:
-                    return FromShortTons(value);
-                case MassUnit.Stone:
-                    return FromStone(value);
-                case MassUnit.Tonne:
-                    return FromTonnes(value);
+			int CompareTo(Mass<T, C> other)
+			{
+				return _kilograms.CompareTo(other._kilograms);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MassUnit" /> to <see cref="Mass" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Mass unit value.</returns>
-        public static Mass? From(QuantityValue? value, MassUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case MassUnit.Centigram:
-                    return FromCentigrams(value.Value);
-                case MassUnit.Decagram:
-                    return FromDecagrams(value.Value);
-                case MassUnit.Decigram:
-                    return FromDecigrams(value.Value);
-                case MassUnit.Gram:
-                    return FromGrams(value.Value);
-                case MassUnit.Hectogram:
-                    return FromHectograms(value.Value);
-                case MassUnit.Kilogram:
-                    return FromKilograms(value.Value);
-                case MassUnit.Kilopound:
-                    return FromKilopounds(value.Value);
-                case MassUnit.Kilotonne:
-                    return FromKilotonnes(value.Value);
-                case MassUnit.LongHundredweight:
-                    return FromLongHundredweight(value.Value);
-                case MassUnit.LongTon:
-                    return FromLongTons(value.Value);
-                case MassUnit.Megapound:
-                    return FromMegapounds(value.Value);
-                case MassUnit.Megatonne:
-                    return FromMegatonnes(value.Value);
-                case MassUnit.Microgram:
-                    return FromMicrograms(value.Value);
-                case MassUnit.Milligram:
-                    return FromMilligrams(value.Value);
-                case MassUnit.Nanogram:
-                    return FromNanograms(value.Value);
-                case MassUnit.Ounce:
-                    return FromOunces(value.Value);
-                case MassUnit.Pound:
-                    return FromPounds(value.Value);
-                case MassUnit.ShortHundredweight:
-                    return FromShortHundredweight(value.Value);
-                case MassUnit.ShortTon:
-                    return FromShortTons(value.Value);
-                case MassUnit.Stone:
-                    return FromStone(value.Value);
-                case MassUnit.Tonne:
-                    return FromTonnes(value.Value);
+			public static bool operator <=(Mass<T, C> left, Mass<T, C> right)
+			{
+				return left._kilograms <= right._kilograms;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(Mass<T, C> left, Mass<T, C> right)
+			{
+				return left._kilograms >= right._kilograms;
+			}
+
+			public static bool operator <(Mass<T, C> left, Mass<T, C> right)
+			{
+				return left._kilograms < right._kilograms;
+			}
+
+			public static bool operator >(Mass<T, C> left, Mass<T, C> right)
+			{
+				return left._kilograms > right._kilograms;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(Mass<T, C> left, Mass<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilograms == right._kilograms;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(Mass<T, C> left, Mass<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilograms != right._kilograms;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MassUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MassUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static Mass operator -(Mass right)
-        {
-            return new Mass(-right._kilograms);
-        }
-
-        public static Mass operator +(Mass left, Mass right)
-        {
-            return new Mass(left._kilograms + right._kilograms);
-        }
-
-        public static Mass operator -(Mass left, Mass right)
-        {
-            return new Mass(left._kilograms - right._kilograms);
-        }
-
-        public static Mass operator *(double left, Mass right)
-        {
-            return new Mass(left*right._kilograms);
-        }
-
-        public static Mass operator *(Mass left, double right)
-        {
-            return new Mass(left._kilograms*(double)right);
-        }
-
-        public static Mass operator /(Mass left, double right)
-        {
-            return new Mass(left._kilograms/(double)right);
-        }
-
-        public static double operator /(Mass left, Mass right)
-        {
-            return Convert.ToDouble(left._kilograms/right._kilograms);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is Mass)) throw new ArgumentException("Expected type Mass.", "obj");
-            return CompareTo((Mass) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(Mass other)
-        {
-            return _kilograms.CompareTo(other._kilograms);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(Mass left, Mass right)
-        {
-            return left._kilograms <= right._kilograms;
-        }
-
-        public static bool operator >=(Mass left, Mass right)
-        {
-            return left._kilograms >= right._kilograms;
-        }
-
-        public static bool operator <(Mass left, Mass right)
-        {
-            return left._kilograms < right._kilograms;
-        }
-
-        public static bool operator >(Mass left, Mass right)
-        {
-            return left._kilograms > right._kilograms;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(Mass left, Mass right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilograms == right._kilograms;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(Mass left, Mass right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilograms != right._kilograms;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _kilograms.Equals(((Mass) obj)._kilograms);
-        }
+				return _kilograms.Equals(((Mass<T, C>) obj)._kilograms);
+			}
 
-        /// <summary>
-        ///     Compare equality to another Mass by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(Mass other, Mass maxError)
-        {
-            return Math.Abs(_kilograms - other._kilograms) <= maxError._kilograms;
-        }
+			/// <summary>
+			///     Compare equality to another Mass by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(Mass<T, C> other, Mass<T, C> maxError)
+			{
+				return Math.Abs((decimal)_kilograms - (decimal)other._kilograms) <= maxError._kilograms;
+			}
 
-        public override int GetHashCode()
-        {
-            return _kilograms.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _kilograms.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(MassUnit unit)
-        {
-            switch (unit)
-            {
-                case MassUnit.Centigram:
-                    return Centigrams;
-                case MassUnit.Decagram:
-                    return Decagrams;
-                case MassUnit.Decigram:
-                    return Decigrams;
-                case MassUnit.Gram:
-                    return Grams;
-                case MassUnit.Hectogram:
-                    return Hectograms;
-                case MassUnit.Kilogram:
-                    return Kilograms;
-                case MassUnit.Kilopound:
-                    return Kilopounds;
-                case MassUnit.Kilotonne:
-                    return Kilotonnes;
-                case MassUnit.LongHundredweight:
-                    return LongHundredweight;
-                case MassUnit.LongTon:
-                    return LongTons;
-                case MassUnit.Megapound:
-                    return Megapounds;
-                case MassUnit.Megatonne:
-                    return Megatonnes;
-                case MassUnit.Microgram:
-                    return Micrograms;
-                case MassUnit.Milligram:
-                    return Milligrams;
-                case MassUnit.Nanogram:
-                    return Nanograms;
-                case MassUnit.Ounce:
-                    return Ounces;
-                case MassUnit.Pound:
-                    return Pounds;
-                case MassUnit.ShortHundredweight:
-                    return ShortHundredweight;
-                case MassUnit.ShortTon:
-                    return ShortTons;
-                case MassUnit.Stone:
-                    return Stone;
-                case MassUnit.Tonne:
-                    return Tonnes;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(MassUnit unit)
+			{
+				switch (unit)
+				{
+					case MassUnit.Centigram:
+						return Centigrams;
+					case MassUnit.Decagram:
+						return Decagrams;
+					case MassUnit.Decigram:
+						return Decigrams;
+					case MassUnit.Gram:
+						return Grams;
+					case MassUnit.Hectogram:
+						return Hectograms;
+					case MassUnit.Kilogram:
+						return Kilograms;
+					case MassUnit.Kilopound:
+						return Kilopounds;
+					case MassUnit.Kilotonne:
+						return Kilotonnes;
+					case MassUnit.LongHundredweight:
+						return LongHundredweight;
+					case MassUnit.LongTon:
+						return LongTons;
+					case MassUnit.Megapound:
+						return Megapounds;
+					case MassUnit.Megatonne:
+						return Megatonnes;
+					case MassUnit.Microgram:
+						return Micrograms;
+					case MassUnit.Milligram:
+						return Milligrams;
+					case MassUnit.Nanogram:
+						return Nanograms;
+					case MassUnit.Ounce:
+						return Ounces;
+					case MassUnit.Pound:
+						return Pounds;
+					case MassUnit.ShortHundredweight:
+						return ShortHundredweight;
+					case MassUnit.ShortTon:
+						return ShortTons;
+					case MassUnit.Stone:
+						return Stone;
+					case MassUnit.Tonne:
+						return Tonnes;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Mass Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Mass<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Mass Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Mass<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<Mass, MassUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    MassUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromKilograms(x.Kilograms + y.Kilograms));
-        }
+					return QuantityParser.Parse<Mass<T, C>, MassUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						MassUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromKilograms((Number<T, C>)x.Kilograms + y.Kilograms));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out Mass result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out Mass<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Mass result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(Mass);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Mass<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(Mass<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MassUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MassUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MassUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MassUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static MassUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static MassUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<MassUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<MassUnit>(str.Trim());
 
-            if (unit == MassUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MassUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == MassUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MassUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is Kilogram
-        /// </summary>
-        public static MassUnit ToStringDefaultUnit { get; set; } = MassUnit.Kilogram;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is Kilogram
+			/// </summary>
+			public static MassUnit ToStringDefaultUnit { get; set; } = MassUnit.Kilogram;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MassUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MassUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MassUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MassUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MassUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MassUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MassUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MassUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of Mass
-        /// </summary>
-        public static Mass MaxValue
-        {
-            get
-            {
-                return new Mass(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of Mass
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of Mass
-        /// </summary>
-        public static Mass MinValue
-        {
-            get
-            {
-                return new Mass(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of Mass
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

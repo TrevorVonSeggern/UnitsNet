@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     The strength of a signal expressed in decibels (dB) relative to one watt.
     /// </summary>
@@ -63,287 +64,213 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class PowerRatio : UnitsNet.Generic.PowerRatio<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class PowerRatio
+		public sealed partial class PowerRatio
 #else
-    public partial struct PowerRatio : IComparable, IComparable<PowerRatio>
+		public partial class PowerRatio <T, C> : IComparable, IComparable<PowerRatio<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of PowerRatio.
-        /// </summary>
-        private readonly double _decibelWatts;
+		{
+			/// <summary>
+			///     Base unit of PowerRatio.
+			/// </summary>
+			private readonly Number<T, C> _decibelWatts;
 
-        // Windows Runtime Component requires a default constructor
+			public PowerRatio() : this(new Number<T,C>())
+			{
+			}
+
+			public PowerRatio(T decibelwatts)
+			{
+				_decibelWatts = (decibelwatts);
+			}
+
+			public PowerRatio(Number<T, C> decibelwatts)
+			{
+				_decibelWatts = (decibelwatts);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.PowerRatio;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static PowerRatioUnit BaseUnit
+			{
+				get { return PowerRatioUnit.DecibelWatt; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the PowerRatio quantity.
+			/// </summary>
+			public static PowerRatioUnit[] Units { get; } = Enum.GetValues(typeof(PowerRatioUnit)).Cast<PowerRatioUnit>().ToArray();
+
+			/// <summary>
+			///     Get PowerRatio in DecibelMilliwatts.
+			/// </summary>
+			public Number<T, C> DecibelMilliwatts
+			{
+				get { return _decibelWatts + 30; }
+			}
+
+			/// <summary>
+			///     Get PowerRatio in DecibelWatts.
+			/// </summary>
+			public Number<T, C> DecibelWatts
+			{
+				get { return _decibelWatts; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static PowerRatio<T, C> Zero
+			{
+				get { return new PowerRatio<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get PowerRatio from DecibelMilliwatts.
+			/// </summary>
 #if WINDOWS_UWP
-        public PowerRatio() : this(0)
-        {
-        }
-#endif
-
-        public PowerRatio(double decibelwatts)
-        {
-            _decibelWatts = Convert.ToDouble(decibelwatts);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static PowerRatio<T, C> FromDecibelMilliwatts(Number<T, C> decibelmilliwatts)
+			{
+				Number<T,C> value = (Number<T,C>) decibelmilliwatts;
+				return new PowerRatio<T, C>(value - 30);
+			}
 #else
-        public
+			public static PowerRatio<T, C> FromDecibelMilliwatts(Number<T, C> decibelmilliwatts)
+			{
+				Number<T,C> value = (Number<T,C>) decibelmilliwatts;
+				return new PowerRatio<T, C>(new Number<T,C>(value - 30));
+			}
 #endif
-        PowerRatio(long decibelwatts)
-        {
-            _decibelWatts = Convert.ToDouble(decibelwatts);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get PowerRatio from DecibelWatts.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static PowerRatio<T, C> FromDecibelWatts(Number<T, C> decibelwatts)
+			{
+				Number<T,C> value = (Number<T,C>) decibelwatts;
+				return new PowerRatio<T, C>(value);
+			}
 #else
-        public
+			public static PowerRatio<T, C> FromDecibelWatts(Number<T, C> decibelwatts)
+			{
+				Number<T,C> value = (Number<T,C>) decibelwatts;
+				return new PowerRatio<T, C>(new Number<T,C>(value));
+			}
 #endif
-        PowerRatio(decimal decibelwatts)
-        {
-            _decibelWatts = Convert.ToDouble(decibelwatts);
-        }
 
-        #region Properties
 
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.PowerRatio;
 
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static PowerRatioUnit BaseUnit
-        {
-            get { return PowerRatioUnit.DecibelWatt; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the PowerRatio quantity.
-        /// </summary>
-        public static PowerRatioUnit[] Units { get; } = Enum.GetValues(typeof(PowerRatioUnit)).Cast<PowerRatioUnit>().ToArray();
-
-        /// <summary>
-        ///     Get PowerRatio in DecibelMilliwatts.
-        /// </summary>
-        public double DecibelMilliwatts
-        {
-            get { return _decibelWatts + 30; }
-        }
-
-        /// <summary>
-        ///     Get PowerRatio in DecibelWatts.
-        /// </summary>
-        public double DecibelWatts
-        {
-            get { return _decibelWatts; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static PowerRatio Zero
-        {
-            get { return new PowerRatio(); }
-        }
-
-        /// <summary>
-        ///     Get PowerRatio from DecibelMilliwatts.
-        /// </summary>
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="PowerRatioUnit" /> to <see cref="PowerRatio" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>PowerRatio unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static PowerRatio FromDecibelMilliwatts(double decibelmilliwatts)
-        {
-            double value = (double) decibelmilliwatts;
-            return new PowerRatio(value - 30);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static PowerRatio<T, C> From(double value, PowerRatioUnit fromUnit)
 #else
-        public static PowerRatio FromDecibelMilliwatts(QuantityValue decibelmilliwatts)
-        {
-            double value = (double) decibelmilliwatts;
-            return new PowerRatio((value - 30));
-        }
+			public static PowerRatio<T, C> From(Number<T, C> value, PowerRatioUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case PowerRatioUnit.DecibelMilliwatt:
+						return FromDecibelMilliwatts(value);
+					case PowerRatioUnit.DecibelWatt:
+						return FromDecibelWatts(value);
 
-        /// <summary>
-        ///     Get PowerRatio from DecibelWatts.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static PowerRatio FromDecibelWatts(double decibelwatts)
-        {
-            double value = (double) decibelwatts;
-            return new PowerRatio(value);
-        }
-#else
-        public static PowerRatio FromDecibelWatts(QuantityValue decibelwatts)
-        {
-            double value = (double) decibelwatts;
-            return new PowerRatio((value));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable PowerRatio from nullable DecibelMilliwatts.
-        /// </summary>
-        public static PowerRatio? FromDecibelMilliwatts(QuantityValue? decibelmilliwatts)
-        {
-            if (decibelmilliwatts.HasValue)
-            {
-                return FromDecibelMilliwatts(decibelmilliwatts.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(PowerRatioUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
 
-        /// <summary>
-        ///     Get nullable PowerRatio from nullable DecibelWatts.
-        /// </summary>
-        public static PowerRatio? FromDecibelWatts(QuantityValue? decibelwatts)
-        {
-            if (decibelwatts.HasValue)
-            {
-                return FromDecibelWatts(decibelwatts.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(PowerRatioUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
 
-#endif
-
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="PowerRatioUnit" /> to <see cref="PowerRatio" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>PowerRatio unit value.</returns>
-#if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static PowerRatio From(double value, PowerRatioUnit fromUnit)
-#else
-        public static PowerRatio From(QuantityValue value, PowerRatioUnit fromUnit)
-#endif
-        {
-            switch (fromUnit)
-            {
-                case PowerRatioUnit.DecibelMilliwatt:
-                    return FromDecibelMilliwatts(value);
-                case PowerRatioUnit.DecibelWatt:
-                    return FromDecibelWatts(value);
-
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="PowerRatioUnit" /> to <see cref="PowerRatio" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>PowerRatio unit value.</returns>
-        public static PowerRatio? From(QuantityValue? value, PowerRatioUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case PowerRatioUnit.DecibelMilliwatt:
-                    return FromDecibelMilliwatts(value.Value);
-                case PowerRatioUnit.DecibelWatt:
-                    return FromDecibelWatts(value.Value);
-
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-#endif
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(PowerRatioUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(PowerRatioUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
+			#endregion
 
         #region Logarithmic Arithmetic Operators
 
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static PowerRatio operator -(PowerRatio right)
+        public static PowerRatio<T, C> operator -(PowerRatio<T, C> right)
         {
-            return new PowerRatio(-right._decibelWatts);
+            return new PowerRatio<T, C>(-right._decibelWatts);
         }
 
-        public static PowerRatio operator +(PowerRatio left, PowerRatio right)
+        public static PowerRatio<T, C> operator +(PowerRatio<T, C> left, PowerRatio<T, C> right)
         {
             // Logarithmic addition
             // Formula: 10*log10(10^(x/10) + 10^(y/10))
-            return new PowerRatio(10*Math.Log10(Math.Pow(10, left._decibelWatts/10) + Math.Pow(10, right._decibelWatts/10)));
+            return new PowerRatio<T, C>(10*Math.Log10(Math.Pow(10, left._decibelWatts/10) + Math.Pow(10, right._decibelWatts/10)));
         }
 
-        public static PowerRatio operator -(PowerRatio left, PowerRatio right)
+        public static PowerRatio<T, C> operator -(PowerRatio<T, C> left, PowerRatio<T, C> right)
         {
             // Logarithmic subtraction
             // Formula: 10*log10(10^(x/10) - 10^(y/10))
-            return new PowerRatio(10*Math.Log10(Math.Pow(10, left._decibelWatts/10) - Math.Pow(10, right._decibelWatts/10)));
+            return new PowerRatio<T, C>(10*Math.Log10(Math.Pow(10, left._decibelWatts/10) - Math.Pow(10, right._decibelWatts/10)));
         }
 
-        public static PowerRatio operator *(double left, PowerRatio right)
+        public static PowerRatio<T, C> operator *(Number<T, C> left, PowerRatio<T, C> right)
         {
             // Logarithmic multiplication = addition
-            return new PowerRatio(left + right._decibelWatts);
+            return new PowerRatio<T, C>(left + right._decibelWatts);
         }
 
-        public static PowerRatio operator *(PowerRatio left, double right)
+        public static PowerRatio<T, C> operator *(PowerRatio<T, C> left, double right)
         {
             // Logarithmic multiplication = addition
-            return new PowerRatio(left._decibelWatts + (double)right);
+            return new PowerRatio<T, C>(left._decibelWatts + (Number<T, C>)right);
         }
 
-        public static PowerRatio operator /(PowerRatio left, double right)
+        public static PowerRatio<T, C> operator /(PowerRatio<T, C> left, double right)
         {
             // Logarithmic division = subtraction
-            return new PowerRatio(left._decibelWatts - (double)right);
+            return new PowerRatio<T, C>(left._decibelWatts - (Number<T, C>)right);
         }
 
-        public static double operator /(PowerRatio left, PowerRatio right)
+        public static double operator /(PowerRatio<T, C> left, PowerRatio<T, C> right)
         {
             // Logarithmic division = subtraction
             return Convert.ToDouble(left._decibelWatts - right._decibelWatts);
@@ -352,381 +279,382 @@ namespace UnitsNet
 
         #endregion
 
-        #region Equality / IComparable
+			#region Equality / IComparable
 
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is PowerRatio)) throw new ArgumentException("Expected type PowerRatio.", "obj");
-            return CompareTo((PowerRatio) obj);
-        }
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is PowerRatio<T, C>)) throw new ArgumentException("Expected type PowerRatio.", "obj");
+				return CompareTo((PowerRatio<T, C>) obj);
+			}
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        int CompareTo(PowerRatio other)
-        {
-            return _decibelWatts.CompareTo(other._decibelWatts);
-        }
+			int CompareTo(PowerRatio<T, C> other)
+			{
+				return _decibelWatts.CompareTo(other._decibelWatts);
+			}
 
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static bool operator <=(PowerRatio left, PowerRatio right)
-        {
-            return left._decibelWatts <= right._decibelWatts;
-        }
+			public static bool operator <=(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				return left._decibelWatts <= right._decibelWatts;
+			}
 
-        public static bool operator >=(PowerRatio left, PowerRatio right)
-        {
-            return left._decibelWatts >= right._decibelWatts;
-        }
+			public static bool operator >=(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				return left._decibelWatts >= right._decibelWatts;
+			}
 
-        public static bool operator <(PowerRatio left, PowerRatio right)
-        {
-            return left._decibelWatts < right._decibelWatts;
-        }
+			public static bool operator <(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				return left._decibelWatts < right._decibelWatts;
+			}
 
-        public static bool operator >(PowerRatio left, PowerRatio right)
-        {
-            return left._decibelWatts > right._decibelWatts;
-        }
+			public static bool operator >(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				return left._decibelWatts > right._decibelWatts;
+			}
 
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(PowerRatio left, PowerRatio right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._decibelWatts == right._decibelWatts;
-        }
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._decibelWatts == right._decibelWatts;
+			}
 
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(PowerRatio left, PowerRatio right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._decibelWatts != right._decibelWatts;
-        }
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(PowerRatio<T, C> left, PowerRatio<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._decibelWatts != right._decibelWatts;
+			}
 #endif
 
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _decibelWatts.Equals(((PowerRatio) obj)._decibelWatts);
-        }
+				return _decibelWatts.Equals(((PowerRatio<T, C>) obj)._decibelWatts);
+			}
 
-        /// <summary>
-        ///     Compare equality to another PowerRatio by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(PowerRatio other, PowerRatio maxError)
-        {
-            return Math.Abs(_decibelWatts - other._decibelWatts) <= maxError._decibelWatts;
-        }
+			/// <summary>
+			///     Compare equality to another PowerRatio by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(PowerRatio<T, C> other, PowerRatio<T, C> maxError)
+			{
+				return Math.Abs((decimal)_decibelWatts - (decimal)other._decibelWatts) <= maxError._decibelWatts;
+			}
 
-        public override int GetHashCode()
-        {
-            return _decibelWatts.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _decibelWatts.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(PowerRatioUnit unit)
-        {
-            switch (unit)
-            {
-                case PowerRatioUnit.DecibelMilliwatt:
-                    return DecibelMilliwatts;
-                case PowerRatioUnit.DecibelWatt:
-                    return DecibelWatts;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(PowerRatioUnit unit)
+			{
+				switch (unit)
+				{
+					case PowerRatioUnit.DecibelMilliwatt:
+						return DecibelMilliwatts;
+					case PowerRatioUnit.DecibelWatt:
+						return DecibelWatts;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static PowerRatio Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static PowerRatio<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static PowerRatio Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static PowerRatio<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<PowerRatio, PowerRatioUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    PowerRatioUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromDecibelWatts(x.DecibelWatts + y.DecibelWatts));
-        }
+					return QuantityParser.Parse<PowerRatio<T, C>, PowerRatioUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						PowerRatioUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromDecibelWatts((Number<T, C>)x.DecibelWatts + y.DecibelWatts));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out PowerRatio result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out PowerRatio<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out PowerRatio result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(PowerRatio);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out PowerRatio<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(PowerRatio<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static PowerRatioUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static PowerRatioUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static PowerRatioUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static PowerRatioUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static PowerRatioUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static PowerRatioUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<PowerRatioUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<PowerRatioUnit>(str.Trim());
 
-            if (unit == PowerRatioUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized PowerRatioUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == PowerRatioUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized PowerRatioUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is DecibelWatt
-        /// </summary>
-        public static PowerRatioUnit ToStringDefaultUnit { get; set; } = PowerRatioUnit.DecibelWatt;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is DecibelWatt
+			/// </summary>
+			public static PowerRatioUnit ToStringDefaultUnit { get; set; } = PowerRatioUnit.DecibelWatt;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(PowerRatioUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(PowerRatioUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(PowerRatioUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of PowerRatio
-        /// </summary>
-        public static PowerRatio MaxValue
-        {
-            get
-            {
-                return new PowerRatio(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of PowerRatio
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of PowerRatio
-        /// </summary>
-        public static PowerRatio MinValue
-        {
-            get
-            {
-                return new PowerRatio(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of PowerRatio
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

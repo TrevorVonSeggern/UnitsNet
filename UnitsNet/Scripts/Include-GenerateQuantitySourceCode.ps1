@@ -10,23 +10,7 @@ function GenerateQuantitySourceCode($quantity)
     $unitEnumName = "$quantityName" + "Unit"
     $baseUnitFieldName = "_"+[Char]::ToLowerInvariant($baseUnitPluralName[0]) + $baseUnitPluralName.Substring(1)
 
-    switch ($baseType) {
-        long {
-            $convertToBaseType = "Convert.ToInt64"
-            break
-        }
-        double {
-            $convertToBaseType = "Convert.ToDouble"
-            break
-        }
-        decimal {
-            $convertToBaseType = "Convert.ToDecimal"
-            break
-        }
-        default {
-            throw "Base type not supported: $baseType"
-        }
-    }
+    $baseType = "Number<T, C>";
 
 	$obsoleteEqualityIfDouble = ''
 	if ($quantity.BaseType -eq "double") {
@@ -88,9 +72,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     $($quantity.XmlDoc)
     /// </summary>
@@ -99,645 +84,583 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class $quantityName : UnitsNet.Generic.$quantityName<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class $quantityName
+		public sealed partial class $quantityName
 #else
-    public partial struct $quantityName : IComparable, IComparable<$quantityName>
+		public partial class $quantityName <T, C> : IComparable, IComparable<$quantityName<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of $quantityName.
-        /// </summary>
-        private readonly $baseType $baseUnitFieldName;
+		{
+			/// <summary>
+			///     Base unit of $quantityName.
+			/// </summary>
+			private readonly Number<T, C> $baseUnitFieldName;
 
-        // Windows Runtime Component requires a default constructor
-#if WINDOWS_UWP
-        public $quantityName() : this(0)
-        {
-        }
-#endif
+			public $quantityName() : this(new Number<T,C>())
+			{
+			}
 
-        public $quantityName(double $baseUnitPluralNameLower)
-        {
-            $baseUnitFieldName = $convertToBaseType($baseUnitPluralNameLower);
-        }
+			public $quantityName(T $baseUnitPluralNameLower)
+			{
+				$baseUnitFieldName = $convertToBaseType($baseUnitPluralNameLower);
+			}
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
-#else
-        public
-#endif
-        $quantityName(long $baseUnitPluralNameLower)
-        {
-            $baseUnitFieldName = $convertToBaseType($baseUnitPluralNameLower);
-        }
+			public $quantityName(Number<T, C> $baseUnitPluralNameLower)
+			{
+				$baseUnitFieldName = $convertToBaseType($baseUnitPluralNameLower);
+			}
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
-#if WINDOWS_UWP
-        private
-#else
-        public
-#endif
-        $quantityName(decimal $baseUnitPluralNameLower)
-        {
-            $baseUnitFieldName = $convertToBaseType($baseUnitPluralNameLower);
-        }
+			#region Properties
 
-        #region Properties
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.$quantityName;
 
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.$quantityName;
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static $unitEnumName BaseUnit
+			{
+				get { return $unitEnumName.$baseUnitSingularName; }
+			}
 
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static $unitEnumName BaseUnit
-        {
-            get { return $unitEnumName.$baseUnitSingularName; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the $quantityName quantity.
-        /// </summary>
-        public static $unitEnumName[] Units { get; } = Enum.GetValues(typeof($unitEnumName)).Cast<$unitEnumName>().ToArray();
+			/// <summary>
+			///     All units of measurement for the $quantityName quantity.
+			/// </summary>
+			public static $unitEnumName[] Units { get; } = Enum.GetValues(typeof($unitEnumName)).Cast<$unitEnumName>().ToArray();
 "@; foreach ($unit in $units) {
-        $propertyName = $unit.PluralName;
-        $obsoleteAttribute = GetObsoleteAttribute($unit);
-        if ($obsoleteAttribute)
-        {
-            $obsoleteAttribute = "`r`n        " + $obsoleteAttribute; # apply padding to conformance with code format in this page
-        }
+			$propertyName = $unit.PluralName;
+			$obsoleteAttribute = GetObsoleteAttribute($unit);
+			if ($obsoleteAttribute)
+			{
+				$obsoleteAttribute = "`r`n            " + $obsoleteAttribute; # apply padding to conformance with code format in this page
+			}
 
-        $fromBaseToUnitFunc = $unit.FromBaseToUnitFunc.Replace("x", $baseUnitFieldName);@"
+			$fromBaseToUnitFunc = $unit.FromBaseToUnitFunc.Replace("x", $baseUnitFieldName);@"
 
-        /// <summary>
-        ///     Get $quantityName in $propertyName.
-        /// </summary>$($obsoleteAttribute)
-        public double $propertyName
-        {
-            get { return $fromBaseToUnitFunc; }
-        }
+			/// <summary>
+			///     Get $quantityName in $propertyName.
+			/// </summary>$($obsoleteAttribute)
+			public Number<T, C> $propertyName
+			{
+				get { return $fromBaseToUnitFunc; }
+			}
 "@; }@"
 
-        #endregion
+			#endregion
 
-        #region Static
+			#region Static
 
-        public static $quantityName Zero
-        {
-            get { return new $quantityName(); }
-        }
+			public static $quantityName<T, C> Zero
+			{
+				get { return new $quantityName<T, C>(); }
+			}
 
 "@; foreach ($unit in $units) {
-        $valueParamName = $unit.PluralName.ToLowerInvariant();
-        $func = $unit.FromUnitToBaseFunc.Replace("x", "value");
-        $decimalFunc = $unit.FromUnitToBaseFunc.Replace("x","Convert.ToDouble(" + $valueParamName + ")"); @"
-        /// <summary>
-        ///     Get $quantityName from $($unit.PluralName).
-        /// </summary>
+			$valueParamName = $unit.PluralName.ToLowerInvariant();
+			$func = $unit.FromUnitToBaseFunc.Replace("x", "value");
+			$decimalFunc = $unit.FromUnitToBaseFunc.Replace("x","Convert.ToDouble(" + $valueParamName + ")"); @"
+			/// <summary>
+			///     Get $quantityName from $($unit.PluralName).
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static $quantityName From$($unit.PluralName)(double $valueParamName)
-        {
-            double value = (double) $valueParamName;
-            return new $quantityName($func);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static $quantityName<T, C> From$($unit.PluralName)(Number<T, C> $valueParamName)
+			{
+				Number<T,C> value = (Number<T,C>) $valueParamName;
+				return new $quantityName<T, C>($func);
+			}
 #else
-        public static $quantityName From$($unit.PluralName)(QuantityValue $valueParamName)
-        {
-            double value = (double) $valueParamName;
-            return new $quantityName(($func));
-        }
+			public static $quantityName<T, C> From$($unit.PluralName)(Number<T, C> $valueParamName)
+			{
+				Number<T,C> value = (Number<T,C>) $valueParamName;
+				return new $quantityName<T, C>(new Number<T,C>($func));
+			}
 #endif
 
 "@; }@"
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-"@; foreach ($unit in $units) {
-    $valueParamName = $unit.PluralName.ToLowerInvariant();
-        $func = $unit.FromUnitToBaseFunc.Replace("x", "$($valueParamName).Value");@"
-        /// <summary>
-        ///     Get nullable $quantityName from nullable $($unit.PluralName).
-        /// </summary>
-        public static $($quantityName)? From$($unit.PluralName)(QuantityValue? $valueParamName)
-        {
-            if ($($valueParamName).HasValue)
-            {
-                return From$($unit.PluralName)($($valueParamName).Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
 
-"@; }@"
-#endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="$unitEnumName" /> to <see cref="$quantityName" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>$quantityName unit value.</returns>
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="$unitEnumName" /> to <see cref="$quantityName" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>$quantityName unit value.</returns>
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static $quantityName From(double value, $unitEnumName fromUnit)
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static $quantityName<T, C> From(double value, $unitEnumName fromUnit)
 #else
-        public static $quantityName From(QuantityValue value, $unitEnumName fromUnit)
+			public static $quantityName<T, C> From(Number<T, C> value, $unitEnumName fromUnit)
 #endif
-        {
-            switch (fromUnit)
-            {
+			{
+				switch (fromUnit)
+				{
 "@; foreach ($unit in $units) {@"
-                case $unitEnumName.$($unit.SingularName):
-                    return From$($unit.PluralName)(value);
+					case $unitEnumName.$($unit.SingularName):
+						return From$($unit.PluralName)(value);
 "@; }@"
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="$unitEnumName" /> to <see cref="$quantityName" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>$quantityName unit value.</returns>
-        public static $($quantityName)? From(QuantityValue? value, $unitEnumName fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-"@; foreach ($unit in $units) {@"
-                case $unitEnumName.$($unit.SingularName):
-                    return From$($unit.PluralName)(value.Value);
-"@; }@"
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation($unitEnumName unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-#endif
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation($unitEnumName unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation($unitEnumName unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation($unitEnumName unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
+			#endregion
 "@; if ($quantity.Logarithmic -eq $true) {
         # Call another script function to generate logarithm-specific arithmetic operator code.
         GenerateLogarithmicArithmeticOperators -quantityName $quantityName -baseUnitFieldName $baseUnitFieldName -baseType $baseType -scalingFactor $quantity.LogarithmicScalingFactor
     }
     elseif ($quantity.GenerateArithmetic -eq $true) {@"
 
-        #region Arithmetic Operators
+			#region Arithmetic Operators
 
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static $quantityName operator -($quantityName right)
-        {
-            return new $quantityName(-right.$baseUnitFieldName);
-        }
+			public static $quantityName<T, C> operator -($quantityName<T, C> right)
+			{
+				return new $quantityName<T, C>(-right.$baseUnitFieldName);
+			}
 
-        public static $quantityName operator +($quantityName left, $quantityName right)
-        {
-            return new $quantityName(left.$baseUnitFieldName + right.$baseUnitFieldName);
-        }
+			public static $quantityName<T, C> operator +($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return new $quantityName<T, C>(left.$baseUnitFieldName + right.$baseUnitFieldName);
+			}
 
-        public static $quantityName operator -($quantityName left, $quantityName right)
-        {
-            return new $quantityName(left.$baseUnitFieldName - right.$baseUnitFieldName);
-        }
+			public static $quantityName<T, C> operator -($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return new $quantityName<T, C>(left.$baseUnitFieldName - right.$baseUnitFieldName);
+			}
 
-        public static $quantityName operator *($baseType left, $quantityName right)
-        {
-            return new $quantityName(left*right.$baseUnitFieldName);
-        }
+			public static $quantityName<T, C> operator *($baseType left, $quantityName<T, C> right)
+			{
+				return new $quantityName<T, C>(left*right.$baseUnitFieldName);
+			}
 
-        public static $quantityName operator *($quantityName left, double right)
-        {
-            return new $quantityName(left.$baseUnitFieldName*($baseType)right);
-        }
+			public static $quantityName<T, C> operator *($quantityName<T, C> left, double right)
+			{
+				return new $quantityName<T, C>(left.$baseUnitFieldName*right);
+			}
 
-        public static $quantityName operator /($quantityName left, double right)
-        {
-            return new $quantityName(left.$baseUnitFieldName/($baseType)right);
-        }
+			public static $quantityName<T, C> operator /($quantityName<T, C> left, double right)
+			{
+				return new $quantityName<T, C>(left.$baseUnitFieldName/right);
+			}
 
-        public static double operator /($quantityName left, $quantityName right)
-        {
-            return Convert.ToDouble(left.$baseUnitFieldName/right.$baseUnitFieldName);
-        }
+			public static double operator /($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return Convert.ToDouble(left.$baseUnitFieldName/right.$baseUnitFieldName);
+			}
 #endif
 
-        #endregion
+			#endregion
 "@; }@"
 
-        #region Equality / IComparable
+			#region Equality / IComparable
 
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is $quantityName)) throw new ArgumentException("Expected type $quantityName.", "obj");
-            return CompareTo(($quantityName) obj);
-        }
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is $quantityName<T, C>)) throw new ArgumentException("Expected type $quantityName.", "obj");
+				return CompareTo(($quantityName<T, C>) obj);
+			}
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        int CompareTo($quantityName other)
-        {
-            return $baseUnitFieldName.CompareTo(other.$baseUnitFieldName);
-        }
+			int CompareTo($quantityName<T, C> other)
+			{
+				return $baseUnitFieldName.CompareTo(other.$baseUnitFieldName);
+			}
 
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static bool operator <=($quantityName left, $quantityName right)
-        {
-            return left.$baseUnitFieldName <= right.$baseUnitFieldName;
-        }
+			public static bool operator <=($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return left.$baseUnitFieldName <= right.$baseUnitFieldName;
+			}
 
-        public static bool operator >=($quantityName left, $quantityName right)
-        {
-            return left.$baseUnitFieldName >= right.$baseUnitFieldName;
-        }
+			public static bool operator >=($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return left.$baseUnitFieldName >= right.$baseUnitFieldName;
+			}
 
-        public static bool operator <($quantityName left, $quantityName right)
-        {
-            return left.$baseUnitFieldName < right.$baseUnitFieldName;
-        }
+			public static bool operator <($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return left.$baseUnitFieldName < right.$baseUnitFieldName;
+			}
 
-        public static bool operator >($quantityName left, $quantityName right)
-        {
-            return left.$baseUnitFieldName > right.$baseUnitFieldName;
-        }
+			public static bool operator >($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				return left.$baseUnitFieldName > right.$baseUnitFieldName;
+			}
 
-        $($obsoleteEqualityIfDouble)public static bool operator ==($quantityName left, $quantityName right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left.$baseUnitFieldName == right.$baseUnitFieldName;
-        }
+			$($obsoleteEqualityIfDouble)public static bool operator ==($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left.$baseUnitFieldName == right.$baseUnitFieldName;
+			}
 
-        $($obsoleteEqualityIfDouble)public static bool operator !=($quantityName left, $quantityName right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left.$baseUnitFieldName != right.$baseUnitFieldName;
-        }
+			$($obsoleteEqualityIfDouble)public static bool operator !=($quantityName<T, C> left, $quantityName<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left.$baseUnitFieldName != right.$baseUnitFieldName;
+			}
 #endif
 
-        $($obsoleteEqualityIfDouble)public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			$($obsoleteEqualityIfDouble)public override bool Equals(object obj)
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return $baseUnitFieldName.Equals((($quantityName) obj).$baseUnitFieldName);
-        }
+				return $baseUnitFieldName.Equals((($quantityName<T, C>) obj).$baseUnitFieldName);
+			}
 
-        /// <summary>
-        ///     Compare equality to another $quantityName by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals($quantityName other, $quantityName maxError)
-        {
-            return Math.Abs($baseUnitFieldName - other.$baseUnitFieldName) <= maxError.$baseUnitFieldName;
-        }
+			/// <summary>
+			///     Compare equality to another $quantityName by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals($quantityName<T, C> other, $quantityName<T, C> maxError)
+			{
+				return Math.Abs((decimal)$baseUnitFieldName - (decimal)other.$baseUnitFieldName) <= maxError.$baseUnitFieldName;
+			}
 
-        public override int GetHashCode()
-        {
-            return $baseUnitFieldName.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return $baseUnitFieldName.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As($unitEnumName unit)
-        {
-            switch (unit)
-            {
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As($unitEnumName unit)
+			{
+				switch (unit)
+				{
 "@; foreach ($unit in $units) {@"
-                case $unitEnumName.$($unit.SingularName):
-                    return $($unit.PluralName);
+					case $unitEnumName.$($unit.SingularName):
+						return $($unit.PluralName);
 "@; }@"
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static $quantityName Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static $quantityName<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static $quantityName Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static $quantityName<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<$quantityName, $unitEnumName>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    $unitEnumName parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => From$baseUnitPluralName(x.$baseUnitPluralName + y.$baseUnitPluralName));
-        }
+					return QuantityParser.Parse<$quantityName<T, C>, $unitEnumName>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						$unitEnumName parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => From$baseUnitPluralName((Number<T, C>)x.$baseUnitPluralName + y.$baseUnitPluralName));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out $quantityName result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out $quantityName<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out $quantityName result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default($quantityName);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out $quantityName<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default($quantityName<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static $unitEnumName ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static $unitEnumName ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static $unitEnumName ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static $unitEnumName ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static $unitEnumName ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static $unitEnumName ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<$unitEnumName>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<$unitEnumName>(str.Trim());
 
-            if (unit == $unitEnumName.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized $unitEnumName.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == $unitEnumName.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized $unitEnumName.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is $baseUnitSingularName
-        /// </summary>
-        public static $unitEnumName ToStringDefaultUnit { get; set; } = $unitEnumName.$baseUnitSingularName;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is $baseUnitSingularName
+			/// </summary>
+			public static $unitEnumName ToStringDefaultUnit { get; set; } = $unitEnumName.$baseUnitSingularName;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString($unitEnumName unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString($unitEnumName unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString($unitEnumName unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString($unitEnumName unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString($unitEnumName unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString($unitEnumName unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString($unitEnumName unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString($unitEnumName unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of $quantityName
-        /// </summary>
-        public static $quantityName MaxValue
-        {
-            get
-            {
-                return new $quantityName($baseType.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of $quantityName
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return $baseType.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of $quantityName
-        /// </summary>
-        public static $quantityName MinValue
-        {
-            get
-            {
-                return new $quantityName($baseType.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of $quantityName
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return $baseType.MinValue;
+				}
+			}
+		}
+	}
 }
 "@;
 }

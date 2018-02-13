@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Molar concentration, also called molarity, amount concentration or substance concentration, is a measure of the concentration of a solute in a solution, or of any chemical species, in terms of amount of substance in a given volume. 
     /// </summary>
@@ -63,944 +64,769 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class Molarity : UnitsNet.Generic.Molarity<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class Molarity
+		public sealed partial class Molarity
 #else
-    public partial struct Molarity : IComparable, IComparable<Molarity>
+		public partial class Molarity <T, C> : IComparable, IComparable<Molarity<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of Molarity.
-        /// </summary>
-        private readonly double _molesPerCubicMeter;
+		{
+			/// <summary>
+			///     Base unit of Molarity.
+			/// </summary>
+			private readonly Number<T, C> _molesPerCubicMeter;
 
-        // Windows Runtime Component requires a default constructor
+			public Molarity() : this(new Number<T,C>())
+			{
+			}
+
+			public Molarity(T molespercubicmeter)
+			{
+				_molesPerCubicMeter = (molespercubicmeter);
+			}
+
+			public Molarity(Number<T, C> molespercubicmeter)
+			{
+				_molesPerCubicMeter = (molespercubicmeter);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.Molarity;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static MolarityUnit BaseUnit
+			{
+				get { return MolarityUnit.MolesPerCubicMeter; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the Molarity quantity.
+			/// </summary>
+			public static MolarityUnit[] Units { get; } = Enum.GetValues(typeof(MolarityUnit)).Cast<MolarityUnit>().ToArray();
+
+			/// <summary>
+			///     Get Molarity in CentimolesPerLiter.
+			/// </summary>
+			public Number<T, C> CentimolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Molarity in DecimolesPerLiter.
+			/// </summary>
+			public Number<T, C> DecimolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Molarity in MicromolesPerLiter.
+			/// </summary>
+			public Number<T, C> MicromolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Molarity in MillimolesPerLiter.
+			/// </summary>
+			public Number<T, C> MillimolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Molarity in MolesPerCubicMeter.
+			/// </summary>
+			public Number<T, C> MolesPerCubicMeter
+			{
+				get { return _molesPerCubicMeter; }
+			}
+
+			/// <summary>
+			///     Get Molarity in MolesPerLiter.
+			/// </summary>
+			public Number<T, C> MolesPerLiter
+			{
+				get { return _molesPerCubicMeter*1e-3; }
+			}
+
+			/// <summary>
+			///     Get Molarity in NanomolesPerLiter.
+			/// </summary>
+			public Number<T, C> NanomolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get Molarity in PicomolesPerLiter.
+			/// </summary>
+			public Number<T, C> PicomolesPerLiter
+			{
+				get { return (_molesPerCubicMeter*1e-3) / 1e-12d; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static Molarity<T, C> Zero
+			{
+				get { return new Molarity<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get Molarity from CentimolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        public Molarity() : this(0)
-        {
-        }
-#endif
-
-        public Molarity(double molespercubicmeter)
-        {
-            _molesPerCubicMeter = Convert.ToDouble(molespercubicmeter);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromCentimolesPerLiter(Number<T, C> centimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) centimolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-2d);
+			}
 #else
-        public
+			public static Molarity<T, C> FromCentimolesPerLiter(Number<T, C> centimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) centimolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-2d));
+			}
 #endif
-        Molarity(long molespercubicmeter)
-        {
-            _molesPerCubicMeter = Convert.ToDouble(molespercubicmeter);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get Molarity from DecimolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromDecimolesPerLiter(Number<T, C> decimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) decimolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-1d);
+			}
 #else
-        public
+			public static Molarity<T, C> FromDecimolesPerLiter(Number<T, C> decimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) decimolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-1d));
+			}
 #endif
-        Molarity(decimal molespercubicmeter)
-        {
-            _molesPerCubicMeter = Convert.ToDouble(molespercubicmeter);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.Molarity;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static MolarityUnit BaseUnit
-        {
-            get { return MolarityUnit.MolesPerCubicMeter; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the Molarity quantity.
-        /// </summary>
-        public static MolarityUnit[] Units { get; } = Enum.GetValues(typeof(MolarityUnit)).Cast<MolarityUnit>().ToArray();
-
-        /// <summary>
-        ///     Get Molarity in CentimolesPerLiter.
-        /// </summary>
-        public double CentimolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in DecimolesPerLiter.
-        /// </summary>
-        public double DecimolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in MicromolesPerLiter.
-        /// </summary>
-        public double MicromolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in MillimolesPerLiter.
-        /// </summary>
-        public double MillimolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in MolesPerCubicMeter.
-        /// </summary>
-        public double MolesPerCubicMeter
-        {
-            get { return _molesPerCubicMeter; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in MolesPerLiter.
-        /// </summary>
-        public double MolesPerLiter
-        {
-            get { return _molesPerCubicMeter*1e-3; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in NanomolesPerLiter.
-        /// </summary>
-        public double NanomolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get Molarity in PicomolesPerLiter.
-        /// </summary>
-        public double PicomolesPerLiter
-        {
-            get { return (_molesPerCubicMeter*1e-3) / 1e-12d; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static Molarity Zero
-        {
-            get { return new Molarity(); }
-        }
-
-        /// <summary>
-        ///     Get Molarity from CentimolesPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from MicromolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromCentimolesPerLiter(double centimolesperliter)
-        {
-            double value = (double) centimolesperliter;
-            return new Molarity((value/1e-3) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromMicromolesPerLiter(Number<T, C> micromolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) micromolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-6d);
+			}
 #else
-        public static Molarity FromCentimolesPerLiter(QuantityValue centimolesperliter)
-        {
-            double value = (double) centimolesperliter;
-            return new Molarity(((value/1e-3) * 1e-2d));
-        }
+			public static Molarity<T, C> FromMicromolesPerLiter(Number<T, C> micromolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) micromolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from DecimolesPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from MillimolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromDecimolesPerLiter(double decimolesperliter)
-        {
-            double value = (double) decimolesperliter;
-            return new Molarity((value/1e-3) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromMillimolesPerLiter(Number<T, C> millimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) millimolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-3d);
+			}
 #else
-        public static Molarity FromDecimolesPerLiter(QuantityValue decimolesperliter)
-        {
-            double value = (double) decimolesperliter;
-            return new Molarity(((value/1e-3) * 1e-1d));
-        }
+			public static Molarity<T, C> FromMillimolesPerLiter(Number<T, C> millimolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) millimolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from MicromolesPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from MolesPerCubicMeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromMicromolesPerLiter(double micromolesperliter)
-        {
-            double value = (double) micromolesperliter;
-            return new Molarity((value/1e-3) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromMolesPerCubicMeter(Number<T, C> molespercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) molespercubicmeter;
+				return new Molarity<T, C>(value);
+			}
 #else
-        public static Molarity FromMicromolesPerLiter(QuantityValue micromolesperliter)
-        {
-            double value = (double) micromolesperliter;
-            return new Molarity(((value/1e-3) * 1e-6d));
-        }
+			public static Molarity<T, C> FromMolesPerCubicMeter(Number<T, C> molespercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) molespercubicmeter;
+				return new Molarity<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from MillimolesPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from MolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromMillimolesPerLiter(double millimolesperliter)
-        {
-            double value = (double) millimolesperliter;
-            return new Molarity((value/1e-3) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromMolesPerLiter(Number<T, C> molesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) molesperliter;
+				return new Molarity<T, C>(value/1e-3);
+			}
 #else
-        public static Molarity FromMillimolesPerLiter(QuantityValue millimolesperliter)
-        {
-            double value = (double) millimolesperliter;
-            return new Molarity(((value/1e-3) * 1e-3d));
-        }
+			public static Molarity<T, C> FromMolesPerLiter(Number<T, C> molesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) molesperliter;
+				return new Molarity<T, C>(new Number<T,C>(value/1e-3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from MolesPerCubicMeter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from NanomolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromMolesPerCubicMeter(double molespercubicmeter)
-        {
-            double value = (double) molespercubicmeter;
-            return new Molarity(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromNanomolesPerLiter(Number<T, C> nanomolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanomolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-9d);
+			}
 #else
-        public static Molarity FromMolesPerCubicMeter(QuantityValue molespercubicmeter)
-        {
-            double value = (double) molespercubicmeter;
-            return new Molarity((value));
-        }
+			public static Molarity<T, C> FromNanomolesPerLiter(Number<T, C> nanomolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanomolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from MolesPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Molarity from PicomolesPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromMolesPerLiter(double molesperliter)
-        {
-            double value = (double) molesperliter;
-            return new Molarity(value/1e-3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Molarity<T, C> FromPicomolesPerLiter(Number<T, C> picomolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) picomolesperliter;
+				return new Molarity<T, C>((value/1e-3) * 1e-12d);
+			}
 #else
-        public static Molarity FromMolesPerLiter(QuantityValue molesperliter)
-        {
-            double value = (double) molesperliter;
-            return new Molarity((value/1e-3));
-        }
+			public static Molarity<T, C> FromPicomolesPerLiter(Number<T, C> picomolesperliter)
+			{
+				Number<T,C> value = (Number<T,C>) picomolesperliter;
+				return new Molarity<T, C>(new Number<T,C>((value/1e-3) * 1e-12d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Molarity from NanomolesPerLiter.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="MolarityUnit" /> to <see cref="Molarity" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>Molarity unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromNanomolesPerLiter(double nanomolesperliter)
-        {
-            double value = (double) nanomolesperliter;
-            return new Molarity((value/1e-3) * 1e-9d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static Molarity<T, C> From(double value, MolarityUnit fromUnit)
 #else
-        public static Molarity FromNanomolesPerLiter(QuantityValue nanomolesperliter)
-        {
-            double value = (double) nanomolesperliter;
-            return new Molarity(((value/1e-3) * 1e-9d));
-        }
+			public static Molarity<T, C> From(Number<T, C> value, MolarityUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case MolarityUnit.CentimolesPerLiter:
+						return FromCentimolesPerLiter(value);
+					case MolarityUnit.DecimolesPerLiter:
+						return FromDecimolesPerLiter(value);
+					case MolarityUnit.MicromolesPerLiter:
+						return FromMicromolesPerLiter(value);
+					case MolarityUnit.MillimolesPerLiter:
+						return FromMillimolesPerLiter(value);
+					case MolarityUnit.MolesPerCubicMeter:
+						return FromMolesPerCubicMeter(value);
+					case MolarityUnit.MolesPerLiter:
+						return FromMolesPerLiter(value);
+					case MolarityUnit.NanomolesPerLiter:
+						return FromNanomolesPerLiter(value);
+					case MolarityUnit.PicomolesPerLiter:
+						return FromPicomolesPerLiter(value);
 
-        /// <summary>
-        ///     Get Molarity from PicomolesPerLiter.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Molarity FromPicomolesPerLiter(double picomolesperliter)
-        {
-            double value = (double) picomolesperliter;
-            return new Molarity((value/1e-3) * 1e-12d);
-        }
-#else
-        public static Molarity FromPicomolesPerLiter(QuantityValue picomolesperliter)
-        {
-            double value = (double) picomolesperliter;
-            return new Molarity(((value/1e-3) * 1e-12d));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarityUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarityUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable Molarity from nullable CentimolesPerLiter.
-        /// </summary>
-        public static Molarity? FromCentimolesPerLiter(QuantityValue? centimolesperliter)
-        {
-            if (centimolesperliter.HasValue)
-            {
-                return FromCentimolesPerLiter(centimolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator -(Molarity<T, C> right)
+			{
+				return new Molarity<T, C>(-right._molesPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable DecimolesPerLiter.
-        /// </summary>
-        public static Molarity? FromDecimolesPerLiter(QuantityValue? decimolesperliter)
-        {
-            if (decimolesperliter.HasValue)
-            {
-                return FromDecimolesPerLiter(decimolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator +(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return new Molarity<T, C>(left._molesPerCubicMeter + right._molesPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable MicromolesPerLiter.
-        /// </summary>
-        public static Molarity? FromMicromolesPerLiter(QuantityValue? micromolesperliter)
-        {
-            if (micromolesperliter.HasValue)
-            {
-                return FromMicromolesPerLiter(micromolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator -(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return new Molarity<T, C>(left._molesPerCubicMeter - right._molesPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable MillimolesPerLiter.
-        /// </summary>
-        public static Molarity? FromMillimolesPerLiter(QuantityValue? millimolesperliter)
-        {
-            if (millimolesperliter.HasValue)
-            {
-                return FromMillimolesPerLiter(millimolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator *(Number<T, C> left, Molarity<T, C> right)
+			{
+				return new Molarity<T, C>(left*right._molesPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable MolesPerCubicMeter.
-        /// </summary>
-        public static Molarity? FromMolesPerCubicMeter(QuantityValue? molespercubicmeter)
-        {
-            if (molespercubicmeter.HasValue)
-            {
-                return FromMolesPerCubicMeter(molespercubicmeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator *(Molarity<T, C> left, double right)
+			{
+				return new Molarity<T, C>(left._molesPerCubicMeter*right);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable MolesPerLiter.
-        /// </summary>
-        public static Molarity? FromMolesPerLiter(QuantityValue? molesperliter)
-        {
-            if (molesperliter.HasValue)
-            {
-                return FromMolesPerLiter(molesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Molarity<T, C> operator /(Molarity<T, C> left, double right)
+			{
+				return new Molarity<T, C>(left._molesPerCubicMeter/right);
+			}
 
-        /// <summary>
-        ///     Get nullable Molarity from nullable NanomolesPerLiter.
-        /// </summary>
-        public static Molarity? FromNanomolesPerLiter(QuantityValue? nanomolesperliter)
-        {
-            if (nanomolesperliter.HasValue)
-            {
-                return FromNanomolesPerLiter(nanomolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Molarity from nullable PicomolesPerLiter.
-        /// </summary>
-        public static Molarity? FromPicomolesPerLiter(QuantityValue? picomolesperliter)
-        {
-            if (picomolesperliter.HasValue)
-            {
-                return FromPicomolesPerLiter(picomolesperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return Convert.ToDouble(left._molesPerCubicMeter/right._molesPerCubicMeter);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarityUnit" /> to <see cref="Molarity" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Molarity unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is Molarity<T, C>)) throw new ArgumentException("Expected type Molarity.", "obj");
+				return CompareTo((Molarity<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static Molarity From(double value, MolarityUnit fromUnit)
+			internal
 #else
-        public static Molarity From(QuantityValue value, MolarityUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case MolarityUnit.CentimolesPerLiter:
-                    return FromCentimolesPerLiter(value);
-                case MolarityUnit.DecimolesPerLiter:
-                    return FromDecimolesPerLiter(value);
-                case MolarityUnit.MicromolesPerLiter:
-                    return FromMicromolesPerLiter(value);
-                case MolarityUnit.MillimolesPerLiter:
-                    return FromMillimolesPerLiter(value);
-                case MolarityUnit.MolesPerCubicMeter:
-                    return FromMolesPerCubicMeter(value);
-                case MolarityUnit.MolesPerLiter:
-                    return FromMolesPerLiter(value);
-                case MolarityUnit.NanomolesPerLiter:
-                    return FromNanomolesPerLiter(value);
-                case MolarityUnit.PicomolesPerLiter:
-                    return FromPicomolesPerLiter(value);
+			int CompareTo(Molarity<T, C> other)
+			{
+				return _molesPerCubicMeter.CompareTo(other._molesPerCubicMeter);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarityUnit" /> to <see cref="Molarity" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Molarity unit value.</returns>
-        public static Molarity? From(QuantityValue? value, MolarityUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case MolarityUnit.CentimolesPerLiter:
-                    return FromCentimolesPerLiter(value.Value);
-                case MolarityUnit.DecimolesPerLiter:
-                    return FromDecimolesPerLiter(value.Value);
-                case MolarityUnit.MicromolesPerLiter:
-                    return FromMicromolesPerLiter(value.Value);
-                case MolarityUnit.MillimolesPerLiter:
-                    return FromMillimolesPerLiter(value.Value);
-                case MolarityUnit.MolesPerCubicMeter:
-                    return FromMolesPerCubicMeter(value.Value);
-                case MolarityUnit.MolesPerLiter:
-                    return FromMolesPerLiter(value.Value);
-                case MolarityUnit.NanomolesPerLiter:
-                    return FromNanomolesPerLiter(value.Value);
-                case MolarityUnit.PicomolesPerLiter:
-                    return FromPicomolesPerLiter(value.Value);
+			public static bool operator <=(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return left._molesPerCubicMeter <= right._molesPerCubicMeter;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return left._molesPerCubicMeter >= right._molesPerCubicMeter;
+			}
+
+			public static bool operator <(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return left._molesPerCubicMeter < right._molesPerCubicMeter;
+			}
+
+			public static bool operator >(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				return left._molesPerCubicMeter > right._molesPerCubicMeter;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._molesPerCubicMeter == right._molesPerCubicMeter;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(Molarity<T, C> left, Molarity<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._molesPerCubicMeter != right._molesPerCubicMeter;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarityUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarityUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static Molarity operator -(Molarity right)
-        {
-            return new Molarity(-right._molesPerCubicMeter);
-        }
-
-        public static Molarity operator +(Molarity left, Molarity right)
-        {
-            return new Molarity(left._molesPerCubicMeter + right._molesPerCubicMeter);
-        }
-
-        public static Molarity operator -(Molarity left, Molarity right)
-        {
-            return new Molarity(left._molesPerCubicMeter - right._molesPerCubicMeter);
-        }
-
-        public static Molarity operator *(double left, Molarity right)
-        {
-            return new Molarity(left*right._molesPerCubicMeter);
-        }
-
-        public static Molarity operator *(Molarity left, double right)
-        {
-            return new Molarity(left._molesPerCubicMeter*(double)right);
-        }
-
-        public static Molarity operator /(Molarity left, double right)
-        {
-            return new Molarity(left._molesPerCubicMeter/(double)right);
-        }
-
-        public static double operator /(Molarity left, Molarity right)
-        {
-            return Convert.ToDouble(left._molesPerCubicMeter/right._molesPerCubicMeter);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is Molarity)) throw new ArgumentException("Expected type Molarity.", "obj");
-            return CompareTo((Molarity) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(Molarity other)
-        {
-            return _molesPerCubicMeter.CompareTo(other._molesPerCubicMeter);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(Molarity left, Molarity right)
-        {
-            return left._molesPerCubicMeter <= right._molesPerCubicMeter;
-        }
-
-        public static bool operator >=(Molarity left, Molarity right)
-        {
-            return left._molesPerCubicMeter >= right._molesPerCubicMeter;
-        }
-
-        public static bool operator <(Molarity left, Molarity right)
-        {
-            return left._molesPerCubicMeter < right._molesPerCubicMeter;
-        }
-
-        public static bool operator >(Molarity left, Molarity right)
-        {
-            return left._molesPerCubicMeter > right._molesPerCubicMeter;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(Molarity left, Molarity right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._molesPerCubicMeter == right._molesPerCubicMeter;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(Molarity left, Molarity right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._molesPerCubicMeter != right._molesPerCubicMeter;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _molesPerCubicMeter.Equals(((Molarity) obj)._molesPerCubicMeter);
-        }
+				return _molesPerCubicMeter.Equals(((Molarity<T, C>) obj)._molesPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Compare equality to another Molarity by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(Molarity other, Molarity maxError)
-        {
-            return Math.Abs(_molesPerCubicMeter - other._molesPerCubicMeter) <= maxError._molesPerCubicMeter;
-        }
+			/// <summary>
+			///     Compare equality to another Molarity by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(Molarity<T, C> other, Molarity<T, C> maxError)
+			{
+				return Math.Abs((decimal)_molesPerCubicMeter - (decimal)other._molesPerCubicMeter) <= maxError._molesPerCubicMeter;
+			}
 
-        public override int GetHashCode()
-        {
-            return _molesPerCubicMeter.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _molesPerCubicMeter.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(MolarityUnit unit)
-        {
-            switch (unit)
-            {
-                case MolarityUnit.CentimolesPerLiter:
-                    return CentimolesPerLiter;
-                case MolarityUnit.DecimolesPerLiter:
-                    return DecimolesPerLiter;
-                case MolarityUnit.MicromolesPerLiter:
-                    return MicromolesPerLiter;
-                case MolarityUnit.MillimolesPerLiter:
-                    return MillimolesPerLiter;
-                case MolarityUnit.MolesPerCubicMeter:
-                    return MolesPerCubicMeter;
-                case MolarityUnit.MolesPerLiter:
-                    return MolesPerLiter;
-                case MolarityUnit.NanomolesPerLiter:
-                    return NanomolesPerLiter;
-                case MolarityUnit.PicomolesPerLiter:
-                    return PicomolesPerLiter;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(MolarityUnit unit)
+			{
+				switch (unit)
+				{
+					case MolarityUnit.CentimolesPerLiter:
+						return CentimolesPerLiter;
+					case MolarityUnit.DecimolesPerLiter:
+						return DecimolesPerLiter;
+					case MolarityUnit.MicromolesPerLiter:
+						return MicromolesPerLiter;
+					case MolarityUnit.MillimolesPerLiter:
+						return MillimolesPerLiter;
+					case MolarityUnit.MolesPerCubicMeter:
+						return MolesPerCubicMeter;
+					case MolarityUnit.MolesPerLiter:
+						return MolesPerLiter;
+					case MolarityUnit.NanomolesPerLiter:
+						return NanomolesPerLiter;
+					case MolarityUnit.PicomolesPerLiter:
+						return PicomolesPerLiter;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Molarity Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Molarity<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Molarity Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Molarity<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<Molarity, MolarityUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    MolarityUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromMolesPerCubicMeter(x.MolesPerCubicMeter + y.MolesPerCubicMeter));
-        }
+					return QuantityParser.Parse<Molarity<T, C>, MolarityUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						MolarityUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromMolesPerCubicMeter((Number<T, C>)x.MolesPerCubicMeter + y.MolesPerCubicMeter));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out Molarity result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out Molarity<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Molarity result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(Molarity);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Molarity<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(Molarity<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarityUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarityUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarityUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarityUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static MolarityUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static MolarityUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<MolarityUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<MolarityUnit>(str.Trim());
 
-            if (unit == MolarityUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarityUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == MolarityUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarityUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is MolesPerCubicMeter
-        /// </summary>
-        public static MolarityUnit ToStringDefaultUnit { get; set; } = MolarityUnit.MolesPerCubicMeter;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is MolesPerCubicMeter
+			/// </summary>
+			public static MolarityUnit ToStringDefaultUnit { get; set; } = MolarityUnit.MolesPerCubicMeter;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarityUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarityUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarityUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarityUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarityUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarityUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarityUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarityUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of Molarity
-        /// </summary>
-        public static Molarity MaxValue
-        {
-            get
-            {
-                return new Molarity(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of Molarity
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of Molarity
-        /// </summary>
-        public static Molarity MinValue
-        {
-            get
-            {
-                return new Molarity(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of Molarity
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

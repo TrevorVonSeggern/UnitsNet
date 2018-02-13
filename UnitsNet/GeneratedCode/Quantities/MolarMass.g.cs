@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     In chemistry, the molar mass M is a physical property defined as the mass of a given substance (chemical element or chemical compound) divided by the amount of substance.
     /// </summary>
@@ -63,1132 +64,889 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class MolarMass : UnitsNet.Generic.MolarMass<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class MolarMass
+		public sealed partial class MolarMass
 #else
-    public partial struct MolarMass : IComparable, IComparable<MolarMass>
+		public partial class MolarMass <T, C> : IComparable, IComparable<MolarMass<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of MolarMass.
-        /// </summary>
-        private readonly double _kilogramsPerMole;
+		{
+			/// <summary>
+			///     Base unit of MolarMass.
+			/// </summary>
+			private readonly Number<T, C> _kilogramsPerMole;
 
-        // Windows Runtime Component requires a default constructor
+			public MolarMass() : this(new Number<T,C>())
+			{
+			}
+
+			public MolarMass(T kilogramspermole)
+			{
+				_kilogramsPerMole = (kilogramspermole);
+			}
+
+			public MolarMass(Number<T, C> kilogramspermole)
+			{
+				_kilogramsPerMole = (kilogramspermole);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.MolarMass;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static MolarMassUnit BaseUnit
+			{
+				get { return MolarMassUnit.KilogramPerMole; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the MolarMass quantity.
+			/// </summary>
+			public static MolarMassUnit[] Units { get; } = Enum.GetValues(typeof(MolarMassUnit)).Cast<MolarMassUnit>().ToArray();
+
+			/// <summary>
+			///     Get MolarMass in CentigramsPerMole.
+			/// </summary>
+			public Number<T, C> CentigramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in DecagramsPerMole.
+			/// </summary>
+			public Number<T, C> DecagramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e1d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in DecigramsPerMole.
+			/// </summary>
+			public Number<T, C> DecigramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in GramsPerMole.
+			/// </summary>
+			public Number<T, C> GramsPerMole
+			{
+				get { return _kilogramsPerMole*1e3; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in HectogramsPerMole.
+			/// </summary>
+			public Number<T, C> HectogramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in KilogramsPerMole.
+			/// </summary>
+			public Number<T, C> KilogramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in KilopoundsPerMole.
+			/// </summary>
+			public Number<T, C> KilopoundsPerMole
+			{
+				get { return (_kilogramsPerMole/0.45359237) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in MegapoundsPerMole.
+			/// </summary>
+			public Number<T, C> MegapoundsPerMole
+			{
+				get { return (_kilogramsPerMole/0.45359237) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in MicrogramsPerMole.
+			/// </summary>
+			public Number<T, C> MicrogramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in MilligramsPerMole.
+			/// </summary>
+			public Number<T, C> MilligramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in NanogramsPerMole.
+			/// </summary>
+			public Number<T, C> NanogramsPerMole
+			{
+				get { return (_kilogramsPerMole*1e3) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get MolarMass in PoundsPerMole.
+			/// </summary>
+			public Number<T, C> PoundsPerMole
+			{
+				get { return _kilogramsPerMole/0.45359237; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static MolarMass<T, C> Zero
+			{
+				get { return new MolarMass<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get MolarMass from CentigramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        public MolarMass() : this(0)
-        {
-        }
-#endif
-
-        public MolarMass(double kilogramspermole)
-        {
-            _kilogramsPerMole = Convert.ToDouble(kilogramspermole);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromCentigramsPerMole(Number<T, C> centigramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) centigramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e-2d);
+			}
 #else
-        public
+			public static MolarMass<T, C> FromCentigramsPerMole(Number<T, C> centigramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) centigramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e-2d));
+			}
 #endif
-        MolarMass(long kilogramspermole)
-        {
-            _kilogramsPerMole = Convert.ToDouble(kilogramspermole);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get MolarMass from DecagramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromDecagramsPerMole(Number<T, C> decagramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) decagramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e1d);
+			}
 #else
-        public
+			public static MolarMass<T, C> FromDecagramsPerMole(Number<T, C> decagramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) decagramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e1d));
+			}
 #endif
-        MolarMass(decimal kilogramspermole)
-        {
-            _kilogramsPerMole = Convert.ToDouble(kilogramspermole);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.MolarMass;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static MolarMassUnit BaseUnit
-        {
-            get { return MolarMassUnit.KilogramPerMole; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the MolarMass quantity.
-        /// </summary>
-        public static MolarMassUnit[] Units { get; } = Enum.GetValues(typeof(MolarMassUnit)).Cast<MolarMassUnit>().ToArray();
-
-        /// <summary>
-        ///     Get MolarMass in CentigramsPerMole.
-        /// </summary>
-        public double CentigramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in DecagramsPerMole.
-        /// </summary>
-        public double DecagramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e1d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in DecigramsPerMole.
-        /// </summary>
-        public double DecigramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in GramsPerMole.
-        /// </summary>
-        public double GramsPerMole
-        {
-            get { return _kilogramsPerMole*1e3; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in HectogramsPerMole.
-        /// </summary>
-        public double HectogramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in KilogramsPerMole.
-        /// </summary>
-        public double KilogramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in KilopoundsPerMole.
-        /// </summary>
-        public double KilopoundsPerMole
-        {
-            get { return (_kilogramsPerMole/0.45359237) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in MegapoundsPerMole.
-        /// </summary>
-        public double MegapoundsPerMole
-        {
-            get { return (_kilogramsPerMole/0.45359237) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in MicrogramsPerMole.
-        /// </summary>
-        public double MicrogramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in MilligramsPerMole.
-        /// </summary>
-        public double MilligramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in NanogramsPerMole.
-        /// </summary>
-        public double NanogramsPerMole
-        {
-            get { return (_kilogramsPerMole*1e3) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get MolarMass in PoundsPerMole.
-        /// </summary>
-        public double PoundsPerMole
-        {
-            get { return _kilogramsPerMole/0.45359237; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static MolarMass Zero
-        {
-            get { return new MolarMass(); }
-        }
-
-        /// <summary>
-        ///     Get MolarMass from CentigramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from DecigramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromCentigramsPerMole(double centigramspermole)
-        {
-            double value = (double) centigramspermole;
-            return new MolarMass((value/1e3) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromDecigramsPerMole(Number<T, C> decigramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) decigramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e-1d);
+			}
 #else
-        public static MolarMass FromCentigramsPerMole(QuantityValue centigramspermole)
-        {
-            double value = (double) centigramspermole;
-            return new MolarMass(((value/1e3) * 1e-2d));
-        }
+			public static MolarMass<T, C> FromDecigramsPerMole(Number<T, C> decigramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) decigramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from DecagramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from GramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromDecagramsPerMole(double decagramspermole)
-        {
-            double value = (double) decagramspermole;
-            return new MolarMass((value/1e3) * 1e1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromGramsPerMole(Number<T, C> gramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) gramspermole;
+				return new MolarMass<T, C>(value/1e3);
+			}
 #else
-        public static MolarMass FromDecagramsPerMole(QuantityValue decagramspermole)
-        {
-            double value = (double) decagramspermole;
-            return new MolarMass(((value/1e3) * 1e1d));
-        }
+			public static MolarMass<T, C> FromGramsPerMole(Number<T, C> gramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) gramspermole;
+				return new MolarMass<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from DecigramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from HectogramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromDecigramsPerMole(double decigramspermole)
-        {
-            double value = (double) decigramspermole;
-            return new MolarMass((value/1e3) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromHectogramsPerMole(Number<T, C> hectogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) hectogramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e2d);
+			}
 #else
-        public static MolarMass FromDecigramsPerMole(QuantityValue decigramspermole)
-        {
-            double value = (double) decigramspermole;
-            return new MolarMass(((value/1e3) * 1e-1d));
-        }
+			public static MolarMass<T, C> FromHectogramsPerMole(Number<T, C> hectogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) hectogramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from GramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from KilogramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromGramsPerMole(double gramspermole)
-        {
-            double value = (double) gramspermole;
-            return new MolarMass(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromKilogramsPerMole(Number<T, C> kilogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e3d);
+			}
 #else
-        public static MolarMass FromGramsPerMole(QuantityValue gramspermole)
-        {
-            double value = (double) gramspermole;
-            return new MolarMass((value/1e3));
-        }
+			public static MolarMass<T, C> FromKilogramsPerMole(Number<T, C> kilogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from HectogramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from KilopoundsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromHectogramsPerMole(double hectogramspermole)
-        {
-            double value = (double) hectogramspermole;
-            return new MolarMass((value/1e3) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromKilopoundsPerMole(Number<T, C> kilopoundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspermole;
+				return new MolarMass<T, C>((value*0.45359237) * 1e3d);
+			}
 #else
-        public static MolarMass FromHectogramsPerMole(QuantityValue hectogramspermole)
-        {
-            double value = (double) hectogramspermole;
-            return new MolarMass(((value/1e3) * 1e2d));
-        }
+			public static MolarMass<T, C> FromKilopoundsPerMole(Number<T, C> kilopoundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value*0.45359237) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from KilogramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from MegapoundsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromKilogramsPerMole(double kilogramspermole)
-        {
-            double value = (double) kilogramspermole;
-            return new MolarMass((value/1e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromMegapoundsPerMole(Number<T, C> megapoundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) megapoundspermole;
+				return new MolarMass<T, C>((value*0.45359237) * 1e6d);
+			}
 #else
-        public static MolarMass FromKilogramsPerMole(QuantityValue kilogramspermole)
-        {
-            double value = (double) kilogramspermole;
-            return new MolarMass(((value/1e3) * 1e3d));
-        }
+			public static MolarMass<T, C> FromMegapoundsPerMole(Number<T, C> megapoundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) megapoundspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value*0.45359237) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from KilopoundsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from MicrogramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromKilopoundsPerMole(double kilopoundspermole)
-        {
-            double value = (double) kilopoundspermole;
-            return new MolarMass((value*0.45359237) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromMicrogramsPerMole(Number<T, C> microgramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) microgramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e-6d);
+			}
 #else
-        public static MolarMass FromKilopoundsPerMole(QuantityValue kilopoundspermole)
-        {
-            double value = (double) kilopoundspermole;
-            return new MolarMass(((value*0.45359237) * 1e3d));
-        }
+			public static MolarMass<T, C> FromMicrogramsPerMole(Number<T, C> microgramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) microgramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from MegapoundsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from MilligramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromMegapoundsPerMole(double megapoundspermole)
-        {
-            double value = (double) megapoundspermole;
-            return new MolarMass((value*0.45359237) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromMilligramsPerMole(Number<T, C> milligramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) milligramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e-3d);
+			}
 #else
-        public static MolarMass FromMegapoundsPerMole(QuantityValue megapoundspermole)
-        {
-            double value = (double) megapoundspermole;
-            return new MolarMass(((value*0.45359237) * 1e6d));
-        }
+			public static MolarMass<T, C> FromMilligramsPerMole(Number<T, C> milligramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) milligramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from MicrogramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from NanogramsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromMicrogramsPerMole(double microgramspermole)
-        {
-            double value = (double) microgramspermole;
-            return new MolarMass((value/1e3) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromNanogramsPerMole(Number<T, C> nanogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramspermole;
+				return new MolarMass<T, C>((value/1e3) * 1e-9d);
+			}
 #else
-        public static MolarMass FromMicrogramsPerMole(QuantityValue microgramspermole)
-        {
-            double value = (double) microgramspermole;
-            return new MolarMass(((value/1e3) * 1e-6d));
-        }
+			public static MolarMass<T, C> FromNanogramsPerMole(Number<T, C> nanogramspermole)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramspermole;
+				return new MolarMass<T, C>(new Number<T,C>((value/1e3) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from MilligramsPerMole.
-        /// </summary>
+			/// <summary>
+			///     Get MolarMass from PoundsPerMole.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromMilligramsPerMole(double milligramspermole)
-        {
-            double value = (double) milligramspermole;
-            return new MolarMass((value/1e3) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarMass<T, C> FromPoundsPerMole(Number<T, C> poundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) poundspermole;
+				return new MolarMass<T, C>(value*0.45359237);
+			}
 #else
-        public static MolarMass FromMilligramsPerMole(QuantityValue milligramspermole)
-        {
-            double value = (double) milligramspermole;
-            return new MolarMass(((value/1e3) * 1e-3d));
-        }
+			public static MolarMass<T, C> FromPoundsPerMole(Number<T, C> poundspermole)
+			{
+				Number<T,C> value = (Number<T,C>) poundspermole;
+				return new MolarMass<T, C>(new Number<T,C>(value*0.45359237));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarMass from NanogramsPerMole.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="MolarMassUnit" /> to <see cref="MolarMass" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>MolarMass unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromNanogramsPerMole(double nanogramspermole)
-        {
-            double value = (double) nanogramspermole;
-            return new MolarMass((value/1e3) * 1e-9d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static MolarMass<T, C> From(double value, MolarMassUnit fromUnit)
 #else
-        public static MolarMass FromNanogramsPerMole(QuantityValue nanogramspermole)
-        {
-            double value = (double) nanogramspermole;
-            return new MolarMass(((value/1e3) * 1e-9d));
-        }
+			public static MolarMass<T, C> From(Number<T, C> value, MolarMassUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case MolarMassUnit.CentigramPerMole:
+						return FromCentigramsPerMole(value);
+					case MolarMassUnit.DecagramPerMole:
+						return FromDecagramsPerMole(value);
+					case MolarMassUnit.DecigramPerMole:
+						return FromDecigramsPerMole(value);
+					case MolarMassUnit.GramPerMole:
+						return FromGramsPerMole(value);
+					case MolarMassUnit.HectogramPerMole:
+						return FromHectogramsPerMole(value);
+					case MolarMassUnit.KilogramPerMole:
+						return FromKilogramsPerMole(value);
+					case MolarMassUnit.KilopoundPerMole:
+						return FromKilopoundsPerMole(value);
+					case MolarMassUnit.MegapoundPerMole:
+						return FromMegapoundsPerMole(value);
+					case MolarMassUnit.MicrogramPerMole:
+						return FromMicrogramsPerMole(value);
+					case MolarMassUnit.MilligramPerMole:
+						return FromMilligramsPerMole(value);
+					case MolarMassUnit.NanogramPerMole:
+						return FromNanogramsPerMole(value);
+					case MolarMassUnit.PoundPerMole:
+						return FromPoundsPerMole(value);
 
-        /// <summary>
-        ///     Get MolarMass from PoundsPerMole.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarMass FromPoundsPerMole(double poundspermole)
-        {
-            double value = (double) poundspermole;
-            return new MolarMass(value*0.45359237);
-        }
-#else
-        public static MolarMass FromPoundsPerMole(QuantityValue poundspermole)
-        {
-            double value = (double) poundspermole;
-            return new MolarMass((value*0.45359237));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarMassUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarMassUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable MolarMass from nullable CentigramsPerMole.
-        /// </summary>
-        public static MolarMass? FromCentigramsPerMole(QuantityValue? centigramspermole)
-        {
-            if (centigramspermole.HasValue)
-            {
-                return FromCentigramsPerMole(centigramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator -(MolarMass<T, C> right)
+			{
+				return new MolarMass<T, C>(-right._kilogramsPerMole);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable DecagramsPerMole.
-        /// </summary>
-        public static MolarMass? FromDecagramsPerMole(QuantityValue? decagramspermole)
-        {
-            if (decagramspermole.HasValue)
-            {
-                return FromDecagramsPerMole(decagramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator +(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return new MolarMass<T, C>(left._kilogramsPerMole + right._kilogramsPerMole);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable DecigramsPerMole.
-        /// </summary>
-        public static MolarMass? FromDecigramsPerMole(QuantityValue? decigramspermole)
-        {
-            if (decigramspermole.HasValue)
-            {
-                return FromDecigramsPerMole(decigramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator -(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return new MolarMass<T, C>(left._kilogramsPerMole - right._kilogramsPerMole);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable GramsPerMole.
-        /// </summary>
-        public static MolarMass? FromGramsPerMole(QuantityValue? gramspermole)
-        {
-            if (gramspermole.HasValue)
-            {
-                return FromGramsPerMole(gramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator *(Number<T, C> left, MolarMass<T, C> right)
+			{
+				return new MolarMass<T, C>(left*right._kilogramsPerMole);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable HectogramsPerMole.
-        /// </summary>
-        public static MolarMass? FromHectogramsPerMole(QuantityValue? hectogramspermole)
-        {
-            if (hectogramspermole.HasValue)
-            {
-                return FromHectogramsPerMole(hectogramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator *(MolarMass<T, C> left, double right)
+			{
+				return new MolarMass<T, C>(left._kilogramsPerMole*right);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable KilogramsPerMole.
-        /// </summary>
-        public static MolarMass? FromKilogramsPerMole(QuantityValue? kilogramspermole)
-        {
-            if (kilogramspermole.HasValue)
-            {
-                return FromKilogramsPerMole(kilogramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarMass<T, C> operator /(MolarMass<T, C> left, double right)
+			{
+				return new MolarMass<T, C>(left._kilogramsPerMole/right);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarMass from nullable KilopoundsPerMole.
-        /// </summary>
-        public static MolarMass? FromKilopoundsPerMole(QuantityValue? kilopoundspermole)
-        {
-            if (kilopoundspermole.HasValue)
-            {
-                return FromKilopoundsPerMole(kilopoundspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable MolarMass from nullable MegapoundsPerMole.
-        /// </summary>
-        public static MolarMass? FromMegapoundsPerMole(QuantityValue? megapoundspermole)
-        {
-            if (megapoundspermole.HasValue)
-            {
-                return FromMegapoundsPerMole(megapoundspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable MolarMass from nullable MicrogramsPerMole.
-        /// </summary>
-        public static MolarMass? FromMicrogramsPerMole(QuantityValue? microgramspermole)
-        {
-            if (microgramspermole.HasValue)
-            {
-                return FromMicrogramsPerMole(microgramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable MolarMass from nullable MilligramsPerMole.
-        /// </summary>
-        public static MolarMass? FromMilligramsPerMole(QuantityValue? milligramspermole)
-        {
-            if (milligramspermole.HasValue)
-            {
-                return FromMilligramsPerMole(milligramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable MolarMass from nullable NanogramsPerMole.
-        /// </summary>
-        public static MolarMass? FromNanogramsPerMole(QuantityValue? nanogramspermole)
-        {
-            if (nanogramspermole.HasValue)
-            {
-                return FromNanogramsPerMole(nanogramspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable MolarMass from nullable PoundsPerMole.
-        /// </summary>
-        public static MolarMass? FromPoundsPerMole(QuantityValue? poundspermole)
-        {
-            if (poundspermole.HasValue)
-            {
-                return FromPoundsPerMole(poundspermole.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return Convert.ToDouble(left._kilogramsPerMole/right._kilogramsPerMole);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarMassUnit" /> to <see cref="MolarMass" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>MolarMass unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is MolarMass<T, C>)) throw new ArgumentException("Expected type MolarMass.", "obj");
+				return CompareTo((MolarMass<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static MolarMass From(double value, MolarMassUnit fromUnit)
+			internal
 #else
-        public static MolarMass From(QuantityValue value, MolarMassUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case MolarMassUnit.CentigramPerMole:
-                    return FromCentigramsPerMole(value);
-                case MolarMassUnit.DecagramPerMole:
-                    return FromDecagramsPerMole(value);
-                case MolarMassUnit.DecigramPerMole:
-                    return FromDecigramsPerMole(value);
-                case MolarMassUnit.GramPerMole:
-                    return FromGramsPerMole(value);
-                case MolarMassUnit.HectogramPerMole:
-                    return FromHectogramsPerMole(value);
-                case MolarMassUnit.KilogramPerMole:
-                    return FromKilogramsPerMole(value);
-                case MolarMassUnit.KilopoundPerMole:
-                    return FromKilopoundsPerMole(value);
-                case MolarMassUnit.MegapoundPerMole:
-                    return FromMegapoundsPerMole(value);
-                case MolarMassUnit.MicrogramPerMole:
-                    return FromMicrogramsPerMole(value);
-                case MolarMassUnit.MilligramPerMole:
-                    return FromMilligramsPerMole(value);
-                case MolarMassUnit.NanogramPerMole:
-                    return FromNanogramsPerMole(value);
-                case MolarMassUnit.PoundPerMole:
-                    return FromPoundsPerMole(value);
+			int CompareTo(MolarMass<T, C> other)
+			{
+				return _kilogramsPerMole.CompareTo(other._kilogramsPerMole);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarMassUnit" /> to <see cref="MolarMass" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>MolarMass unit value.</returns>
-        public static MolarMass? From(QuantityValue? value, MolarMassUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case MolarMassUnit.CentigramPerMole:
-                    return FromCentigramsPerMole(value.Value);
-                case MolarMassUnit.DecagramPerMole:
-                    return FromDecagramsPerMole(value.Value);
-                case MolarMassUnit.DecigramPerMole:
-                    return FromDecigramsPerMole(value.Value);
-                case MolarMassUnit.GramPerMole:
-                    return FromGramsPerMole(value.Value);
-                case MolarMassUnit.HectogramPerMole:
-                    return FromHectogramsPerMole(value.Value);
-                case MolarMassUnit.KilogramPerMole:
-                    return FromKilogramsPerMole(value.Value);
-                case MolarMassUnit.KilopoundPerMole:
-                    return FromKilopoundsPerMole(value.Value);
-                case MolarMassUnit.MegapoundPerMole:
-                    return FromMegapoundsPerMole(value.Value);
-                case MolarMassUnit.MicrogramPerMole:
-                    return FromMicrogramsPerMole(value.Value);
-                case MolarMassUnit.MilligramPerMole:
-                    return FromMilligramsPerMole(value.Value);
-                case MolarMassUnit.NanogramPerMole:
-                    return FromNanogramsPerMole(value.Value);
-                case MolarMassUnit.PoundPerMole:
-                    return FromPoundsPerMole(value.Value);
+			public static bool operator <=(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return left._kilogramsPerMole <= right._kilogramsPerMole;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return left._kilogramsPerMole >= right._kilogramsPerMole;
+			}
+
+			public static bool operator <(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return left._kilogramsPerMole < right._kilogramsPerMole;
+			}
+
+			public static bool operator >(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				return left._kilogramsPerMole > right._kilogramsPerMole;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilogramsPerMole == right._kilogramsPerMole;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(MolarMass<T, C> left, MolarMass<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilogramsPerMole != right._kilogramsPerMole;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarMassUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarMassUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static MolarMass operator -(MolarMass right)
-        {
-            return new MolarMass(-right._kilogramsPerMole);
-        }
-
-        public static MolarMass operator +(MolarMass left, MolarMass right)
-        {
-            return new MolarMass(left._kilogramsPerMole + right._kilogramsPerMole);
-        }
-
-        public static MolarMass operator -(MolarMass left, MolarMass right)
-        {
-            return new MolarMass(left._kilogramsPerMole - right._kilogramsPerMole);
-        }
-
-        public static MolarMass operator *(double left, MolarMass right)
-        {
-            return new MolarMass(left*right._kilogramsPerMole);
-        }
-
-        public static MolarMass operator *(MolarMass left, double right)
-        {
-            return new MolarMass(left._kilogramsPerMole*(double)right);
-        }
-
-        public static MolarMass operator /(MolarMass left, double right)
-        {
-            return new MolarMass(left._kilogramsPerMole/(double)right);
-        }
-
-        public static double operator /(MolarMass left, MolarMass right)
-        {
-            return Convert.ToDouble(left._kilogramsPerMole/right._kilogramsPerMole);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is MolarMass)) throw new ArgumentException("Expected type MolarMass.", "obj");
-            return CompareTo((MolarMass) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(MolarMass other)
-        {
-            return _kilogramsPerMole.CompareTo(other._kilogramsPerMole);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(MolarMass left, MolarMass right)
-        {
-            return left._kilogramsPerMole <= right._kilogramsPerMole;
-        }
-
-        public static bool operator >=(MolarMass left, MolarMass right)
-        {
-            return left._kilogramsPerMole >= right._kilogramsPerMole;
-        }
-
-        public static bool operator <(MolarMass left, MolarMass right)
-        {
-            return left._kilogramsPerMole < right._kilogramsPerMole;
-        }
-
-        public static bool operator >(MolarMass left, MolarMass right)
-        {
-            return left._kilogramsPerMole > right._kilogramsPerMole;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(MolarMass left, MolarMass right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilogramsPerMole == right._kilogramsPerMole;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(MolarMass left, MolarMass right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilogramsPerMole != right._kilogramsPerMole;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _kilogramsPerMole.Equals(((MolarMass) obj)._kilogramsPerMole);
-        }
+				return _kilogramsPerMole.Equals(((MolarMass<T, C>) obj)._kilogramsPerMole);
+			}
 
-        /// <summary>
-        ///     Compare equality to another MolarMass by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(MolarMass other, MolarMass maxError)
-        {
-            return Math.Abs(_kilogramsPerMole - other._kilogramsPerMole) <= maxError._kilogramsPerMole;
-        }
+			/// <summary>
+			///     Compare equality to another MolarMass by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(MolarMass<T, C> other, MolarMass<T, C> maxError)
+			{
+				return Math.Abs((decimal)_kilogramsPerMole - (decimal)other._kilogramsPerMole) <= maxError._kilogramsPerMole;
+			}
 
-        public override int GetHashCode()
-        {
-            return _kilogramsPerMole.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _kilogramsPerMole.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(MolarMassUnit unit)
-        {
-            switch (unit)
-            {
-                case MolarMassUnit.CentigramPerMole:
-                    return CentigramsPerMole;
-                case MolarMassUnit.DecagramPerMole:
-                    return DecagramsPerMole;
-                case MolarMassUnit.DecigramPerMole:
-                    return DecigramsPerMole;
-                case MolarMassUnit.GramPerMole:
-                    return GramsPerMole;
-                case MolarMassUnit.HectogramPerMole:
-                    return HectogramsPerMole;
-                case MolarMassUnit.KilogramPerMole:
-                    return KilogramsPerMole;
-                case MolarMassUnit.KilopoundPerMole:
-                    return KilopoundsPerMole;
-                case MolarMassUnit.MegapoundPerMole:
-                    return MegapoundsPerMole;
-                case MolarMassUnit.MicrogramPerMole:
-                    return MicrogramsPerMole;
-                case MolarMassUnit.MilligramPerMole:
-                    return MilligramsPerMole;
-                case MolarMassUnit.NanogramPerMole:
-                    return NanogramsPerMole;
-                case MolarMassUnit.PoundPerMole:
-                    return PoundsPerMole;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(MolarMassUnit unit)
+			{
+				switch (unit)
+				{
+					case MolarMassUnit.CentigramPerMole:
+						return CentigramsPerMole;
+					case MolarMassUnit.DecagramPerMole:
+						return DecagramsPerMole;
+					case MolarMassUnit.DecigramPerMole:
+						return DecigramsPerMole;
+					case MolarMassUnit.GramPerMole:
+						return GramsPerMole;
+					case MolarMassUnit.HectogramPerMole:
+						return HectogramsPerMole;
+					case MolarMassUnit.KilogramPerMole:
+						return KilogramsPerMole;
+					case MolarMassUnit.KilopoundPerMole:
+						return KilopoundsPerMole;
+					case MolarMassUnit.MegapoundPerMole:
+						return MegapoundsPerMole;
+					case MolarMassUnit.MicrogramPerMole:
+						return MicrogramsPerMole;
+					case MolarMassUnit.MilligramPerMole:
+						return MilligramsPerMole;
+					case MolarMassUnit.NanogramPerMole:
+						return NanogramsPerMole;
+					case MolarMassUnit.PoundPerMole:
+						return PoundsPerMole;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static MolarMass Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static MolarMass<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static MolarMass Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static MolarMass<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<MolarMass, MolarMassUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    MolarMassUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromKilogramsPerMole(x.KilogramsPerMole + y.KilogramsPerMole));
-        }
+					return QuantityParser.Parse<MolarMass<T, C>, MolarMassUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						MolarMassUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromKilogramsPerMole((Number<T, C>)x.KilogramsPerMole + y.KilogramsPerMole));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out MolarMass result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out MolarMass<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out MolarMass result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(MolarMass);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out MolarMass<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(MolarMass<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarMassUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarMassUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarMassUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarMassUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static MolarMassUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static MolarMassUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<MolarMassUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<MolarMassUnit>(str.Trim());
 
-            if (unit == MolarMassUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarMassUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == MolarMassUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarMassUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is KilogramPerMole
-        /// </summary>
-        public static MolarMassUnit ToStringDefaultUnit { get; set; } = MolarMassUnit.KilogramPerMole;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is KilogramPerMole
+			/// </summary>
+			public static MolarMassUnit ToStringDefaultUnit { get; set; } = MolarMassUnit.KilogramPerMole;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarMassUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarMassUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarMassUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of MolarMass
-        /// </summary>
-        public static MolarMass MaxValue
-        {
-            get
-            {
-                return new MolarMass(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of MolarMass
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of MolarMass
-        /// </summary>
-        public static MolarMass MinValue
-        {
-            get
-            {
-                return new MolarMass(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of MolarMass
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

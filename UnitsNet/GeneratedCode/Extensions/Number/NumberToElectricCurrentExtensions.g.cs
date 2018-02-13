@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,238 +48,133 @@ namespace UnitsNet.Extensions.NumberToElectricCurrent
         #region Ampere
 
         /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
-        public static ElectricCurrent Amperes(this int value) => ElectricCurrent.FromAmperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double?)"/>
-        public static ElectricCurrent? Amperes(this int? value) => ElectricCurrent.FromAmperes(value);
+        public static ElectricCurrent Amperes(this int value) => (ElectricCurrent)ElectricCurrent.FromAmperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
+        public static ElectricCurrent Amperes(this long value) => (ElectricCurrent)ElectricCurrent.FromAmperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
-        public static ElectricCurrent Amperes(this long value) => ElectricCurrent.FromAmperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double?)"/>
-        public static ElectricCurrent? Amperes(this long? value) => ElectricCurrent.FromAmperes(value);
+        public static ElectricCurrent Amperes(this double value) => (ElectricCurrent)ElectricCurrent.FromAmperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
-        public static ElectricCurrent Amperes(this double value) => ElectricCurrent.FromAmperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double?)"/>
-        public static ElectricCurrent? Amperes(this double? value) => ElectricCurrent.FromAmperes(value);
+        public static ElectricCurrent Amperes(this float value) => (ElectricCurrent)ElectricCurrent.FromAmperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
-        public static ElectricCurrent Amperes(this float value) => ElectricCurrent.FromAmperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double?)"/>
-        public static ElectricCurrent? Amperes(this float? value) => ElectricCurrent.FromAmperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double)"/>
-        public static ElectricCurrent Amperes(this decimal value) => ElectricCurrent.FromAmperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromAmperes(double?)"/>
-        public static ElectricCurrent? Amperes(this decimal? value) => ElectricCurrent.FromAmperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Amperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromAmperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Kiloampere
 
         /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
-        public static ElectricCurrent Kiloamperes(this int value) => ElectricCurrent.FromKiloamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double?)"/>
-        public static ElectricCurrent? Kiloamperes(this int? value) => ElectricCurrent.FromKiloamperes(value);
+        public static ElectricCurrent Kiloamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromKiloamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
+        public static ElectricCurrent Kiloamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromKiloamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
-        public static ElectricCurrent Kiloamperes(this long value) => ElectricCurrent.FromKiloamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double?)"/>
-        public static ElectricCurrent? Kiloamperes(this long? value) => ElectricCurrent.FromKiloamperes(value);
+        public static ElectricCurrent Kiloamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromKiloamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
-        public static ElectricCurrent Kiloamperes(this double value) => ElectricCurrent.FromKiloamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double?)"/>
-        public static ElectricCurrent? Kiloamperes(this double? value) => ElectricCurrent.FromKiloamperes(value);
+        public static ElectricCurrent Kiloamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromKiloamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
-        public static ElectricCurrent Kiloamperes(this float value) => ElectricCurrent.FromKiloamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double?)"/>
-        public static ElectricCurrent? Kiloamperes(this float? value) => ElectricCurrent.FromKiloamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double)"/>
-        public static ElectricCurrent Kiloamperes(this decimal value) => ElectricCurrent.FromKiloamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromKiloamperes(double?)"/>
-        public static ElectricCurrent? Kiloamperes(this decimal? value) => ElectricCurrent.FromKiloamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Kiloamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromKiloamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Megaampere
 
         /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
-        public static ElectricCurrent Megaamperes(this int value) => ElectricCurrent.FromMegaamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double?)"/>
-        public static ElectricCurrent? Megaamperes(this int? value) => ElectricCurrent.FromMegaamperes(value);
+        public static ElectricCurrent Megaamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromMegaamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
+        public static ElectricCurrent Megaamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromMegaamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
-        public static ElectricCurrent Megaamperes(this long value) => ElectricCurrent.FromMegaamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double?)"/>
-        public static ElectricCurrent? Megaamperes(this long? value) => ElectricCurrent.FromMegaamperes(value);
+        public static ElectricCurrent Megaamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromMegaamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
-        public static ElectricCurrent Megaamperes(this double value) => ElectricCurrent.FromMegaamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double?)"/>
-        public static ElectricCurrent? Megaamperes(this double? value) => ElectricCurrent.FromMegaamperes(value);
+        public static ElectricCurrent Megaamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromMegaamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
-        public static ElectricCurrent Megaamperes(this float value) => ElectricCurrent.FromMegaamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double?)"/>
-        public static ElectricCurrent? Megaamperes(this float? value) => ElectricCurrent.FromMegaamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double)"/>
-        public static ElectricCurrent Megaamperes(this decimal value) => ElectricCurrent.FromMegaamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromMegaamperes(double?)"/>
-        public static ElectricCurrent? Megaamperes(this decimal? value) => ElectricCurrent.FromMegaamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Megaamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromMegaamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Microampere
 
         /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
-        public static ElectricCurrent Microamperes(this int value) => ElectricCurrent.FromMicroamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double?)"/>
-        public static ElectricCurrent? Microamperes(this int? value) => ElectricCurrent.FromMicroamperes(value);
+        public static ElectricCurrent Microamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromMicroamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
+        public static ElectricCurrent Microamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromMicroamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
-        public static ElectricCurrent Microamperes(this long value) => ElectricCurrent.FromMicroamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double?)"/>
-        public static ElectricCurrent? Microamperes(this long? value) => ElectricCurrent.FromMicroamperes(value);
+        public static ElectricCurrent Microamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromMicroamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
-        public static ElectricCurrent Microamperes(this double value) => ElectricCurrent.FromMicroamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double?)"/>
-        public static ElectricCurrent? Microamperes(this double? value) => ElectricCurrent.FromMicroamperes(value);
+        public static ElectricCurrent Microamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromMicroamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
-        public static ElectricCurrent Microamperes(this float value) => ElectricCurrent.FromMicroamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double?)"/>
-        public static ElectricCurrent? Microamperes(this float? value) => ElectricCurrent.FromMicroamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double)"/>
-        public static ElectricCurrent Microamperes(this decimal value) => ElectricCurrent.FromMicroamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromMicroamperes(double?)"/>
-        public static ElectricCurrent? Microamperes(this decimal? value) => ElectricCurrent.FromMicroamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Microamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromMicroamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Milliampere
 
         /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
-        public static ElectricCurrent Milliamperes(this int value) => ElectricCurrent.FromMilliamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double?)"/>
-        public static ElectricCurrent? Milliamperes(this int? value) => ElectricCurrent.FromMilliamperes(value);
+        public static ElectricCurrent Milliamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromMilliamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
+        public static ElectricCurrent Milliamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromMilliamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
-        public static ElectricCurrent Milliamperes(this long value) => ElectricCurrent.FromMilliamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double?)"/>
-        public static ElectricCurrent? Milliamperes(this long? value) => ElectricCurrent.FromMilliamperes(value);
+        public static ElectricCurrent Milliamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromMilliamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
-        public static ElectricCurrent Milliamperes(this double value) => ElectricCurrent.FromMilliamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double?)"/>
-        public static ElectricCurrent? Milliamperes(this double? value) => ElectricCurrent.FromMilliamperes(value);
+        public static ElectricCurrent Milliamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromMilliamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
-        public static ElectricCurrent Milliamperes(this float value) => ElectricCurrent.FromMilliamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double?)"/>
-        public static ElectricCurrent? Milliamperes(this float? value) => ElectricCurrent.FromMilliamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double)"/>
-        public static ElectricCurrent Milliamperes(this decimal value) => ElectricCurrent.FromMilliamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromMilliamperes(double?)"/>
-        public static ElectricCurrent? Milliamperes(this decimal? value) => ElectricCurrent.FromMilliamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Milliamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromMilliamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanoampere
 
         /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
-        public static ElectricCurrent Nanoamperes(this int value) => ElectricCurrent.FromNanoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double?)"/>
-        public static ElectricCurrent? Nanoamperes(this int? value) => ElectricCurrent.FromNanoamperes(value);
+        public static ElectricCurrent Nanoamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromNanoamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
+        public static ElectricCurrent Nanoamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromNanoamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
-        public static ElectricCurrent Nanoamperes(this long value) => ElectricCurrent.FromNanoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double?)"/>
-        public static ElectricCurrent? Nanoamperes(this long? value) => ElectricCurrent.FromNanoamperes(value);
+        public static ElectricCurrent Nanoamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromNanoamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
-        public static ElectricCurrent Nanoamperes(this double value) => ElectricCurrent.FromNanoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double?)"/>
-        public static ElectricCurrent? Nanoamperes(this double? value) => ElectricCurrent.FromNanoamperes(value);
+        public static ElectricCurrent Nanoamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromNanoamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
-        public static ElectricCurrent Nanoamperes(this float value) => ElectricCurrent.FromNanoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double?)"/>
-        public static ElectricCurrent? Nanoamperes(this float? value) => ElectricCurrent.FromNanoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double)"/>
-        public static ElectricCurrent Nanoamperes(this decimal value) => ElectricCurrent.FromNanoamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromNanoamperes(double?)"/>
-        public static ElectricCurrent? Nanoamperes(this decimal? value) => ElectricCurrent.FromNanoamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Nanoamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromNanoamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Picoampere
 
         /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
-        public static ElectricCurrent Picoamperes(this int value) => ElectricCurrent.FromPicoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double?)"/>
-        public static ElectricCurrent? Picoamperes(this int? value) => ElectricCurrent.FromPicoamperes(value);
+        public static ElectricCurrent Picoamperes(this int value) => (ElectricCurrent)ElectricCurrent.FromPicoamperes(value);
+	
+        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
+        public static ElectricCurrent Picoamperes(this long value) => (ElectricCurrent)ElectricCurrent.FromPicoamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
-        public static ElectricCurrent Picoamperes(this long value) => ElectricCurrent.FromPicoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double?)"/>
-        public static ElectricCurrent? Picoamperes(this long? value) => ElectricCurrent.FromPicoamperes(value);
+        public static ElectricCurrent Picoamperes(this double value) => (ElectricCurrent)ElectricCurrent.FromPicoamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
-        public static ElectricCurrent Picoamperes(this double value) => ElectricCurrent.FromPicoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double?)"/>
-        public static ElectricCurrent? Picoamperes(this double? value) => ElectricCurrent.FromPicoamperes(value);
+        public static ElectricCurrent Picoamperes(this float value) => (ElectricCurrent)ElectricCurrent.FromPicoamperes(value);
 
         /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
-        public static ElectricCurrent Picoamperes(this float value) => ElectricCurrent.FromPicoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double?)"/>
-        public static ElectricCurrent? Picoamperes(this float? value) => ElectricCurrent.FromPicoamperes(value);
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double)"/>
-        public static ElectricCurrent Picoamperes(this decimal value) => ElectricCurrent.FromPicoamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricCurrent.FromPicoamperes(double?)"/>
-        public static ElectricCurrent? Picoamperes(this decimal? value) => ElectricCurrent.FromPicoamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricCurrent Picoamperes(this decimal value) => (ElectricCurrent)ElectricCurrent.FromPicoamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

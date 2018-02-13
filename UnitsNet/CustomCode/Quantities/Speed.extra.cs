@@ -24,7 +24,7 @@ using System;
 
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -32,49 +32,51 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Speed
 #else
-    public partial struct Speed
+    public partial class Speed<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Acceleration operator /(Speed speed, TimeSpan timeSpan)
+        public static Acceleration<T, C> operator /(Speed<T, C> speed, TimeSpan timeSpan)
         {
-            return Acceleration.FromMeterPerSecondSquared(speed.MetersPerSecond / timeSpan.TotalSeconds);
+            return Acceleration<T, C>.FromMeterPerSecondSquared(speed.MetersPerSecond / timeSpan.TotalSeconds);
         }
 
-        public static Length operator *(Speed speed, TimeSpan timeSpan)
+        public static Length<T, C> operator *(Speed<T, C> speed, TimeSpan timeSpan)
         {
-            return Length.FromMeters(speed.MetersPerSecond * timeSpan.TotalSeconds);
+            return Length<T, C>.FromMeters(speed.MetersPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Length operator *(TimeSpan timeSpan, Speed speed)
+        public static Length<T, C> operator *(TimeSpan timeSpan, Speed<T, C> speed)
         {
-            return Length.FromMeters(speed.MetersPerSecond * timeSpan.TotalSeconds);
+            return Length<T, C>.FromMeters(speed.MetersPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Acceleration operator /(Speed speed, Duration duration)
+        public static Acceleration<T, C> operator /(Speed<T, C> speed, Duration<T, C> duration)
         {
-            return Acceleration.FromMeterPerSecondSquared(speed.MetersPerSecond / duration.Seconds);
+            return Acceleration<T, C>.FromMeterPerSecondSquared(speed.MetersPerSecond / duration.Seconds);
         }
 
-        public static Length operator *(Speed speed, Duration duration)
+        public static Length<T, C> operator *(Speed<T, C> speed, Duration<T, C> duration)
         {
-            return Length.FromMeters(speed.MetersPerSecond * duration.Seconds);
+            return Length<T, C>.FromMeters(speed.MetersPerSecond * duration.Seconds);
         }
 
-        public static Length operator *(Duration duration, Speed speed)
+        public static Length<T, C> operator *(Duration<T, C> duration, Speed<T, C> speed)
         {
-            return Length.FromMeters(speed.MetersPerSecond * duration.Seconds);
+            return Length<T, C>.FromMeters(speed.MetersPerSecond * duration.Seconds);
         }
 
-        public static KinematicViscosity operator *(Speed speed, Length length)
+        public static KinematicViscosity<T, C> operator *(Speed<T, C> speed, Length<T, C> length)
         {
-            return KinematicViscosity.FromSquareMetersPerSecond(length.Meters * speed.MetersPerSecond);
+            return KinematicViscosity<T, C>.FromSquareMetersPerSecond(length.Meters * speed.MetersPerSecond);
         }
 
-        public static SpecificEnergy operator *(Speed left, Speed right)
+        public static SpecificEnergy<T, C> operator *(Speed<T, C> left, Speed<T, C> right)
         {
-            return SpecificEnergy.FromJoulesPerKilogram(left.MetersPerSecond * right.MetersPerSecond);
+            return SpecificEnergy<T, C>.FromJoulesPerKilogram(left.MetersPerSecond * right.MetersPerSecond);
         }
 #endif
     }

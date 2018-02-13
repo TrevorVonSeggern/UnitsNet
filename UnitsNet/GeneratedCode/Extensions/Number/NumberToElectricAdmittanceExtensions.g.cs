@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,136 +48,76 @@ namespace UnitsNet.Extensions.NumberToElectricAdmittance
         #region Microsiemens
 
         /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
-        public static ElectricAdmittance Microsiemens(this int value) => ElectricAdmittance.FromMicrosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double?)"/>
-        public static ElectricAdmittance? Microsiemens(this int? value) => ElectricAdmittance.FromMicrosiemens(value);
+        public static ElectricAdmittance Microsiemens(this int value) => (ElectricAdmittance)ElectricAdmittance.FromMicrosiemens(value);
+	
+        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
+        public static ElectricAdmittance Microsiemens(this long value) => (ElectricAdmittance)ElectricAdmittance.FromMicrosiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
-        public static ElectricAdmittance Microsiemens(this long value) => ElectricAdmittance.FromMicrosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double?)"/>
-        public static ElectricAdmittance? Microsiemens(this long? value) => ElectricAdmittance.FromMicrosiemens(value);
+        public static ElectricAdmittance Microsiemens(this double value) => (ElectricAdmittance)ElectricAdmittance.FromMicrosiemens(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
-        public static ElectricAdmittance Microsiemens(this double value) => ElectricAdmittance.FromMicrosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double?)"/>
-        public static ElectricAdmittance? Microsiemens(this double? value) => ElectricAdmittance.FromMicrosiemens(value);
+        public static ElectricAdmittance Microsiemens(this float value) => (ElectricAdmittance)ElectricAdmittance.FromMicrosiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
-        public static ElectricAdmittance Microsiemens(this float value) => ElectricAdmittance.FromMicrosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double?)"/>
-        public static ElectricAdmittance? Microsiemens(this float? value) => ElectricAdmittance.FromMicrosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double)"/>
-        public static ElectricAdmittance Microsiemens(this decimal value) => ElectricAdmittance.FromMicrosiemens(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMicrosiemens(double?)"/>
-        public static ElectricAdmittance? Microsiemens(this decimal? value) => ElectricAdmittance.FromMicrosiemens(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricAdmittance Microsiemens(this decimal value) => (ElectricAdmittance)ElectricAdmittance.FromMicrosiemens(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Millisiemens
 
         /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
-        public static ElectricAdmittance Millisiemens(this int value) => ElectricAdmittance.FromMillisiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double?)"/>
-        public static ElectricAdmittance? Millisiemens(this int? value) => ElectricAdmittance.FromMillisiemens(value);
+        public static ElectricAdmittance Millisiemens(this int value) => (ElectricAdmittance)ElectricAdmittance.FromMillisiemens(value);
+	
+        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
+        public static ElectricAdmittance Millisiemens(this long value) => (ElectricAdmittance)ElectricAdmittance.FromMillisiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
-        public static ElectricAdmittance Millisiemens(this long value) => ElectricAdmittance.FromMillisiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double?)"/>
-        public static ElectricAdmittance? Millisiemens(this long? value) => ElectricAdmittance.FromMillisiemens(value);
+        public static ElectricAdmittance Millisiemens(this double value) => (ElectricAdmittance)ElectricAdmittance.FromMillisiemens(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
-        public static ElectricAdmittance Millisiemens(this double value) => ElectricAdmittance.FromMillisiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double?)"/>
-        public static ElectricAdmittance? Millisiemens(this double? value) => ElectricAdmittance.FromMillisiemens(value);
+        public static ElectricAdmittance Millisiemens(this float value) => (ElectricAdmittance)ElectricAdmittance.FromMillisiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
-        public static ElectricAdmittance Millisiemens(this float value) => ElectricAdmittance.FromMillisiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double?)"/>
-        public static ElectricAdmittance? Millisiemens(this float? value) => ElectricAdmittance.FromMillisiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double)"/>
-        public static ElectricAdmittance Millisiemens(this decimal value) => ElectricAdmittance.FromMillisiemens(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricAdmittance.FromMillisiemens(double?)"/>
-        public static ElectricAdmittance? Millisiemens(this decimal? value) => ElectricAdmittance.FromMillisiemens(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricAdmittance Millisiemens(this decimal value) => (ElectricAdmittance)ElectricAdmittance.FromMillisiemens(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanosiemens
 
         /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
-        public static ElectricAdmittance Nanosiemens(this int value) => ElectricAdmittance.FromNanosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double?)"/>
-        public static ElectricAdmittance? Nanosiemens(this int? value) => ElectricAdmittance.FromNanosiemens(value);
+        public static ElectricAdmittance Nanosiemens(this int value) => (ElectricAdmittance)ElectricAdmittance.FromNanosiemens(value);
+	
+        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
+        public static ElectricAdmittance Nanosiemens(this long value) => (ElectricAdmittance)ElectricAdmittance.FromNanosiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
-        public static ElectricAdmittance Nanosiemens(this long value) => ElectricAdmittance.FromNanosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double?)"/>
-        public static ElectricAdmittance? Nanosiemens(this long? value) => ElectricAdmittance.FromNanosiemens(value);
+        public static ElectricAdmittance Nanosiemens(this double value) => (ElectricAdmittance)ElectricAdmittance.FromNanosiemens(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
-        public static ElectricAdmittance Nanosiemens(this double value) => ElectricAdmittance.FromNanosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double?)"/>
-        public static ElectricAdmittance? Nanosiemens(this double? value) => ElectricAdmittance.FromNanosiemens(value);
+        public static ElectricAdmittance Nanosiemens(this float value) => (ElectricAdmittance)ElectricAdmittance.FromNanosiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
-        public static ElectricAdmittance Nanosiemens(this float value) => ElectricAdmittance.FromNanosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double?)"/>
-        public static ElectricAdmittance? Nanosiemens(this float? value) => ElectricAdmittance.FromNanosiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double)"/>
-        public static ElectricAdmittance Nanosiemens(this decimal value) => ElectricAdmittance.FromNanosiemens(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricAdmittance.FromNanosiemens(double?)"/>
-        public static ElectricAdmittance? Nanosiemens(this decimal? value) => ElectricAdmittance.FromNanosiemens(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricAdmittance Nanosiemens(this decimal value) => (ElectricAdmittance)ElectricAdmittance.FromNanosiemens(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Siemens
 
         /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
-        public static ElectricAdmittance Siemens(this int value) => ElectricAdmittance.FromSiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double?)"/>
-        public static ElectricAdmittance? Siemens(this int? value) => ElectricAdmittance.FromSiemens(value);
+        public static ElectricAdmittance Siemens(this int value) => (ElectricAdmittance)ElectricAdmittance.FromSiemens(value);
+	
+        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
+        public static ElectricAdmittance Siemens(this long value) => (ElectricAdmittance)ElectricAdmittance.FromSiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
-        public static ElectricAdmittance Siemens(this long value) => ElectricAdmittance.FromSiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double?)"/>
-        public static ElectricAdmittance? Siemens(this long? value) => ElectricAdmittance.FromSiemens(value);
+        public static ElectricAdmittance Siemens(this double value) => (ElectricAdmittance)ElectricAdmittance.FromSiemens(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
-        public static ElectricAdmittance Siemens(this double value) => ElectricAdmittance.FromSiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double?)"/>
-        public static ElectricAdmittance? Siemens(this double? value) => ElectricAdmittance.FromSiemens(value);
+        public static ElectricAdmittance Siemens(this float value) => (ElectricAdmittance)ElectricAdmittance.FromSiemens(value);
 
         /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
-        public static ElectricAdmittance Siemens(this float value) => ElectricAdmittance.FromSiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double?)"/>
-        public static ElectricAdmittance? Siemens(this float? value) => ElectricAdmittance.FromSiemens(value);
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double)"/>
-        public static ElectricAdmittance Siemens(this decimal value) => ElectricAdmittance.FromSiemens(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ElectricAdmittance.FromSiemens(double?)"/>
-        public static ElectricAdmittance? Siemens(this decimal? value) => ElectricAdmittance.FromSiemens(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ElectricAdmittance Siemens(this decimal value) => (ElectricAdmittance)ElectricAdmittance.FromSiemens(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

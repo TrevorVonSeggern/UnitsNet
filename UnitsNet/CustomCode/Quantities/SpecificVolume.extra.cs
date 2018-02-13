@@ -21,7 +21,7 @@
 
 using System;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -29,19 +29,21 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class SpecificVolume
 #else
-    public partial struct SpecificVolume
+    public partial class SpecificVolume<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
 
 #if !WINDOWS_UWP
-        public static Density operator /(double constant, SpecificVolume volume)
+        public static Density<T, C> operator /(double constant, SpecificVolume<T, C> volume)
         {
-            return Density.FromKilogramsPerCubicMeter(constant / volume.CubicMetersPerKilogram);
+            return Density<T, C>.FromKilogramsPerCubicMeter(constant / volume.CubicMetersPerKilogram);
         }
 
-        public static Volume operator *(SpecificVolume volume, Mass mass)
+        public static Volume<T, C> operator *(SpecificVolume<T, C> volume, Mass<T, C> mass)
         {
-            return Volume.FromCubicMeters(volume.CubicMetersPerKilogram * mass.Kilograms);
+            return Volume<T, C>.FromCubicMeters(volume.CubicMetersPerKilogram * mass.Kilograms);
         }
 
 #endif

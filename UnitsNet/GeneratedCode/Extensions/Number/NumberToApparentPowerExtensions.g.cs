@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,102 +48,57 @@ namespace UnitsNet.Extensions.NumberToApparentPower
         #region Kilovoltampere
 
         /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
-        public static ApparentPower Kilovoltamperes(this int value) => ApparentPower.FromKilovoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double?)"/>
-        public static ApparentPower? Kilovoltamperes(this int? value) => ApparentPower.FromKilovoltamperes(value);
+        public static ApparentPower Kilovoltamperes(this int value) => (ApparentPower)ApparentPower.FromKilovoltamperes(value);
+	
+        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
+        public static ApparentPower Kilovoltamperes(this long value) => (ApparentPower)ApparentPower.FromKilovoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
-        public static ApparentPower Kilovoltamperes(this long value) => ApparentPower.FromKilovoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double?)"/>
-        public static ApparentPower? Kilovoltamperes(this long? value) => ApparentPower.FromKilovoltamperes(value);
+        public static ApparentPower Kilovoltamperes(this double value) => (ApparentPower)ApparentPower.FromKilovoltamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
-        public static ApparentPower Kilovoltamperes(this double value) => ApparentPower.FromKilovoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double?)"/>
-        public static ApparentPower? Kilovoltamperes(this double? value) => ApparentPower.FromKilovoltamperes(value);
+        public static ApparentPower Kilovoltamperes(this float value) => (ApparentPower)ApparentPower.FromKilovoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
-        public static ApparentPower Kilovoltamperes(this float value) => ApparentPower.FromKilovoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double?)"/>
-        public static ApparentPower? Kilovoltamperes(this float? value) => ApparentPower.FromKilovoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double)"/>
-        public static ApparentPower Kilovoltamperes(this decimal value) => ApparentPower.FromKilovoltamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ApparentPower.FromKilovoltamperes(double?)"/>
-        public static ApparentPower? Kilovoltamperes(this decimal? value) => ApparentPower.FromKilovoltamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ApparentPower Kilovoltamperes(this decimal value) => (ApparentPower)ApparentPower.FromKilovoltamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Megavoltampere
 
         /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
-        public static ApparentPower Megavoltamperes(this int value) => ApparentPower.FromMegavoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double?)"/>
-        public static ApparentPower? Megavoltamperes(this int? value) => ApparentPower.FromMegavoltamperes(value);
+        public static ApparentPower Megavoltamperes(this int value) => (ApparentPower)ApparentPower.FromMegavoltamperes(value);
+	
+        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
+        public static ApparentPower Megavoltamperes(this long value) => (ApparentPower)ApparentPower.FromMegavoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
-        public static ApparentPower Megavoltamperes(this long value) => ApparentPower.FromMegavoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double?)"/>
-        public static ApparentPower? Megavoltamperes(this long? value) => ApparentPower.FromMegavoltamperes(value);
+        public static ApparentPower Megavoltamperes(this double value) => (ApparentPower)ApparentPower.FromMegavoltamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
-        public static ApparentPower Megavoltamperes(this double value) => ApparentPower.FromMegavoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double?)"/>
-        public static ApparentPower? Megavoltamperes(this double? value) => ApparentPower.FromMegavoltamperes(value);
+        public static ApparentPower Megavoltamperes(this float value) => (ApparentPower)ApparentPower.FromMegavoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
-        public static ApparentPower Megavoltamperes(this float value) => ApparentPower.FromMegavoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double?)"/>
-        public static ApparentPower? Megavoltamperes(this float? value) => ApparentPower.FromMegavoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double)"/>
-        public static ApparentPower Megavoltamperes(this decimal value) => ApparentPower.FromMegavoltamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ApparentPower.FromMegavoltamperes(double?)"/>
-        public static ApparentPower? Megavoltamperes(this decimal? value) => ApparentPower.FromMegavoltamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ApparentPower Megavoltamperes(this decimal value) => (ApparentPower)ApparentPower.FromMegavoltamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Voltampere
 
         /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
-        public static ApparentPower Voltamperes(this int value) => ApparentPower.FromVoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double?)"/>
-        public static ApparentPower? Voltamperes(this int? value) => ApparentPower.FromVoltamperes(value);
+        public static ApparentPower Voltamperes(this int value) => (ApparentPower)ApparentPower.FromVoltamperes(value);
+	
+        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
+        public static ApparentPower Voltamperes(this long value) => (ApparentPower)ApparentPower.FromVoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
-        public static ApparentPower Voltamperes(this long value) => ApparentPower.FromVoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double?)"/>
-        public static ApparentPower? Voltamperes(this long? value) => ApparentPower.FromVoltamperes(value);
+        public static ApparentPower Voltamperes(this double value) => (ApparentPower)ApparentPower.FromVoltamperes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
-        public static ApparentPower Voltamperes(this double value) => ApparentPower.FromVoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double?)"/>
-        public static ApparentPower? Voltamperes(this double? value) => ApparentPower.FromVoltamperes(value);
+        public static ApparentPower Voltamperes(this float value) => (ApparentPower)ApparentPower.FromVoltamperes(value);
 
         /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
-        public static ApparentPower Voltamperes(this float value) => ApparentPower.FromVoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double?)"/>
-        public static ApparentPower? Voltamperes(this float? value) => ApparentPower.FromVoltamperes(value);
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double)"/>
-        public static ApparentPower Voltamperes(this decimal value) => ApparentPower.FromVoltamperes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="ApparentPower.FromVoltamperes(double?)"/>
-        public static ApparentPower? Voltamperes(this decimal? value) => ApparentPower.FromVoltamperes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static ApparentPower Voltamperes(this decimal value) => (ApparentPower)ApparentPower.FromVoltamperes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,476 +48,266 @@ namespace UnitsNet.Extensions.NumberToAmountOfSubstance
         #region Centimole
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
-        public static AmountOfSubstance Centimoles(this int value) => AmountOfSubstance.FromCentimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double?)"/>
-        public static AmountOfSubstance? Centimoles(this int? value) => AmountOfSubstance.FromCentimoles(value);
+        public static AmountOfSubstance Centimoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromCentimoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
+        public static AmountOfSubstance Centimoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromCentimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
-        public static AmountOfSubstance Centimoles(this long value) => AmountOfSubstance.FromCentimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double?)"/>
-        public static AmountOfSubstance? Centimoles(this long? value) => AmountOfSubstance.FromCentimoles(value);
+        public static AmountOfSubstance Centimoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromCentimoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
-        public static AmountOfSubstance Centimoles(this double value) => AmountOfSubstance.FromCentimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double?)"/>
-        public static AmountOfSubstance? Centimoles(this double? value) => AmountOfSubstance.FromCentimoles(value);
+        public static AmountOfSubstance Centimoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromCentimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
-        public static AmountOfSubstance Centimoles(this float value) => AmountOfSubstance.FromCentimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double?)"/>
-        public static AmountOfSubstance? Centimoles(this float? value) => AmountOfSubstance.FromCentimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double)"/>
-        public static AmountOfSubstance Centimoles(this decimal value) => AmountOfSubstance.FromCentimoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentimoles(double?)"/>
-        public static AmountOfSubstance? Centimoles(this decimal? value) => AmountOfSubstance.FromCentimoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Centimoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromCentimoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region CentipoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
-        public static AmountOfSubstance CentipoundMoles(this int value) => AmountOfSubstance.FromCentipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double?)"/>
-        public static AmountOfSubstance? CentipoundMoles(this int? value) => AmountOfSubstance.FromCentipoundMoles(value);
+        public static AmountOfSubstance CentipoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromCentipoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
+        public static AmountOfSubstance CentipoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromCentipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
-        public static AmountOfSubstance CentipoundMoles(this long value) => AmountOfSubstance.FromCentipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double?)"/>
-        public static AmountOfSubstance? CentipoundMoles(this long? value) => AmountOfSubstance.FromCentipoundMoles(value);
+        public static AmountOfSubstance CentipoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromCentipoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
-        public static AmountOfSubstance CentipoundMoles(this double value) => AmountOfSubstance.FromCentipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double?)"/>
-        public static AmountOfSubstance? CentipoundMoles(this double? value) => AmountOfSubstance.FromCentipoundMoles(value);
+        public static AmountOfSubstance CentipoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromCentipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
-        public static AmountOfSubstance CentipoundMoles(this float value) => AmountOfSubstance.FromCentipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double?)"/>
-        public static AmountOfSubstance? CentipoundMoles(this float? value) => AmountOfSubstance.FromCentipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double)"/>
-        public static AmountOfSubstance CentipoundMoles(this decimal value) => AmountOfSubstance.FromCentipoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromCentipoundMoles(double?)"/>
-        public static AmountOfSubstance? CentipoundMoles(this decimal? value) => AmountOfSubstance.FromCentipoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance CentipoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromCentipoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Decimole
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
-        public static AmountOfSubstance Decimoles(this int value) => AmountOfSubstance.FromDecimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double?)"/>
-        public static AmountOfSubstance? Decimoles(this int? value) => AmountOfSubstance.FromDecimoles(value);
+        public static AmountOfSubstance Decimoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromDecimoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
+        public static AmountOfSubstance Decimoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromDecimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
-        public static AmountOfSubstance Decimoles(this long value) => AmountOfSubstance.FromDecimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double?)"/>
-        public static AmountOfSubstance? Decimoles(this long? value) => AmountOfSubstance.FromDecimoles(value);
+        public static AmountOfSubstance Decimoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromDecimoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
-        public static AmountOfSubstance Decimoles(this double value) => AmountOfSubstance.FromDecimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double?)"/>
-        public static AmountOfSubstance? Decimoles(this double? value) => AmountOfSubstance.FromDecimoles(value);
+        public static AmountOfSubstance Decimoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromDecimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
-        public static AmountOfSubstance Decimoles(this float value) => AmountOfSubstance.FromDecimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double?)"/>
-        public static AmountOfSubstance? Decimoles(this float? value) => AmountOfSubstance.FromDecimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double)"/>
-        public static AmountOfSubstance Decimoles(this decimal value) => AmountOfSubstance.FromDecimoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecimoles(double?)"/>
-        public static AmountOfSubstance? Decimoles(this decimal? value) => AmountOfSubstance.FromDecimoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Decimoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromDecimoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecipoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
-        public static AmountOfSubstance DecipoundMoles(this int value) => AmountOfSubstance.FromDecipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double?)"/>
-        public static AmountOfSubstance? DecipoundMoles(this int? value) => AmountOfSubstance.FromDecipoundMoles(value);
+        public static AmountOfSubstance DecipoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromDecipoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
+        public static AmountOfSubstance DecipoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromDecipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
-        public static AmountOfSubstance DecipoundMoles(this long value) => AmountOfSubstance.FromDecipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double?)"/>
-        public static AmountOfSubstance? DecipoundMoles(this long? value) => AmountOfSubstance.FromDecipoundMoles(value);
+        public static AmountOfSubstance DecipoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromDecipoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
-        public static AmountOfSubstance DecipoundMoles(this double value) => AmountOfSubstance.FromDecipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double?)"/>
-        public static AmountOfSubstance? DecipoundMoles(this double? value) => AmountOfSubstance.FromDecipoundMoles(value);
+        public static AmountOfSubstance DecipoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromDecipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
-        public static AmountOfSubstance DecipoundMoles(this float value) => AmountOfSubstance.FromDecipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double?)"/>
-        public static AmountOfSubstance? DecipoundMoles(this float? value) => AmountOfSubstance.FromDecipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double)"/>
-        public static AmountOfSubstance DecipoundMoles(this decimal value) => AmountOfSubstance.FromDecipoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromDecipoundMoles(double?)"/>
-        public static AmountOfSubstance? DecipoundMoles(this decimal? value) => AmountOfSubstance.FromDecipoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance DecipoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromDecipoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Kilomole
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
-        public static AmountOfSubstance Kilomoles(this int value) => AmountOfSubstance.FromKilomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double?)"/>
-        public static AmountOfSubstance? Kilomoles(this int? value) => AmountOfSubstance.FromKilomoles(value);
+        public static AmountOfSubstance Kilomoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromKilomoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
+        public static AmountOfSubstance Kilomoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromKilomoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
-        public static AmountOfSubstance Kilomoles(this long value) => AmountOfSubstance.FromKilomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double?)"/>
-        public static AmountOfSubstance? Kilomoles(this long? value) => AmountOfSubstance.FromKilomoles(value);
+        public static AmountOfSubstance Kilomoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromKilomoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
-        public static AmountOfSubstance Kilomoles(this double value) => AmountOfSubstance.FromKilomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double?)"/>
-        public static AmountOfSubstance? Kilomoles(this double? value) => AmountOfSubstance.FromKilomoles(value);
+        public static AmountOfSubstance Kilomoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromKilomoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
-        public static AmountOfSubstance Kilomoles(this float value) => AmountOfSubstance.FromKilomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double?)"/>
-        public static AmountOfSubstance? Kilomoles(this float? value) => AmountOfSubstance.FromKilomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double)"/>
-        public static AmountOfSubstance Kilomoles(this decimal value) => AmountOfSubstance.FromKilomoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilomoles(double?)"/>
-        public static AmountOfSubstance? Kilomoles(this decimal? value) => AmountOfSubstance.FromKilomoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Kilomoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromKilomoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilopoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
-        public static AmountOfSubstance KilopoundMoles(this int value) => AmountOfSubstance.FromKilopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double?)"/>
-        public static AmountOfSubstance? KilopoundMoles(this int? value) => AmountOfSubstance.FromKilopoundMoles(value);
+        public static AmountOfSubstance KilopoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromKilopoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
+        public static AmountOfSubstance KilopoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromKilopoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
-        public static AmountOfSubstance KilopoundMoles(this long value) => AmountOfSubstance.FromKilopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double?)"/>
-        public static AmountOfSubstance? KilopoundMoles(this long? value) => AmountOfSubstance.FromKilopoundMoles(value);
+        public static AmountOfSubstance KilopoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromKilopoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
-        public static AmountOfSubstance KilopoundMoles(this double value) => AmountOfSubstance.FromKilopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double?)"/>
-        public static AmountOfSubstance? KilopoundMoles(this double? value) => AmountOfSubstance.FromKilopoundMoles(value);
+        public static AmountOfSubstance KilopoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromKilopoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
-        public static AmountOfSubstance KilopoundMoles(this float value) => AmountOfSubstance.FromKilopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double?)"/>
-        public static AmountOfSubstance? KilopoundMoles(this float? value) => AmountOfSubstance.FromKilopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double)"/>
-        public static AmountOfSubstance KilopoundMoles(this decimal value) => AmountOfSubstance.FromKilopoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromKilopoundMoles(double?)"/>
-        public static AmountOfSubstance? KilopoundMoles(this decimal? value) => AmountOfSubstance.FromKilopoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance KilopoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromKilopoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Micromole
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
-        public static AmountOfSubstance Micromoles(this int value) => AmountOfSubstance.FromMicromoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double?)"/>
-        public static AmountOfSubstance? Micromoles(this int? value) => AmountOfSubstance.FromMicromoles(value);
+        public static AmountOfSubstance Micromoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromMicromoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
+        public static AmountOfSubstance Micromoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromMicromoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
-        public static AmountOfSubstance Micromoles(this long value) => AmountOfSubstance.FromMicromoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double?)"/>
-        public static AmountOfSubstance? Micromoles(this long? value) => AmountOfSubstance.FromMicromoles(value);
+        public static AmountOfSubstance Micromoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromMicromoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
-        public static AmountOfSubstance Micromoles(this double value) => AmountOfSubstance.FromMicromoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double?)"/>
-        public static AmountOfSubstance? Micromoles(this double? value) => AmountOfSubstance.FromMicromoles(value);
+        public static AmountOfSubstance Micromoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromMicromoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
-        public static AmountOfSubstance Micromoles(this float value) => AmountOfSubstance.FromMicromoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double?)"/>
-        public static AmountOfSubstance? Micromoles(this float? value) => AmountOfSubstance.FromMicromoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double)"/>
-        public static AmountOfSubstance Micromoles(this decimal value) => AmountOfSubstance.FromMicromoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicromoles(double?)"/>
-        public static AmountOfSubstance? Micromoles(this decimal? value) => AmountOfSubstance.FromMicromoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Micromoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromMicromoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MicropoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
-        public static AmountOfSubstance MicropoundMoles(this int value) => AmountOfSubstance.FromMicropoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double?)"/>
-        public static AmountOfSubstance? MicropoundMoles(this int? value) => AmountOfSubstance.FromMicropoundMoles(value);
+        public static AmountOfSubstance MicropoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromMicropoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
+        public static AmountOfSubstance MicropoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromMicropoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
-        public static AmountOfSubstance MicropoundMoles(this long value) => AmountOfSubstance.FromMicropoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double?)"/>
-        public static AmountOfSubstance? MicropoundMoles(this long? value) => AmountOfSubstance.FromMicropoundMoles(value);
+        public static AmountOfSubstance MicropoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromMicropoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
-        public static AmountOfSubstance MicropoundMoles(this double value) => AmountOfSubstance.FromMicropoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double?)"/>
-        public static AmountOfSubstance? MicropoundMoles(this double? value) => AmountOfSubstance.FromMicropoundMoles(value);
+        public static AmountOfSubstance MicropoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromMicropoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
-        public static AmountOfSubstance MicropoundMoles(this float value) => AmountOfSubstance.FromMicropoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double?)"/>
-        public static AmountOfSubstance? MicropoundMoles(this float? value) => AmountOfSubstance.FromMicropoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double)"/>
-        public static AmountOfSubstance MicropoundMoles(this decimal value) => AmountOfSubstance.FromMicropoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMicropoundMoles(double?)"/>
-        public static AmountOfSubstance? MicropoundMoles(this decimal? value) => AmountOfSubstance.FromMicropoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance MicropoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromMicropoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Millimole
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
-        public static AmountOfSubstance Millimoles(this int value) => AmountOfSubstance.FromMillimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double?)"/>
-        public static AmountOfSubstance? Millimoles(this int? value) => AmountOfSubstance.FromMillimoles(value);
+        public static AmountOfSubstance Millimoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromMillimoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
+        public static AmountOfSubstance Millimoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromMillimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
-        public static AmountOfSubstance Millimoles(this long value) => AmountOfSubstance.FromMillimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double?)"/>
-        public static AmountOfSubstance? Millimoles(this long? value) => AmountOfSubstance.FromMillimoles(value);
+        public static AmountOfSubstance Millimoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromMillimoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
-        public static AmountOfSubstance Millimoles(this double value) => AmountOfSubstance.FromMillimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double?)"/>
-        public static AmountOfSubstance? Millimoles(this double? value) => AmountOfSubstance.FromMillimoles(value);
+        public static AmountOfSubstance Millimoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromMillimoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
-        public static AmountOfSubstance Millimoles(this float value) => AmountOfSubstance.FromMillimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double?)"/>
-        public static AmountOfSubstance? Millimoles(this float? value) => AmountOfSubstance.FromMillimoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double)"/>
-        public static AmountOfSubstance Millimoles(this decimal value) => AmountOfSubstance.FromMillimoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillimoles(double?)"/>
-        public static AmountOfSubstance? Millimoles(this decimal? value) => AmountOfSubstance.FromMillimoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Millimoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromMillimoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MillipoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
-        public static AmountOfSubstance MillipoundMoles(this int value) => AmountOfSubstance.FromMillipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double?)"/>
-        public static AmountOfSubstance? MillipoundMoles(this int? value) => AmountOfSubstance.FromMillipoundMoles(value);
+        public static AmountOfSubstance MillipoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromMillipoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
+        public static AmountOfSubstance MillipoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromMillipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
-        public static AmountOfSubstance MillipoundMoles(this long value) => AmountOfSubstance.FromMillipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double?)"/>
-        public static AmountOfSubstance? MillipoundMoles(this long? value) => AmountOfSubstance.FromMillipoundMoles(value);
+        public static AmountOfSubstance MillipoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromMillipoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
-        public static AmountOfSubstance MillipoundMoles(this double value) => AmountOfSubstance.FromMillipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double?)"/>
-        public static AmountOfSubstance? MillipoundMoles(this double? value) => AmountOfSubstance.FromMillipoundMoles(value);
+        public static AmountOfSubstance MillipoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromMillipoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
-        public static AmountOfSubstance MillipoundMoles(this float value) => AmountOfSubstance.FromMillipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double?)"/>
-        public static AmountOfSubstance? MillipoundMoles(this float? value) => AmountOfSubstance.FromMillipoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double)"/>
-        public static AmountOfSubstance MillipoundMoles(this decimal value) => AmountOfSubstance.FromMillipoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMillipoundMoles(double?)"/>
-        public static AmountOfSubstance? MillipoundMoles(this decimal? value) => AmountOfSubstance.FromMillipoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance MillipoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromMillipoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Mole
 
         /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
-        public static AmountOfSubstance Moles(this int value) => AmountOfSubstance.FromMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double?)"/>
-        public static AmountOfSubstance? Moles(this int? value) => AmountOfSubstance.FromMoles(value);
+        public static AmountOfSubstance Moles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
+        public static AmountOfSubstance Moles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
-        public static AmountOfSubstance Moles(this long value) => AmountOfSubstance.FromMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double?)"/>
-        public static AmountOfSubstance? Moles(this long? value) => AmountOfSubstance.FromMoles(value);
+        public static AmountOfSubstance Moles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
-        public static AmountOfSubstance Moles(this double value) => AmountOfSubstance.FromMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double?)"/>
-        public static AmountOfSubstance? Moles(this double? value) => AmountOfSubstance.FromMoles(value);
+        public static AmountOfSubstance Moles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
-        public static AmountOfSubstance Moles(this float value) => AmountOfSubstance.FromMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double?)"/>
-        public static AmountOfSubstance? Moles(this float? value) => AmountOfSubstance.FromMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double)"/>
-        public static AmountOfSubstance Moles(this decimal value) => AmountOfSubstance.FromMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromMoles(double?)"/>
-        public static AmountOfSubstance? Moles(this decimal? value) => AmountOfSubstance.FromMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Moles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanomole
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
-        public static AmountOfSubstance Nanomoles(this int value) => AmountOfSubstance.FromNanomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double?)"/>
-        public static AmountOfSubstance? Nanomoles(this int? value) => AmountOfSubstance.FromNanomoles(value);
+        public static AmountOfSubstance Nanomoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromNanomoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
+        public static AmountOfSubstance Nanomoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromNanomoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
-        public static AmountOfSubstance Nanomoles(this long value) => AmountOfSubstance.FromNanomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double?)"/>
-        public static AmountOfSubstance? Nanomoles(this long? value) => AmountOfSubstance.FromNanomoles(value);
+        public static AmountOfSubstance Nanomoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromNanomoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
-        public static AmountOfSubstance Nanomoles(this double value) => AmountOfSubstance.FromNanomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double?)"/>
-        public static AmountOfSubstance? Nanomoles(this double? value) => AmountOfSubstance.FromNanomoles(value);
+        public static AmountOfSubstance Nanomoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromNanomoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
-        public static AmountOfSubstance Nanomoles(this float value) => AmountOfSubstance.FromNanomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double?)"/>
-        public static AmountOfSubstance? Nanomoles(this float? value) => AmountOfSubstance.FromNanomoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double)"/>
-        public static AmountOfSubstance Nanomoles(this decimal value) => AmountOfSubstance.FromNanomoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanomoles(double?)"/>
-        public static AmountOfSubstance? Nanomoles(this decimal? value) => AmountOfSubstance.FromNanomoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance Nanomoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromNanomoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region NanopoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
-        public static AmountOfSubstance NanopoundMoles(this int value) => AmountOfSubstance.FromNanopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double?)"/>
-        public static AmountOfSubstance? NanopoundMoles(this int? value) => AmountOfSubstance.FromNanopoundMoles(value);
+        public static AmountOfSubstance NanopoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromNanopoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
+        public static AmountOfSubstance NanopoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromNanopoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
-        public static AmountOfSubstance NanopoundMoles(this long value) => AmountOfSubstance.FromNanopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double?)"/>
-        public static AmountOfSubstance? NanopoundMoles(this long? value) => AmountOfSubstance.FromNanopoundMoles(value);
+        public static AmountOfSubstance NanopoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromNanopoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
-        public static AmountOfSubstance NanopoundMoles(this double value) => AmountOfSubstance.FromNanopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double?)"/>
-        public static AmountOfSubstance? NanopoundMoles(this double? value) => AmountOfSubstance.FromNanopoundMoles(value);
+        public static AmountOfSubstance NanopoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromNanopoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
-        public static AmountOfSubstance NanopoundMoles(this float value) => AmountOfSubstance.FromNanopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double?)"/>
-        public static AmountOfSubstance? NanopoundMoles(this float? value) => AmountOfSubstance.FromNanopoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double)"/>
-        public static AmountOfSubstance NanopoundMoles(this decimal value) => AmountOfSubstance.FromNanopoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromNanopoundMoles(double?)"/>
-        public static AmountOfSubstance? NanopoundMoles(this decimal? value) => AmountOfSubstance.FromNanopoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance NanopoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromNanopoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region PoundMole
 
         /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
-        public static AmountOfSubstance PoundMoles(this int value) => AmountOfSubstance.FromPoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double?)"/>
-        public static AmountOfSubstance? PoundMoles(this int? value) => AmountOfSubstance.FromPoundMoles(value);
+        public static AmountOfSubstance PoundMoles(this int value) => (AmountOfSubstance)AmountOfSubstance.FromPoundMoles(value);
+	
+        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
+        public static AmountOfSubstance PoundMoles(this long value) => (AmountOfSubstance)AmountOfSubstance.FromPoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
-        public static AmountOfSubstance PoundMoles(this long value) => AmountOfSubstance.FromPoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double?)"/>
-        public static AmountOfSubstance? PoundMoles(this long? value) => AmountOfSubstance.FromPoundMoles(value);
+        public static AmountOfSubstance PoundMoles(this double value) => (AmountOfSubstance)AmountOfSubstance.FromPoundMoles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
-        public static AmountOfSubstance PoundMoles(this double value) => AmountOfSubstance.FromPoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double?)"/>
-        public static AmountOfSubstance? PoundMoles(this double? value) => AmountOfSubstance.FromPoundMoles(value);
+        public static AmountOfSubstance PoundMoles(this float value) => (AmountOfSubstance)AmountOfSubstance.FromPoundMoles(value);
 
         /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
-        public static AmountOfSubstance PoundMoles(this float value) => AmountOfSubstance.FromPoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double?)"/>
-        public static AmountOfSubstance? PoundMoles(this float? value) => AmountOfSubstance.FromPoundMoles(value);
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double)"/>
-        public static AmountOfSubstance PoundMoles(this decimal value) => AmountOfSubstance.FromPoundMoles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmountOfSubstance.FromPoundMoles(double?)"/>
-        public static AmountOfSubstance? PoundMoles(this decimal? value) => AmountOfSubstance.FromPoundMoles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmountOfSubstance PoundMoles(this decimal value) => (AmountOfSubstance)AmountOfSubstance.FromPoundMoles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

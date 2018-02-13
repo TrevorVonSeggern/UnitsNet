@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,408 +48,228 @@ namespace UnitsNet.Extensions.NumberToArea
         #region Acre
 
         /// <inheritdoc cref="Area.FromAcres(double)"/>
-        public static Area Acres(this int value) => Area.FromAcres(value);
-
-        /// <inheritdoc cref="Area.FromAcres(double?)"/>
-        public static Area? Acres(this int? value) => Area.FromAcres(value);
+        public static Area Acres(this int value) => (Area)Area.FromAcres(value);
+	
+        /// <inheritdoc cref="Area.FromAcres(double)"/>
+        public static Area Acres(this long value) => (Area)Area.FromAcres(value);
 
         /// <inheritdoc cref="Area.FromAcres(double)"/>
-        public static Area Acres(this long value) => Area.FromAcres(value);
-
-        /// <inheritdoc cref="Area.FromAcres(double?)"/>
-        public static Area? Acres(this long? value) => Area.FromAcres(value);
+        public static Area Acres(this double value) => (Area)Area.FromAcres(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromAcres(double)"/>
-        public static Area Acres(this double value) => Area.FromAcres(value);
-
-        /// <inheritdoc cref="Area.FromAcres(double?)"/>
-        public static Area? Acres(this double? value) => Area.FromAcres(value);
+        public static Area Acres(this float value) => (Area)Area.FromAcres(value);
 
         /// <inheritdoc cref="Area.FromAcres(double)"/>
-        public static Area Acres(this float value) => Area.FromAcres(value);
-
-        /// <inheritdoc cref="Area.FromAcres(double?)"/>
-        public static Area? Acres(this float? value) => Area.FromAcres(value);
-
-        /// <inheritdoc cref="Area.FromAcres(double)"/>
-        public static Area Acres(this decimal value) => Area.FromAcres(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromAcres(double?)"/>
-        public static Area? Acres(this decimal? value) => Area.FromAcres(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area Acres(this decimal value) => (Area)Area.FromAcres(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Hectare
 
         /// <inheritdoc cref="Area.FromHectares(double)"/>
-        public static Area Hectares(this int value) => Area.FromHectares(value);
-
-        /// <inheritdoc cref="Area.FromHectares(double?)"/>
-        public static Area? Hectares(this int? value) => Area.FromHectares(value);
+        public static Area Hectares(this int value) => (Area)Area.FromHectares(value);
+	
+        /// <inheritdoc cref="Area.FromHectares(double)"/>
+        public static Area Hectares(this long value) => (Area)Area.FromHectares(value);
 
         /// <inheritdoc cref="Area.FromHectares(double)"/>
-        public static Area Hectares(this long value) => Area.FromHectares(value);
-
-        /// <inheritdoc cref="Area.FromHectares(double?)"/>
-        public static Area? Hectares(this long? value) => Area.FromHectares(value);
+        public static Area Hectares(this double value) => (Area)Area.FromHectares(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromHectares(double)"/>
-        public static Area Hectares(this double value) => Area.FromHectares(value);
-
-        /// <inheritdoc cref="Area.FromHectares(double?)"/>
-        public static Area? Hectares(this double? value) => Area.FromHectares(value);
+        public static Area Hectares(this float value) => (Area)Area.FromHectares(value);
 
         /// <inheritdoc cref="Area.FromHectares(double)"/>
-        public static Area Hectares(this float value) => Area.FromHectares(value);
-
-        /// <inheritdoc cref="Area.FromHectares(double?)"/>
-        public static Area? Hectares(this float? value) => Area.FromHectares(value);
-
-        /// <inheritdoc cref="Area.FromHectares(double)"/>
-        public static Area Hectares(this decimal value) => Area.FromHectares(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromHectares(double?)"/>
-        public static Area? Hectares(this decimal? value) => Area.FromHectares(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area Hectares(this decimal value) => (Area)Area.FromHectares(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareCentimeter
 
         /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
-        public static Area SquareCentimeters(this int value) => Area.FromSquareCentimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double?)"/>
-        public static Area? SquareCentimeters(this int? value) => Area.FromSquareCentimeters(value);
+        public static Area SquareCentimeters(this int value) => (Area)Area.FromSquareCentimeters(value);
+	
+        /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
+        public static Area SquareCentimeters(this long value) => (Area)Area.FromSquareCentimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
-        public static Area SquareCentimeters(this long value) => Area.FromSquareCentimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double?)"/>
-        public static Area? SquareCentimeters(this long? value) => Area.FromSquareCentimeters(value);
+        public static Area SquareCentimeters(this double value) => (Area)Area.FromSquareCentimeters(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
-        public static Area SquareCentimeters(this double value) => Area.FromSquareCentimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double?)"/>
-        public static Area? SquareCentimeters(this double? value) => Area.FromSquareCentimeters(value);
+        public static Area SquareCentimeters(this float value) => (Area)Area.FromSquareCentimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
-        public static Area SquareCentimeters(this float value) => Area.FromSquareCentimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double?)"/>
-        public static Area? SquareCentimeters(this float? value) => Area.FromSquareCentimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double)"/>
-        public static Area SquareCentimeters(this decimal value) => Area.FromSquareCentimeters(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareCentimeters(double?)"/>
-        public static Area? SquareCentimeters(this decimal? value) => Area.FromSquareCentimeters(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareCentimeters(this decimal value) => (Area)Area.FromSquareCentimeters(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareDecimeter
 
         /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
-        public static Area SquareDecimeters(this int value) => Area.FromSquareDecimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double?)"/>
-        public static Area? SquareDecimeters(this int? value) => Area.FromSquareDecimeters(value);
+        public static Area SquareDecimeters(this int value) => (Area)Area.FromSquareDecimeters(value);
+	
+        /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
+        public static Area SquareDecimeters(this long value) => (Area)Area.FromSquareDecimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
-        public static Area SquareDecimeters(this long value) => Area.FromSquareDecimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double?)"/>
-        public static Area? SquareDecimeters(this long? value) => Area.FromSquareDecimeters(value);
+        public static Area SquareDecimeters(this double value) => (Area)Area.FromSquareDecimeters(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
-        public static Area SquareDecimeters(this double value) => Area.FromSquareDecimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double?)"/>
-        public static Area? SquareDecimeters(this double? value) => Area.FromSquareDecimeters(value);
+        public static Area SquareDecimeters(this float value) => (Area)Area.FromSquareDecimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
-        public static Area SquareDecimeters(this float value) => Area.FromSquareDecimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double?)"/>
-        public static Area? SquareDecimeters(this float? value) => Area.FromSquareDecimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double)"/>
-        public static Area SquareDecimeters(this decimal value) => Area.FromSquareDecimeters(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareDecimeters(double?)"/>
-        public static Area? SquareDecimeters(this decimal? value) => Area.FromSquareDecimeters(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareDecimeters(this decimal value) => (Area)Area.FromSquareDecimeters(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareFoot
 
         /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
-        public static Area SquareFeet(this int value) => Area.FromSquareFeet(value);
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double?)"/>
-        public static Area? SquareFeet(this int? value) => Area.FromSquareFeet(value);
+        public static Area SquareFeet(this int value) => (Area)Area.FromSquareFeet(value);
+	
+        /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
+        public static Area SquareFeet(this long value) => (Area)Area.FromSquareFeet(value);
 
         /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
-        public static Area SquareFeet(this long value) => Area.FromSquareFeet(value);
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double?)"/>
-        public static Area? SquareFeet(this long? value) => Area.FromSquareFeet(value);
+        public static Area SquareFeet(this double value) => (Area)Area.FromSquareFeet(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
-        public static Area SquareFeet(this double value) => Area.FromSquareFeet(value);
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double?)"/>
-        public static Area? SquareFeet(this double? value) => Area.FromSquareFeet(value);
+        public static Area SquareFeet(this float value) => (Area)Area.FromSquareFeet(value);
 
         /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
-        public static Area SquareFeet(this float value) => Area.FromSquareFeet(value);
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double?)"/>
-        public static Area? SquareFeet(this float? value) => Area.FromSquareFeet(value);
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double)"/>
-        public static Area SquareFeet(this decimal value) => Area.FromSquareFeet(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareFeet(double?)"/>
-        public static Area? SquareFeet(this decimal? value) => Area.FromSquareFeet(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareFeet(this decimal value) => (Area)Area.FromSquareFeet(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareInch
 
         /// <inheritdoc cref="Area.FromSquareInches(double)"/>
-        public static Area SquareInches(this int value) => Area.FromSquareInches(value);
-
-        /// <inheritdoc cref="Area.FromSquareInches(double?)"/>
-        public static Area? SquareInches(this int? value) => Area.FromSquareInches(value);
+        public static Area SquareInches(this int value) => (Area)Area.FromSquareInches(value);
+	
+        /// <inheritdoc cref="Area.FromSquareInches(double)"/>
+        public static Area SquareInches(this long value) => (Area)Area.FromSquareInches(value);
 
         /// <inheritdoc cref="Area.FromSquareInches(double)"/>
-        public static Area SquareInches(this long value) => Area.FromSquareInches(value);
-
-        /// <inheritdoc cref="Area.FromSquareInches(double?)"/>
-        public static Area? SquareInches(this long? value) => Area.FromSquareInches(value);
+        public static Area SquareInches(this double value) => (Area)Area.FromSquareInches(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareInches(double)"/>
-        public static Area SquareInches(this double value) => Area.FromSquareInches(value);
-
-        /// <inheritdoc cref="Area.FromSquareInches(double?)"/>
-        public static Area? SquareInches(this double? value) => Area.FromSquareInches(value);
+        public static Area SquareInches(this float value) => (Area)Area.FromSquareInches(value);
 
         /// <inheritdoc cref="Area.FromSquareInches(double)"/>
-        public static Area SquareInches(this float value) => Area.FromSquareInches(value);
-
-        /// <inheritdoc cref="Area.FromSquareInches(double?)"/>
-        public static Area? SquareInches(this float? value) => Area.FromSquareInches(value);
-
-        /// <inheritdoc cref="Area.FromSquareInches(double)"/>
-        public static Area SquareInches(this decimal value) => Area.FromSquareInches(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareInches(double?)"/>
-        public static Area? SquareInches(this decimal? value) => Area.FromSquareInches(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareInches(this decimal value) => (Area)Area.FromSquareInches(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareKilometer
 
         /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
-        public static Area SquareKilometers(this int value) => Area.FromSquareKilometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double?)"/>
-        public static Area? SquareKilometers(this int? value) => Area.FromSquareKilometers(value);
+        public static Area SquareKilometers(this int value) => (Area)Area.FromSquareKilometers(value);
+	
+        /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
+        public static Area SquareKilometers(this long value) => (Area)Area.FromSquareKilometers(value);
 
         /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
-        public static Area SquareKilometers(this long value) => Area.FromSquareKilometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double?)"/>
-        public static Area? SquareKilometers(this long? value) => Area.FromSquareKilometers(value);
+        public static Area SquareKilometers(this double value) => (Area)Area.FromSquareKilometers(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
-        public static Area SquareKilometers(this double value) => Area.FromSquareKilometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double?)"/>
-        public static Area? SquareKilometers(this double? value) => Area.FromSquareKilometers(value);
+        public static Area SquareKilometers(this float value) => (Area)Area.FromSquareKilometers(value);
 
         /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
-        public static Area SquareKilometers(this float value) => Area.FromSquareKilometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double?)"/>
-        public static Area? SquareKilometers(this float? value) => Area.FromSquareKilometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double)"/>
-        public static Area SquareKilometers(this decimal value) => Area.FromSquareKilometers(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareKilometers(double?)"/>
-        public static Area? SquareKilometers(this decimal? value) => Area.FromSquareKilometers(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareKilometers(this decimal value) => (Area)Area.FromSquareKilometers(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareMeter
 
         /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
-        public static Area SquareMeters(this int value) => Area.FromSquareMeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double?)"/>
-        public static Area? SquareMeters(this int? value) => Area.FromSquareMeters(value);
+        public static Area SquareMeters(this int value) => (Area)Area.FromSquareMeters(value);
+	
+        /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
+        public static Area SquareMeters(this long value) => (Area)Area.FromSquareMeters(value);
 
         /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
-        public static Area SquareMeters(this long value) => Area.FromSquareMeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double?)"/>
-        public static Area? SquareMeters(this long? value) => Area.FromSquareMeters(value);
+        public static Area SquareMeters(this double value) => (Area)Area.FromSquareMeters(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
-        public static Area SquareMeters(this double value) => Area.FromSquareMeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double?)"/>
-        public static Area? SquareMeters(this double? value) => Area.FromSquareMeters(value);
+        public static Area SquareMeters(this float value) => (Area)Area.FromSquareMeters(value);
 
         /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
-        public static Area SquareMeters(this float value) => Area.FromSquareMeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double?)"/>
-        public static Area? SquareMeters(this float? value) => Area.FromSquareMeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double)"/>
-        public static Area SquareMeters(this decimal value) => Area.FromSquareMeters(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareMeters(double?)"/>
-        public static Area? SquareMeters(this decimal? value) => Area.FromSquareMeters(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareMeters(this decimal value) => (Area)Area.FromSquareMeters(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareMicrometer
 
         /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
-        public static Area SquareMicrometers(this int value) => Area.FromSquareMicrometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double?)"/>
-        public static Area? SquareMicrometers(this int? value) => Area.FromSquareMicrometers(value);
+        public static Area SquareMicrometers(this int value) => (Area)Area.FromSquareMicrometers(value);
+	
+        /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
+        public static Area SquareMicrometers(this long value) => (Area)Area.FromSquareMicrometers(value);
 
         /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
-        public static Area SquareMicrometers(this long value) => Area.FromSquareMicrometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double?)"/>
-        public static Area? SquareMicrometers(this long? value) => Area.FromSquareMicrometers(value);
+        public static Area SquareMicrometers(this double value) => (Area)Area.FromSquareMicrometers(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
-        public static Area SquareMicrometers(this double value) => Area.FromSquareMicrometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double?)"/>
-        public static Area? SquareMicrometers(this double? value) => Area.FromSquareMicrometers(value);
+        public static Area SquareMicrometers(this float value) => (Area)Area.FromSquareMicrometers(value);
 
         /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
-        public static Area SquareMicrometers(this float value) => Area.FromSquareMicrometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double?)"/>
-        public static Area? SquareMicrometers(this float? value) => Area.FromSquareMicrometers(value);
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double)"/>
-        public static Area SquareMicrometers(this decimal value) => Area.FromSquareMicrometers(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareMicrometers(double?)"/>
-        public static Area? SquareMicrometers(this decimal? value) => Area.FromSquareMicrometers(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareMicrometers(this decimal value) => (Area)Area.FromSquareMicrometers(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareMile
 
         /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
-        public static Area SquareMiles(this int value) => Area.FromSquareMiles(value);
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double?)"/>
-        public static Area? SquareMiles(this int? value) => Area.FromSquareMiles(value);
+        public static Area SquareMiles(this int value) => (Area)Area.FromSquareMiles(value);
+	
+        /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
+        public static Area SquareMiles(this long value) => (Area)Area.FromSquareMiles(value);
 
         /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
-        public static Area SquareMiles(this long value) => Area.FromSquareMiles(value);
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double?)"/>
-        public static Area? SquareMiles(this long? value) => Area.FromSquareMiles(value);
+        public static Area SquareMiles(this double value) => (Area)Area.FromSquareMiles(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
-        public static Area SquareMiles(this double value) => Area.FromSquareMiles(value);
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double?)"/>
-        public static Area? SquareMiles(this double? value) => Area.FromSquareMiles(value);
+        public static Area SquareMiles(this float value) => (Area)Area.FromSquareMiles(value);
 
         /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
-        public static Area SquareMiles(this float value) => Area.FromSquareMiles(value);
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double?)"/>
-        public static Area? SquareMiles(this float? value) => Area.FromSquareMiles(value);
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double)"/>
-        public static Area SquareMiles(this decimal value) => Area.FromSquareMiles(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareMiles(double?)"/>
-        public static Area? SquareMiles(this decimal? value) => Area.FromSquareMiles(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareMiles(this decimal value) => (Area)Area.FromSquareMiles(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareMillimeter
 
         /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
-        public static Area SquareMillimeters(this int value) => Area.FromSquareMillimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double?)"/>
-        public static Area? SquareMillimeters(this int? value) => Area.FromSquareMillimeters(value);
+        public static Area SquareMillimeters(this int value) => (Area)Area.FromSquareMillimeters(value);
+	
+        /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
+        public static Area SquareMillimeters(this long value) => (Area)Area.FromSquareMillimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
-        public static Area SquareMillimeters(this long value) => Area.FromSquareMillimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double?)"/>
-        public static Area? SquareMillimeters(this long? value) => Area.FromSquareMillimeters(value);
+        public static Area SquareMillimeters(this double value) => (Area)Area.FromSquareMillimeters(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
-        public static Area SquareMillimeters(this double value) => Area.FromSquareMillimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double?)"/>
-        public static Area? SquareMillimeters(this double? value) => Area.FromSquareMillimeters(value);
+        public static Area SquareMillimeters(this float value) => (Area)Area.FromSquareMillimeters(value);
 
         /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
-        public static Area SquareMillimeters(this float value) => Area.FromSquareMillimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double?)"/>
-        public static Area? SquareMillimeters(this float? value) => Area.FromSquareMillimeters(value);
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double)"/>
-        public static Area SquareMillimeters(this decimal value) => Area.FromSquareMillimeters(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareMillimeters(double?)"/>
-        public static Area? SquareMillimeters(this decimal? value) => Area.FromSquareMillimeters(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareMillimeters(this decimal value) => (Area)Area.FromSquareMillimeters(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region SquareYard
 
         /// <inheritdoc cref="Area.FromSquareYards(double)"/>
-        public static Area SquareYards(this int value) => Area.FromSquareYards(value);
-
-        /// <inheritdoc cref="Area.FromSquareYards(double?)"/>
-        public static Area? SquareYards(this int? value) => Area.FromSquareYards(value);
+        public static Area SquareYards(this int value) => (Area)Area.FromSquareYards(value);
+	
+        /// <inheritdoc cref="Area.FromSquareYards(double)"/>
+        public static Area SquareYards(this long value) => (Area)Area.FromSquareYards(value);
 
         /// <inheritdoc cref="Area.FromSquareYards(double)"/>
-        public static Area SquareYards(this long value) => Area.FromSquareYards(value);
-
-        /// <inheritdoc cref="Area.FromSquareYards(double?)"/>
-        public static Area? SquareYards(this long? value) => Area.FromSquareYards(value);
+        public static Area SquareYards(this double value) => (Area)Area.FromSquareYards(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Area.FromSquareYards(double)"/>
-        public static Area SquareYards(this double value) => Area.FromSquareYards(value);
-
-        /// <inheritdoc cref="Area.FromSquareYards(double?)"/>
-        public static Area? SquareYards(this double? value) => Area.FromSquareYards(value);
+        public static Area SquareYards(this float value) => (Area)Area.FromSquareYards(value);
 
         /// <inheritdoc cref="Area.FromSquareYards(double)"/>
-        public static Area SquareYards(this float value) => Area.FromSquareYards(value);
-
-        /// <inheritdoc cref="Area.FromSquareYards(double?)"/>
-        public static Area? SquareYards(this float? value) => Area.FromSquareYards(value);
-
-        /// <inheritdoc cref="Area.FromSquareYards(double)"/>
-        public static Area SquareYards(this decimal value) => Area.FromSquareYards(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Area.FromSquareYards(double?)"/>
-        public static Area? SquareYards(this decimal? value) => Area.FromSquareYards(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Area SquareYards(this decimal value) => (Area)Area.FromSquareYards(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

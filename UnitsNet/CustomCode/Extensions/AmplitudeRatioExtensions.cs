@@ -19,6 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     /// <summary>
@@ -36,9 +39,9 @@ namespace UnitsNet.CustomCode.Extensions
         ///         <c>var voltage = voltageRatio.ToElectricPotential();</c>
         ///     </example>
         /// </remarks>
-        public static ElectricPotential ToElectricPotential(this AmplitudeRatio amplitudeRatio)
+        public static ElectricPotential<double, DoubleCalculator> ToElectricPotential(this AmplitudeRatio<double, DoubleCalculator> amplitudeRatio)
         {
-            return AmplitudeRatio.ToElectricPotential(amplitudeRatio);
+            return AmplitudeRatio<double, DoubleCalculator>.ToElectricPotential(amplitudeRatio);
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace UnitsNet.CustomCode.Extensions
         /// <param name="amplitudeRatio">The amplitude ratio to convert.</param>
         /// <param name="impedance">The input impedance of the load. This is usually 50, 75 or 600 ohms.</param>
         /// <remarks>http://www.maximintegrated.com/en/app-notes/index.mvp/id/808</remarks>
-        public static PowerRatio ToPowerRatio(this AmplitudeRatio amplitudeRatio, ElectricResistance impedance)
+        public static PowerRatio<double, DoubleCalculator> ToPowerRatio(this AmplitudeRatio amplitudeRatio, ElectricResistance impedance)
         {
             return AmplitudeRatio.ToPowerRatio(amplitudeRatio, impedance);
         }

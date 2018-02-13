@@ -19,7 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+using UnitsNet.InternalHelpers.Calculators;
+
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,34 +29,36 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class SpecificEnergy
 #else
-    public partial struct SpecificEnergy
+    public partial class SpecificEnergy<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Energy operator *(SpecificEnergy specificEnergy, Mass mass)
+        public static Energy<T, C> operator *(SpecificEnergy<T, C> specificEnergy, Mass<T, C> mass)
         {
-            return Energy.FromJoules(specificEnergy.JoulesPerKilogram * mass.Kilograms);
+            return Energy<T, C>.FromJoules(specificEnergy.JoulesPerKilogram * mass.Kilograms);
         }
 
-        public static Energy operator *(Mass mass, SpecificEnergy specificEnergy)
+        public static Energy<T, C> operator *(Mass<T, C> mass, SpecificEnergy<T, C> specificEnergy)
         {
-            return Energy.FromJoules(specificEnergy.JoulesPerKilogram * mass.Kilograms);
+            return Energy<T, C>.FromJoules(specificEnergy.JoulesPerKilogram * mass.Kilograms);
         }
 
-        public static BrakeSpecificFuelConsumption operator /(double value, SpecificEnergy specificEnergy)
+        public static BrakeSpecificFuelConsumption<T, C> operator /(double value, SpecificEnergy<T, C> specificEnergy)
         {
-            return BrakeSpecificFuelConsumption.FromKilogramsPerJoule(value / specificEnergy.JoulesPerKilogram);
+            return BrakeSpecificFuelConsumption<T, C>.FromKilogramsPerJoule(value / specificEnergy.JoulesPerKilogram);
         }
 
-        public static double operator *(SpecificEnergy specificEnergy, BrakeSpecificFuelConsumption bsfc)
+        public static Number<T, C> operator *(SpecificEnergy<T, C> specificEnergy, BrakeSpecificFuelConsumption<T, C> bsfc)
         {
             return specificEnergy.JoulesPerKilogram * bsfc.KilogramsPerJoule;
         }
 
-        public static Power operator *(SpecificEnergy specificEnergy, MassFlow massFlow)
+        public static Power<T, C> operator *(SpecificEnergy<T, C> specificEnergy, MassFlow<T, C> massFlow)
         {
-            return Power.FromWatts(massFlow.KilogramsPerSecond * specificEnergy.JoulesPerKilogram);
+            return Power<T, C>.FromWatts(massFlow.KilogramsPerSecond * specificEnergy.JoulesPerKilogram);
         }
 #endif
     }

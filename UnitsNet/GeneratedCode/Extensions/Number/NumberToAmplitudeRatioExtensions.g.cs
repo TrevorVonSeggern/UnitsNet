@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,136 +48,76 @@ namespace UnitsNet.Extensions.NumberToAmplitudeRatio
         #region DecibelMicrovolt
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
-        public static AmplitudeRatio DecibelMicrovolts(this int value) => AmplitudeRatio.FromDecibelMicrovolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double?)"/>
-        public static AmplitudeRatio? DecibelMicrovolts(this int? value) => AmplitudeRatio.FromDecibelMicrovolts(value);
+        public static AmplitudeRatio DecibelMicrovolts(this int value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMicrovolts(value);
+	
+        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
+        public static AmplitudeRatio DecibelMicrovolts(this long value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMicrovolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
-        public static AmplitudeRatio DecibelMicrovolts(this long value) => AmplitudeRatio.FromDecibelMicrovolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double?)"/>
-        public static AmplitudeRatio? DecibelMicrovolts(this long? value) => AmplitudeRatio.FromDecibelMicrovolts(value);
+        public static AmplitudeRatio DecibelMicrovolts(this double value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMicrovolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
-        public static AmplitudeRatio DecibelMicrovolts(this double value) => AmplitudeRatio.FromDecibelMicrovolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double?)"/>
-        public static AmplitudeRatio? DecibelMicrovolts(this double? value) => AmplitudeRatio.FromDecibelMicrovolts(value);
+        public static AmplitudeRatio DecibelMicrovolts(this float value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMicrovolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
-        public static AmplitudeRatio DecibelMicrovolts(this float value) => AmplitudeRatio.FromDecibelMicrovolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double?)"/>
-        public static AmplitudeRatio? DecibelMicrovolts(this float? value) => AmplitudeRatio.FromDecibelMicrovolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double)"/>
-        public static AmplitudeRatio DecibelMicrovolts(this decimal value) => AmplitudeRatio.FromDecibelMicrovolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMicrovolts(double?)"/>
-        public static AmplitudeRatio? DecibelMicrovolts(this decimal? value) => AmplitudeRatio.FromDecibelMicrovolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmplitudeRatio DecibelMicrovolts(this decimal value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMicrovolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecibelMillivolt
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
-        public static AmplitudeRatio DecibelMillivolts(this int value) => AmplitudeRatio.FromDecibelMillivolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double?)"/>
-        public static AmplitudeRatio? DecibelMillivolts(this int? value) => AmplitudeRatio.FromDecibelMillivolts(value);
+        public static AmplitudeRatio DecibelMillivolts(this int value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMillivolts(value);
+	
+        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
+        public static AmplitudeRatio DecibelMillivolts(this long value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMillivolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
-        public static AmplitudeRatio DecibelMillivolts(this long value) => AmplitudeRatio.FromDecibelMillivolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double?)"/>
-        public static AmplitudeRatio? DecibelMillivolts(this long? value) => AmplitudeRatio.FromDecibelMillivolts(value);
+        public static AmplitudeRatio DecibelMillivolts(this double value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMillivolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
-        public static AmplitudeRatio DecibelMillivolts(this double value) => AmplitudeRatio.FromDecibelMillivolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double?)"/>
-        public static AmplitudeRatio? DecibelMillivolts(this double? value) => AmplitudeRatio.FromDecibelMillivolts(value);
+        public static AmplitudeRatio DecibelMillivolts(this float value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMillivolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
-        public static AmplitudeRatio DecibelMillivolts(this float value) => AmplitudeRatio.FromDecibelMillivolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double?)"/>
-        public static AmplitudeRatio? DecibelMillivolts(this float? value) => AmplitudeRatio.FromDecibelMillivolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double)"/>
-        public static AmplitudeRatio DecibelMillivolts(this decimal value) => AmplitudeRatio.FromDecibelMillivolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelMillivolts(double?)"/>
-        public static AmplitudeRatio? DecibelMillivolts(this decimal? value) => AmplitudeRatio.FromDecibelMillivolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmplitudeRatio DecibelMillivolts(this decimal value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelMillivolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecibelUnloaded
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
-        public static AmplitudeRatio DecibelsUnloaded(this int value) => AmplitudeRatio.FromDecibelsUnloaded(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double?)"/>
-        public static AmplitudeRatio? DecibelsUnloaded(this int? value) => AmplitudeRatio.FromDecibelsUnloaded(value);
+        public static AmplitudeRatio DecibelsUnloaded(this int value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelsUnloaded(value);
+	
+        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
+        public static AmplitudeRatio DecibelsUnloaded(this long value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelsUnloaded(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
-        public static AmplitudeRatio DecibelsUnloaded(this long value) => AmplitudeRatio.FromDecibelsUnloaded(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double?)"/>
-        public static AmplitudeRatio? DecibelsUnloaded(this long? value) => AmplitudeRatio.FromDecibelsUnloaded(value);
+        public static AmplitudeRatio DecibelsUnloaded(this double value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelsUnloaded(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
-        public static AmplitudeRatio DecibelsUnloaded(this double value) => AmplitudeRatio.FromDecibelsUnloaded(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double?)"/>
-        public static AmplitudeRatio? DecibelsUnloaded(this double? value) => AmplitudeRatio.FromDecibelsUnloaded(value);
+        public static AmplitudeRatio DecibelsUnloaded(this float value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelsUnloaded(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
-        public static AmplitudeRatio DecibelsUnloaded(this float value) => AmplitudeRatio.FromDecibelsUnloaded(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double?)"/>
-        public static AmplitudeRatio? DecibelsUnloaded(this float? value) => AmplitudeRatio.FromDecibelsUnloaded(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double)"/>
-        public static AmplitudeRatio DecibelsUnloaded(this decimal value) => AmplitudeRatio.FromDecibelsUnloaded(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelsUnloaded(double?)"/>
-        public static AmplitudeRatio? DecibelsUnloaded(this decimal? value) => AmplitudeRatio.FromDecibelsUnloaded(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmplitudeRatio DecibelsUnloaded(this decimal value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelsUnloaded(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecibelVolt
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
-        public static AmplitudeRatio DecibelVolts(this int value) => AmplitudeRatio.FromDecibelVolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double?)"/>
-        public static AmplitudeRatio? DecibelVolts(this int? value) => AmplitudeRatio.FromDecibelVolts(value);
+        public static AmplitudeRatio DecibelVolts(this int value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelVolts(value);
+	
+        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
+        public static AmplitudeRatio DecibelVolts(this long value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelVolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
-        public static AmplitudeRatio DecibelVolts(this long value) => AmplitudeRatio.FromDecibelVolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double?)"/>
-        public static AmplitudeRatio? DecibelVolts(this long? value) => AmplitudeRatio.FromDecibelVolts(value);
+        public static AmplitudeRatio DecibelVolts(this double value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelVolts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
-        public static AmplitudeRatio DecibelVolts(this double value) => AmplitudeRatio.FromDecibelVolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double?)"/>
-        public static AmplitudeRatio? DecibelVolts(this double? value) => AmplitudeRatio.FromDecibelVolts(value);
+        public static AmplitudeRatio DecibelVolts(this float value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelVolts(value);
 
         /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
-        public static AmplitudeRatio DecibelVolts(this float value) => AmplitudeRatio.FromDecibelVolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double?)"/>
-        public static AmplitudeRatio? DecibelVolts(this float? value) => AmplitudeRatio.FromDecibelVolts(value);
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double)"/>
-        public static AmplitudeRatio DecibelVolts(this decimal value) => AmplitudeRatio.FromDecibelVolts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="AmplitudeRatio.FromDecibelVolts(double?)"/>
-        public static AmplitudeRatio? DecibelVolts(this decimal? value) => AmplitudeRatio.FromDecibelVolts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static AmplitudeRatio DecibelVolts(this decimal value) => (AmplitudeRatio)AmplitudeRatio.FromDecibelVolts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

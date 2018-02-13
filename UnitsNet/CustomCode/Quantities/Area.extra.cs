@@ -19,7 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,14 +30,16 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Area
 #else
-    public partial struct Area
+    public partial class Area<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Length operator /(Area area, Length length)
+        public static Length<T, C> operator /(Area<T, C> area, Length<T, C> length)
         {
-            return Length.FromMeters(area.SquareMeters / length.Meters);
+            return Length<T, C>.FromMeters(area.SquareMeters / length.Meters);
         }
 #endif
     }

@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Electric admittance is a measure of how easily a circuit or device will allow a current to flow. It is defined as the inverse of impedance. The SI unit of admittance is the siemens (symbol S).
     /// </summary>
@@ -63,756 +64,649 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class ElectricAdmittance : UnitsNet.Generic.ElectricAdmittance<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class ElectricAdmittance
+		public sealed partial class ElectricAdmittance
 #else
-    public partial struct ElectricAdmittance : IComparable, IComparable<ElectricAdmittance>
+		public partial class ElectricAdmittance <T, C> : IComparable, IComparable<ElectricAdmittance<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of ElectricAdmittance.
-        /// </summary>
-        private readonly double _siemens;
+		{
+			/// <summary>
+			///     Base unit of ElectricAdmittance.
+			/// </summary>
+			private readonly Number<T, C> _siemens;
 
-        // Windows Runtime Component requires a default constructor
+			public ElectricAdmittance() : this(new Number<T,C>())
+			{
+			}
+
+			public ElectricAdmittance(T siemens)
+			{
+				_siemens = (siemens);
+			}
+
+			public ElectricAdmittance(Number<T, C> siemens)
+			{
+				_siemens = (siemens);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.ElectricAdmittance;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static ElectricAdmittanceUnit BaseUnit
+			{
+				get { return ElectricAdmittanceUnit.Siemens; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the ElectricAdmittance quantity.
+			/// </summary>
+			public static ElectricAdmittanceUnit[] Units { get; } = Enum.GetValues(typeof(ElectricAdmittanceUnit)).Cast<ElectricAdmittanceUnit>().ToArray();
+
+			/// <summary>
+			///     Get ElectricAdmittance in Microsiemens.
+			/// </summary>
+			public Number<T, C> Microsiemens
+			{
+				get { return (_siemens) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get ElectricAdmittance in Millisiemens.
+			/// </summary>
+			public Number<T, C> Millisiemens
+			{
+				get { return (_siemens) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get ElectricAdmittance in Nanosiemens.
+			/// </summary>
+			public Number<T, C> Nanosiemens
+			{
+				get { return (_siemens) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get ElectricAdmittance in Siemens.
+			/// </summary>
+			public Number<T, C> Siemens
+			{
+				get { return _siemens; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static ElectricAdmittance<T, C> Zero
+			{
+				get { return new ElectricAdmittance<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get ElectricAdmittance from Microsiemens.
+			/// </summary>
 #if WINDOWS_UWP
-        public ElectricAdmittance() : this(0)
-        {
-        }
-#endif
-
-        public ElectricAdmittance(double siemens)
-        {
-            _siemens = Convert.ToDouble(siemens);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ElectricAdmittance<T, C> FromMicrosiemens(Number<T, C> microsiemens)
+			{
+				Number<T,C> value = (Number<T,C>) microsiemens;
+				return new ElectricAdmittance<T, C>((value) * 1e-6d);
+			}
 #else
-        public
+			public static ElectricAdmittance<T, C> FromMicrosiemens(Number<T, C> microsiemens)
+			{
+				Number<T,C> value = (Number<T,C>) microsiemens;
+				return new ElectricAdmittance<T, C>(new Number<T,C>((value) * 1e-6d));
+			}
 #endif
-        ElectricAdmittance(long siemens)
-        {
-            _siemens = Convert.ToDouble(siemens);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get ElectricAdmittance from Millisiemens.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ElectricAdmittance<T, C> FromMillisiemens(Number<T, C> millisiemens)
+			{
+				Number<T,C> value = (Number<T,C>) millisiemens;
+				return new ElectricAdmittance<T, C>((value) * 1e-3d);
+			}
 #else
-        public
+			public static ElectricAdmittance<T, C> FromMillisiemens(Number<T, C> millisiemens)
+			{
+				Number<T,C> value = (Number<T,C>) millisiemens;
+				return new ElectricAdmittance<T, C>(new Number<T,C>((value) * 1e-3d));
+			}
 #endif
-        ElectricAdmittance(decimal siemens)
-        {
-            _siemens = Convert.ToDouble(siemens);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.ElectricAdmittance;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static ElectricAdmittanceUnit BaseUnit
-        {
-            get { return ElectricAdmittanceUnit.Siemens; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the ElectricAdmittance quantity.
-        /// </summary>
-        public static ElectricAdmittanceUnit[] Units { get; } = Enum.GetValues(typeof(ElectricAdmittanceUnit)).Cast<ElectricAdmittanceUnit>().ToArray();
-
-        /// <summary>
-        ///     Get ElectricAdmittance in Microsiemens.
-        /// </summary>
-        public double Microsiemens
-        {
-            get { return (_siemens) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get ElectricAdmittance in Millisiemens.
-        /// </summary>
-        public double Millisiemens
-        {
-            get { return (_siemens) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get ElectricAdmittance in Nanosiemens.
-        /// </summary>
-        public double Nanosiemens
-        {
-            get { return (_siemens) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get ElectricAdmittance in Siemens.
-        /// </summary>
-        public double Siemens
-        {
-            get { return _siemens; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static ElectricAdmittance Zero
-        {
-            get { return new ElectricAdmittance(); }
-        }
-
-        /// <summary>
-        ///     Get ElectricAdmittance from Microsiemens.
-        /// </summary>
+			/// <summary>
+			///     Get ElectricAdmittance from Nanosiemens.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ElectricAdmittance FromMicrosiemens(double microsiemens)
-        {
-            double value = (double) microsiemens;
-            return new ElectricAdmittance((value) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ElectricAdmittance<T, C> FromNanosiemens(Number<T, C> nanosiemens)
+			{
+				Number<T,C> value = (Number<T,C>) nanosiemens;
+				return new ElectricAdmittance<T, C>((value) * 1e-9d);
+			}
 #else
-        public static ElectricAdmittance FromMicrosiemens(QuantityValue microsiemens)
-        {
-            double value = (double) microsiemens;
-            return new ElectricAdmittance(((value) * 1e-6d));
-        }
+			public static ElectricAdmittance<T, C> FromNanosiemens(Number<T, C> nanosiemens)
+			{
+				Number<T,C> value = (Number<T,C>) nanosiemens;
+				return new ElectricAdmittance<T, C>(new Number<T,C>((value) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ElectricAdmittance from Millisiemens.
-        /// </summary>
+			/// <summary>
+			///     Get ElectricAdmittance from Siemens.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ElectricAdmittance FromMillisiemens(double millisiemens)
-        {
-            double value = (double) millisiemens;
-            return new ElectricAdmittance((value) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ElectricAdmittance<T, C> FromSiemens(Number<T, C> siemens)
+			{
+				Number<T,C> value = (Number<T,C>) siemens;
+				return new ElectricAdmittance<T, C>(value);
+			}
 #else
-        public static ElectricAdmittance FromMillisiemens(QuantityValue millisiemens)
-        {
-            double value = (double) millisiemens;
-            return new ElectricAdmittance(((value) * 1e-3d));
-        }
+			public static ElectricAdmittance<T, C> FromSiemens(Number<T, C> siemens)
+			{
+				Number<T,C> value = (Number<T,C>) siemens;
+				return new ElectricAdmittance<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ElectricAdmittance from Nanosiemens.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="ElectricAdmittanceUnit" /> to <see cref="ElectricAdmittance" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>ElectricAdmittance unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ElectricAdmittance FromNanosiemens(double nanosiemens)
-        {
-            double value = (double) nanosiemens;
-            return new ElectricAdmittance((value) * 1e-9d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static ElectricAdmittance<T, C> From(double value, ElectricAdmittanceUnit fromUnit)
 #else
-        public static ElectricAdmittance FromNanosiemens(QuantityValue nanosiemens)
-        {
-            double value = (double) nanosiemens;
-            return new ElectricAdmittance(((value) * 1e-9d));
-        }
+			public static ElectricAdmittance<T, C> From(Number<T, C> value, ElectricAdmittanceUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case ElectricAdmittanceUnit.Microsiemens:
+						return FromMicrosiemens(value);
+					case ElectricAdmittanceUnit.Millisiemens:
+						return FromMillisiemens(value);
+					case ElectricAdmittanceUnit.Nanosiemens:
+						return FromNanosiemens(value);
+					case ElectricAdmittanceUnit.Siemens:
+						return FromSiemens(value);
 
-        /// <summary>
-        ///     Get ElectricAdmittance from Siemens.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ElectricAdmittance FromSiemens(double siemens)
-        {
-            double value = (double) siemens;
-            return new ElectricAdmittance(value);
-        }
-#else
-        public static ElectricAdmittance FromSiemens(QuantityValue siemens)
-        {
-            double value = (double) siemens;
-            return new ElectricAdmittance((value));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(ElectricAdmittanceUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable ElectricAdmittance from nullable Microsiemens.
-        /// </summary>
-        public static ElectricAdmittance? FromMicrosiemens(QuantityValue? microsiemens)
-        {
-            if (microsiemens.HasValue)
-            {
-                return FromMicrosiemens(microsiemens.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ElectricAdmittance<T, C> operator -(ElectricAdmittance<T, C> right)
+			{
+				return new ElectricAdmittance<T, C>(-right._siemens);
+			}
 
-        /// <summary>
-        ///     Get nullable ElectricAdmittance from nullable Millisiemens.
-        /// </summary>
-        public static ElectricAdmittance? FromMillisiemens(QuantityValue? millisiemens)
-        {
-            if (millisiemens.HasValue)
-            {
-                return FromMillisiemens(millisiemens.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ElectricAdmittance<T, C> operator +(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return new ElectricAdmittance<T, C>(left._siemens + right._siemens);
+			}
 
-        /// <summary>
-        ///     Get nullable ElectricAdmittance from nullable Nanosiemens.
-        /// </summary>
-        public static ElectricAdmittance? FromNanosiemens(QuantityValue? nanosiemens)
-        {
-            if (nanosiemens.HasValue)
-            {
-                return FromNanosiemens(nanosiemens.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ElectricAdmittance<T, C> operator -(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return new ElectricAdmittance<T, C>(left._siemens - right._siemens);
+			}
 
-        /// <summary>
-        ///     Get nullable ElectricAdmittance from nullable Siemens.
-        /// </summary>
-        public static ElectricAdmittance? FromSiemens(QuantityValue? siemens)
-        {
-            if (siemens.HasValue)
-            {
-                return FromSiemens(siemens.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ElectricAdmittance<T, C> operator *(Number<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return new ElectricAdmittance<T, C>(left*right._siemens);
+			}
 
+			public static ElectricAdmittance<T, C> operator *(ElectricAdmittance<T, C> left, double right)
+			{
+				return new ElectricAdmittance<T, C>(left._siemens*right);
+			}
+
+			public static ElectricAdmittance<T, C> operator /(ElectricAdmittance<T, C> left, double right)
+			{
+				return new ElectricAdmittance<T, C>(left._siemens/right);
+			}
+
+			public static double operator /(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return Convert.ToDouble(left._siemens/right._siemens);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="ElectricAdmittanceUnit" /> to <see cref="ElectricAdmittance" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>ElectricAdmittance unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is ElectricAdmittance<T, C>)) throw new ArgumentException("Expected type ElectricAdmittance.", "obj");
+				return CompareTo((ElectricAdmittance<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static ElectricAdmittance From(double value, ElectricAdmittanceUnit fromUnit)
+			internal
 #else
-        public static ElectricAdmittance From(QuantityValue value, ElectricAdmittanceUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case ElectricAdmittanceUnit.Microsiemens:
-                    return FromMicrosiemens(value);
-                case ElectricAdmittanceUnit.Millisiemens:
-                    return FromMillisiemens(value);
-                case ElectricAdmittanceUnit.Nanosiemens:
-                    return FromNanosiemens(value);
-                case ElectricAdmittanceUnit.Siemens:
-                    return FromSiemens(value);
+			int CompareTo(ElectricAdmittance<T, C> other)
+			{
+				return _siemens.CompareTo(other._siemens);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="ElectricAdmittanceUnit" /> to <see cref="ElectricAdmittance" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>ElectricAdmittance unit value.</returns>
-        public static ElectricAdmittance? From(QuantityValue? value, ElectricAdmittanceUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case ElectricAdmittanceUnit.Microsiemens:
-                    return FromMicrosiemens(value.Value);
-                case ElectricAdmittanceUnit.Millisiemens:
-                    return FromMillisiemens(value.Value);
-                case ElectricAdmittanceUnit.Nanosiemens:
-                    return FromNanosiemens(value.Value);
-                case ElectricAdmittanceUnit.Siemens:
-                    return FromSiemens(value.Value);
+			public static bool operator <=(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return left._siemens <= right._siemens;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return left._siemens >= right._siemens;
+			}
+
+			public static bool operator <(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return left._siemens < right._siemens;
+			}
+
+			public static bool operator >(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				return left._siemens > right._siemens;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._siemens == right._siemens;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(ElectricAdmittance<T, C> left, ElectricAdmittance<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._siemens != right._siemens;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(ElectricAdmittanceUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static ElectricAdmittance operator -(ElectricAdmittance right)
-        {
-            return new ElectricAdmittance(-right._siemens);
-        }
-
-        public static ElectricAdmittance operator +(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return new ElectricAdmittance(left._siemens + right._siemens);
-        }
-
-        public static ElectricAdmittance operator -(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return new ElectricAdmittance(left._siemens - right._siemens);
-        }
-
-        public static ElectricAdmittance operator *(double left, ElectricAdmittance right)
-        {
-            return new ElectricAdmittance(left*right._siemens);
-        }
-
-        public static ElectricAdmittance operator *(ElectricAdmittance left, double right)
-        {
-            return new ElectricAdmittance(left._siemens*(double)right);
-        }
-
-        public static ElectricAdmittance operator /(ElectricAdmittance left, double right)
-        {
-            return new ElectricAdmittance(left._siemens/(double)right);
-        }
-
-        public static double operator /(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return Convert.ToDouble(left._siemens/right._siemens);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is ElectricAdmittance)) throw new ArgumentException("Expected type ElectricAdmittance.", "obj");
-            return CompareTo((ElectricAdmittance) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(ElectricAdmittance other)
-        {
-            return _siemens.CompareTo(other._siemens);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return left._siemens <= right._siemens;
-        }
-
-        public static bool operator >=(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return left._siemens >= right._siemens;
-        }
-
-        public static bool operator <(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return left._siemens < right._siemens;
-        }
-
-        public static bool operator >(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            return left._siemens > right._siemens;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._siemens == right._siemens;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(ElectricAdmittance left, ElectricAdmittance right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._siemens != right._siemens;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _siemens.Equals(((ElectricAdmittance) obj)._siemens);
-        }
+				return _siemens.Equals(((ElectricAdmittance<T, C>) obj)._siemens);
+			}
 
-        /// <summary>
-        ///     Compare equality to another ElectricAdmittance by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(ElectricAdmittance other, ElectricAdmittance maxError)
-        {
-            return Math.Abs(_siemens - other._siemens) <= maxError._siemens;
-        }
+			/// <summary>
+			///     Compare equality to another ElectricAdmittance by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(ElectricAdmittance<T, C> other, ElectricAdmittance<T, C> maxError)
+			{
+				return Math.Abs((decimal)_siemens - (decimal)other._siemens) <= maxError._siemens;
+			}
 
-        public override int GetHashCode()
-        {
-            return _siemens.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _siemens.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(ElectricAdmittanceUnit unit)
-        {
-            switch (unit)
-            {
-                case ElectricAdmittanceUnit.Microsiemens:
-                    return Microsiemens;
-                case ElectricAdmittanceUnit.Millisiemens:
-                    return Millisiemens;
-                case ElectricAdmittanceUnit.Nanosiemens:
-                    return Nanosiemens;
-                case ElectricAdmittanceUnit.Siemens:
-                    return Siemens;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(ElectricAdmittanceUnit unit)
+			{
+				switch (unit)
+				{
+					case ElectricAdmittanceUnit.Microsiemens:
+						return Microsiemens;
+					case ElectricAdmittanceUnit.Millisiemens:
+						return Millisiemens;
+					case ElectricAdmittanceUnit.Nanosiemens:
+						return Nanosiemens;
+					case ElectricAdmittanceUnit.Siemens:
+						return Siemens;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static ElectricAdmittance Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static ElectricAdmittance<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static ElectricAdmittance Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static ElectricAdmittance<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<ElectricAdmittance, ElectricAdmittanceUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    ElectricAdmittanceUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromSiemens(x.Siemens + y.Siemens));
-        }
+					return QuantityParser.Parse<ElectricAdmittance<T, C>, ElectricAdmittanceUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						ElectricAdmittanceUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromSiemens((Number<T, C>)x.Siemens + y.Siemens));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out ElectricAdmittance result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out ElectricAdmittance<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out ElectricAdmittance result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(ElectricAdmittance);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out ElectricAdmittance<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(ElectricAdmittance<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static ElectricAdmittanceUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static ElectricAdmittanceUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static ElectricAdmittanceUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static ElectricAdmittanceUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static ElectricAdmittanceUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static ElectricAdmittanceUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<ElectricAdmittanceUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<ElectricAdmittanceUnit>(str.Trim());
 
-            if (unit == ElectricAdmittanceUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized ElectricAdmittanceUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == ElectricAdmittanceUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized ElectricAdmittanceUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is Siemens
-        /// </summary>
-        public static ElectricAdmittanceUnit ToStringDefaultUnit { get; set; } = ElectricAdmittanceUnit.Siemens;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is Siemens
+			/// </summary>
+			public static ElectricAdmittanceUnit ToStringDefaultUnit { get; set; } = ElectricAdmittanceUnit.Siemens;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(ElectricAdmittanceUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(ElectricAdmittanceUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(ElectricAdmittanceUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of ElectricAdmittance
-        /// </summary>
-        public static ElectricAdmittance MaxValue
-        {
-            get
-            {
-                return new ElectricAdmittance(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of ElectricAdmittance
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of ElectricAdmittance
-        /// </summary>
-        public static ElectricAdmittance MinValue
-        {
-            get
-            {
-                return new ElectricAdmittance(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of ElectricAdmittance
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

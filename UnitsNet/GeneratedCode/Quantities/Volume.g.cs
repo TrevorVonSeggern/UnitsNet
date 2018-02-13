@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Volume is the quantity of three-dimensional space enclosed by some closed boundary, for example, the space that a substance (solid, liquid, gas, or plasma) or shape occupies or contains.[1] Volume is often quantified numerically using the SI derived unit, the cubic metre. The volume of a container is generally understood to be the capacity of the container, i. e. the amount of fluid (gas or liquid) that the container could hold, rather than the amount of space the container itself displaces.
     /// </summary>
@@ -63,2544 +64,1791 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class Volume : UnitsNet.Generic.Volume<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class Volume
+		public sealed partial class Volume
 #else
-    public partial struct Volume : IComparable, IComparable<Volume>
+		public partial class Volume <T, C> : IComparable, IComparable<Volume<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of Volume.
-        /// </summary>
-        private readonly double _cubicMeters;
+		{
+			/// <summary>
+			///     Base unit of Volume.
+			/// </summary>
+			private readonly Number<T, C> _cubicMeters;
 
-        // Windows Runtime Component requires a default constructor
+			public Volume() : this(new Number<T,C>())
+			{
+			}
+
+			public Volume(T cubicmeters)
+			{
+				_cubicMeters = (cubicmeters);
+			}
+
+			public Volume(Number<T, C> cubicmeters)
+			{
+				_cubicMeters = (cubicmeters);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.Volume;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static VolumeUnit BaseUnit
+			{
+				get { return VolumeUnit.CubicMeter; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the Volume quantity.
+			/// </summary>
+			public static VolumeUnit[] Units { get; } = Enum.GetValues(typeof(VolumeUnit)).Cast<VolumeUnit>().ToArray();
+
+			/// <summary>
+			///     Get Volume in AuTablespoons.
+			/// </summary>
+			public Number<T, C> AuTablespoons
+			{
+				get { return _cubicMeters/2e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in Centiliters.
+			/// </summary>
+			public Number<T, C> Centiliters
+			{
+				get { return (_cubicMeters*1e3) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicCentimeters.
+			/// </summary>
+			public Number<T, C> CubicCentimeters
+			{
+				get { return _cubicMeters*1e6; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicDecimeters.
+			/// </summary>
+			public Number<T, C> CubicDecimeters
+			{
+				get { return _cubicMeters*1e3; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicFeet.
+			/// </summary>
+			public Number<T, C> CubicFeet
+			{
+				get { return _cubicMeters/0.0283168; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicInches.
+			/// </summary>
+			public Number<T, C> CubicInches
+			{
+				get { return _cubicMeters/(1.6387*1e-5); }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicKilometers.
+			/// </summary>
+			public Number<T, C> CubicKilometers
+			{
+				get { return _cubicMeters/1e9; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicMeters.
+			/// </summary>
+			public Number<T, C> CubicMeters
+			{
+				get { return _cubicMeters; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicMicrometers.
+			/// </summary>
+			public Number<T, C> CubicMicrometers
+			{
+				get { return _cubicMeters*1e18; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicMiles.
+			/// </summary>
+			public Number<T, C> CubicMiles
+			{
+				get { return _cubicMeters/(4.16818183*1e9); }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicMillimeters.
+			/// </summary>
+			public Number<T, C> CubicMillimeters
+			{
+				get { return _cubicMeters*1e9; }
+			}
+
+			/// <summary>
+			///     Get Volume in CubicYards.
+			/// </summary>
+			public Number<T, C> CubicYards
+			{
+				get { return _cubicMeters/0.764554858; }
+			}
+
+			/// <summary>
+			///     Get Volume in Deciliters.
+			/// </summary>
+			public Number<T, C> Deciliters
+			{
+				get { return (_cubicMeters*1e3) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Volume in HectocubicFeet.
+			/// </summary>
+			public Number<T, C> HectocubicFeet
+			{
+				get { return (_cubicMeters/0.0283168) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get Volume in HectocubicMeters.
+			/// </summary>
+			public Number<T, C> HectocubicMeters
+			{
+				get { return (_cubicMeters) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get Volume in Hectoliters.
+			/// </summary>
+			public Number<T, C> Hectoliters
+			{
+				get { return (_cubicMeters*1e3) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get Volume in ImperialBeerBarrels.
+			/// </summary>
+			public Number<T, C> ImperialBeerBarrels
+			{
+				get { return _cubicMeters/0.16365924; }
+			}
+
+			/// <summary>
+			///     Get Volume in ImperialGallons.
+			/// </summary>
+			public Number<T, C> ImperialGallons
+			{
+				get { return _cubicMeters/0.00454609000000181429905810072407; }
+			}
+
+			/// <summary>
+			///     Get Volume in ImperialOunces.
+			/// </summary>
+			public Number<T, C> ImperialOunces
+			{
+				get { return _cubicMeters/2.8413062499962901241875439064617e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in KilocubicFeet.
+			/// </summary>
+			public Number<T, C> KilocubicFeet
+			{
+				get { return (_cubicMeters/0.0283168) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Volume in KilocubicMeters.
+			/// </summary>
+			public Number<T, C> KilocubicMeters
+			{
+				get { return (_cubicMeters) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Volume in KiloimperialGallons.
+			/// </summary>
+			public Number<T, C> KiloimperialGallons
+			{
+				get { return (_cubicMeters/0.00454609000000181429905810072407) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Volume in KilousGallons.
+			/// </summary>
+			public Number<T, C> KilousGallons
+			{
+				get { return (_cubicMeters/0.00378541) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Volume in Liters.
+			/// </summary>
+			public Number<T, C> Liters
+			{
+				get { return _cubicMeters*1e3; }
+			}
+
+			/// <summary>
+			///     Get Volume in MegacubicFeet.
+			/// </summary>
+			public Number<T, C> MegacubicFeet
+			{
+				get { return (_cubicMeters/0.0283168) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get Volume in MegaimperialGallons.
+			/// </summary>
+			public Number<T, C> MegaimperialGallons
+			{
+				get { return (_cubicMeters/0.00454609000000181429905810072407) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get Volume in MegausGallons.
+			/// </summary>
+			public Number<T, C> MegausGallons
+			{
+				get { return (_cubicMeters/0.00378541) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get Volume in MetricCups.
+			/// </summary>
+			public Number<T, C> MetricCups
+			{
+				get { return _cubicMeters/0.00025; }
+			}
+
+			/// <summary>
+			///     Get Volume in MetricTeaspoons.
+			/// </summary>
+			public Number<T, C> MetricTeaspoons
+			{
+				get { return _cubicMeters/0.5e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in Microliters.
+			/// </summary>
+			public Number<T, C> Microliters
+			{
+				get { return (_cubicMeters*1e3) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Volume in Milliliters.
+			/// </summary>
+			public Number<T, C> Milliliters
+			{
+				get { return (_cubicMeters*1e3) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Volume in OilBarrels.
+			/// </summary>
+			public Number<T, C> OilBarrels
+			{
+				get { return _cubicMeters/0.158987294928; }
+			}
+
+			/// <summary>
+			///     Get Volume in Tablespoons.
+			/// </summary>
+            [System.Obsolete("Deprecated due to github issue #134, please use UsTablespoon instead")]
+			public Number<T, C> Tablespoons
+			{
+				get { return _cubicMeters/1.478676478125e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in Teaspoons.
+			/// </summary>
+            [System.Obsolete("Deprecated due to github issue #134, please use UsTeaspoon instead")]
+			public Number<T, C> Teaspoons
+			{
+				get { return _cubicMeters/4.92892159375e-6; }
+			}
+
+			/// <summary>
+			///     Get Volume in UkTablespoons.
+			/// </summary>
+			public Number<T, C> UkTablespoons
+			{
+				get { return _cubicMeters/1.5e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsBeerBarrels.
+			/// </summary>
+			public Number<T, C> UsBeerBarrels
+			{
+				get { return _cubicMeters/0.1173477658; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsCustomaryCups.
+			/// </summary>
+			public Number<T, C> UsCustomaryCups
+			{
+				get { return _cubicMeters/0.0002365882365; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsGallons.
+			/// </summary>
+			public Number<T, C> UsGallons
+			{
+				get { return _cubicMeters/0.00378541; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsLegalCups.
+			/// </summary>
+			public Number<T, C> UsLegalCups
+			{
+				get { return _cubicMeters/0.00024; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsOunces.
+			/// </summary>
+			public Number<T, C> UsOunces
+			{
+				get { return _cubicMeters/2.957352956253760505068307980135e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsTablespoons.
+			/// </summary>
+			public Number<T, C> UsTablespoons
+			{
+				get { return _cubicMeters/1.478676478125e-5; }
+			}
+
+			/// <summary>
+			///     Get Volume in UsTeaspoons.
+			/// </summary>
+			public Number<T, C> UsTeaspoons
+			{
+				get { return _cubicMeters/4.92892159375e-6; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static Volume<T, C> Zero
+			{
+				get { return new Volume<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get Volume from AuTablespoons.
+			/// </summary>
 #if WINDOWS_UWP
-        public Volume() : this(0)
-        {
-        }
-#endif
-
-        public Volume(double cubicmeters)
-        {
-            _cubicMeters = Convert.ToDouble(cubicmeters);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromAuTablespoons(Number<T, C> autablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) autablespoons;
+				return new Volume<T, C>(value*2e-5);
+			}
 #else
-        public
+			public static Volume<T, C> FromAuTablespoons(Number<T, C> autablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) autablespoons;
+				return new Volume<T, C>(new Number<T,C>(value*2e-5));
+			}
 #endif
-        Volume(long cubicmeters)
-        {
-            _cubicMeters = Convert.ToDouble(cubicmeters);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get Volume from Centiliters.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCentiliters(Number<T, C> centiliters)
+			{
+				Number<T,C> value = (Number<T,C>) centiliters;
+				return new Volume<T, C>((value/1e3) * 1e-2d);
+			}
 #else
-        public
+			public static Volume<T, C> FromCentiliters(Number<T, C> centiliters)
+			{
+				Number<T,C> value = (Number<T,C>) centiliters;
+				return new Volume<T, C>(new Number<T,C>((value/1e3) * 1e-2d));
+			}
 #endif
-        Volume(decimal cubicmeters)
-        {
-            _cubicMeters = Convert.ToDouble(cubicmeters);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.Volume;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static VolumeUnit BaseUnit
-        {
-            get { return VolumeUnit.CubicMeter; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the Volume quantity.
-        /// </summary>
-        public static VolumeUnit[] Units { get; } = Enum.GetValues(typeof(VolumeUnit)).Cast<VolumeUnit>().ToArray();
-
-        /// <summary>
-        ///     Get Volume in AuTablespoons.
-        /// </summary>
-        public double AuTablespoons
-        {
-            get { return _cubicMeters/2e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Centiliters.
-        /// </summary>
-        public double Centiliters
-        {
-            get { return (_cubicMeters*1e3) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicCentimeters.
-        /// </summary>
-        public double CubicCentimeters
-        {
-            get { return _cubicMeters*1e6; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicDecimeters.
-        /// </summary>
-        public double CubicDecimeters
-        {
-            get { return _cubicMeters*1e3; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicFeet.
-        /// </summary>
-        public double CubicFeet
-        {
-            get { return _cubicMeters/0.0283168; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicInches.
-        /// </summary>
-        public double CubicInches
-        {
-            get { return _cubicMeters/(1.6387*1e-5); }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicKilometers.
-        /// </summary>
-        public double CubicKilometers
-        {
-            get { return _cubicMeters/1e9; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicMeters.
-        /// </summary>
-        public double CubicMeters
-        {
-            get { return _cubicMeters; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicMicrometers.
-        /// </summary>
-        public double CubicMicrometers
-        {
-            get { return _cubicMeters*1e18; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicMiles.
-        /// </summary>
-        public double CubicMiles
-        {
-            get { return _cubicMeters/(4.16818183*1e9); }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicMillimeters.
-        /// </summary>
-        public double CubicMillimeters
-        {
-            get { return _cubicMeters*1e9; }
-        }
-
-        /// <summary>
-        ///     Get Volume in CubicYards.
-        /// </summary>
-        public double CubicYards
-        {
-            get { return _cubicMeters/0.764554858; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Deciliters.
-        /// </summary>
-        public double Deciliters
-        {
-            get { return (_cubicMeters*1e3) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in HectocubicFeet.
-        /// </summary>
-        public double HectocubicFeet
-        {
-            get { return (_cubicMeters/0.0283168) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in HectocubicMeters.
-        /// </summary>
-        public double HectocubicMeters
-        {
-            get { return (_cubicMeters) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Hectoliters.
-        /// </summary>
-        public double Hectoliters
-        {
-            get { return (_cubicMeters*1e3) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in ImperialBeerBarrels.
-        /// </summary>
-        public double ImperialBeerBarrels
-        {
-            get { return _cubicMeters/0.16365924; }
-        }
-
-        /// <summary>
-        ///     Get Volume in ImperialGallons.
-        /// </summary>
-        public double ImperialGallons
-        {
-            get { return _cubicMeters/0.00454609000000181429905810072407; }
-        }
-
-        /// <summary>
-        ///     Get Volume in ImperialOunces.
-        /// </summary>
-        public double ImperialOunces
-        {
-            get { return _cubicMeters/2.8413062499962901241875439064617e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in KilocubicFeet.
-        /// </summary>
-        public double KilocubicFeet
-        {
-            get { return (_cubicMeters/0.0283168) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in KilocubicMeters.
-        /// </summary>
-        public double KilocubicMeters
-        {
-            get { return (_cubicMeters) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in KiloimperialGallons.
-        /// </summary>
-        public double KiloimperialGallons
-        {
-            get { return (_cubicMeters/0.00454609000000181429905810072407) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in KilousGallons.
-        /// </summary>
-        public double KilousGallons
-        {
-            get { return (_cubicMeters/0.00378541) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Liters.
-        /// </summary>
-        public double Liters
-        {
-            get { return _cubicMeters*1e3; }
-        }
-
-        /// <summary>
-        ///     Get Volume in MegacubicFeet.
-        /// </summary>
-        public double MegacubicFeet
-        {
-            get { return (_cubicMeters/0.0283168) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in MegaimperialGallons.
-        /// </summary>
-        public double MegaimperialGallons
-        {
-            get { return (_cubicMeters/0.00454609000000181429905810072407) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in MegausGallons.
-        /// </summary>
-        public double MegausGallons
-        {
-            get { return (_cubicMeters/0.00378541) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in MetricCups.
-        /// </summary>
-        public double MetricCups
-        {
-            get { return _cubicMeters/0.00025; }
-        }
-
-        /// <summary>
-        ///     Get Volume in MetricTeaspoons.
-        /// </summary>
-        public double MetricTeaspoons
-        {
-            get { return _cubicMeters/0.5e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Microliters.
-        /// </summary>
-        public double Microliters
-        {
-            get { return (_cubicMeters*1e3) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Milliliters.
-        /// </summary>
-        public double Milliliters
-        {
-            get { return (_cubicMeters*1e3) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Volume in OilBarrels.
-        /// </summary>
-        public double OilBarrels
-        {
-            get { return _cubicMeters/0.158987294928; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Tablespoons.
-        /// </summary>
-        [System.Obsolete("Deprecated due to github issue #134, please use UsTablespoon instead")]
-        public double Tablespoons
-        {
-            get { return _cubicMeters/1.478676478125e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in Teaspoons.
-        /// </summary>
-        [System.Obsolete("Deprecated due to github issue #134, please use UsTeaspoon instead")]
-        public double Teaspoons
-        {
-            get { return _cubicMeters/4.92892159375e-6; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UkTablespoons.
-        /// </summary>
-        public double UkTablespoons
-        {
-            get { return _cubicMeters/1.5e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsBeerBarrels.
-        /// </summary>
-        public double UsBeerBarrels
-        {
-            get { return _cubicMeters/0.1173477658; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsCustomaryCups.
-        /// </summary>
-        public double UsCustomaryCups
-        {
-            get { return _cubicMeters/0.0002365882365; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsGallons.
-        /// </summary>
-        public double UsGallons
-        {
-            get { return _cubicMeters/0.00378541; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsLegalCups.
-        /// </summary>
-        public double UsLegalCups
-        {
-            get { return _cubicMeters/0.00024; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsOunces.
-        /// </summary>
-        public double UsOunces
-        {
-            get { return _cubicMeters/2.957352956253760505068307980135e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsTablespoons.
-        /// </summary>
-        public double UsTablespoons
-        {
-            get { return _cubicMeters/1.478676478125e-5; }
-        }
-
-        /// <summary>
-        ///     Get Volume in UsTeaspoons.
-        /// </summary>
-        public double UsTeaspoons
-        {
-            get { return _cubicMeters/4.92892159375e-6; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static Volume Zero
-        {
-            get { return new Volume(); }
-        }
-
-        /// <summary>
-        ///     Get Volume from AuTablespoons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicCentimeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromAuTablespoons(double autablespoons)
-        {
-            double value = (double) autablespoons;
-            return new Volume(value*2e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicCentimeters(Number<T, C> cubiccentimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubiccentimeters;
+				return new Volume<T, C>(value/1e6);
+			}
 #else
-        public static Volume FromAuTablespoons(QuantityValue autablespoons)
-        {
-            double value = (double) autablespoons;
-            return new Volume((value*2e-5));
-        }
+			public static Volume<T, C> FromCubicCentimeters(Number<T, C> cubiccentimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubiccentimeters;
+				return new Volume<T, C>(new Number<T,C>(value/1e6));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Centiliters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicDecimeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCentiliters(double centiliters)
-        {
-            double value = (double) centiliters;
-            return new Volume((value/1e3) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicDecimeters(Number<T, C> cubicdecimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicdecimeters;
+				return new Volume<T, C>(value/1e3);
+			}
 #else
-        public static Volume FromCentiliters(QuantityValue centiliters)
-        {
-            double value = (double) centiliters;
-            return new Volume(((value/1e3) * 1e-2d));
-        }
+			public static Volume<T, C> FromCubicDecimeters(Number<T, C> cubicdecimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicdecimeters;
+				return new Volume<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicCentimeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicFeet.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicCentimeters(double cubiccentimeters)
-        {
-            double value = (double) cubiccentimeters;
-            return new Volume(value/1e6);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicFeet(Number<T, C> cubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) cubicfeet;
+				return new Volume<T, C>(value*0.0283168);
+			}
 #else
-        public static Volume FromCubicCentimeters(QuantityValue cubiccentimeters)
-        {
-            double value = (double) cubiccentimeters;
-            return new Volume((value/1e6));
-        }
+			public static Volume<T, C> FromCubicFeet(Number<T, C> cubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) cubicfeet;
+				return new Volume<T, C>(new Number<T,C>(value*0.0283168));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicDecimeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicInches.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicDecimeters(double cubicdecimeters)
-        {
-            double value = (double) cubicdecimeters;
-            return new Volume(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicInches(Number<T, C> cubicinches)
+			{
+				Number<T,C> value = (Number<T,C>) cubicinches;
+				return new Volume<T, C>(value*1.6387*1e-5);
+			}
 #else
-        public static Volume FromCubicDecimeters(QuantityValue cubicdecimeters)
-        {
-            double value = (double) cubicdecimeters;
-            return new Volume((value/1e3));
-        }
+			public static Volume<T, C> FromCubicInches(Number<T, C> cubicinches)
+			{
+				Number<T,C> value = (Number<T,C>) cubicinches;
+				return new Volume<T, C>(new Number<T,C>(value*1.6387*1e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicFeet.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicKilometers.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicFeet(double cubicfeet)
-        {
-            double value = (double) cubicfeet;
-            return new Volume(value*0.0283168);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicKilometers(Number<T, C> cubickilometers)
+			{
+				Number<T,C> value = (Number<T,C>) cubickilometers;
+				return new Volume<T, C>(value*1e9);
+			}
 #else
-        public static Volume FromCubicFeet(QuantityValue cubicfeet)
-        {
-            double value = (double) cubicfeet;
-            return new Volume((value*0.0283168));
-        }
+			public static Volume<T, C> FromCubicKilometers(Number<T, C> cubickilometers)
+			{
+				Number<T,C> value = (Number<T,C>) cubickilometers;
+				return new Volume<T, C>(new Number<T,C>(value*1e9));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicInches.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicMeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicInches(double cubicinches)
-        {
-            double value = (double) cubicinches;
-            return new Volume(value*1.6387*1e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicMeters(Number<T, C> cubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmeters;
+				return new Volume<T, C>(value);
+			}
 #else
-        public static Volume FromCubicInches(QuantityValue cubicinches)
-        {
-            double value = (double) cubicinches;
-            return new Volume((value*1.6387*1e-5));
-        }
+			public static Volume<T, C> FromCubicMeters(Number<T, C> cubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmeters;
+				return new Volume<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicKilometers.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicMicrometers.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicKilometers(double cubickilometers)
-        {
-            double value = (double) cubickilometers;
-            return new Volume(value*1e9);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicMicrometers(Number<T, C> cubicmicrometers)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmicrometers;
+				return new Volume<T, C>(value/1e18);
+			}
 #else
-        public static Volume FromCubicKilometers(QuantityValue cubickilometers)
-        {
-            double value = (double) cubickilometers;
-            return new Volume((value*1e9));
-        }
+			public static Volume<T, C> FromCubicMicrometers(Number<T, C> cubicmicrometers)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmicrometers;
+				return new Volume<T, C>(new Number<T,C>(value/1e18));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicMeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicMiles.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicMeters(double cubicmeters)
-        {
-            double value = (double) cubicmeters;
-            return new Volume(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicMiles(Number<T, C> cubicmiles)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmiles;
+				return new Volume<T, C>(value*4.16818183*1e9);
+			}
 #else
-        public static Volume FromCubicMeters(QuantityValue cubicmeters)
-        {
-            double value = (double) cubicmeters;
-            return new Volume((value));
-        }
+			public static Volume<T, C> FromCubicMiles(Number<T, C> cubicmiles)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmiles;
+				return new Volume<T, C>(new Number<T,C>(value*4.16818183*1e9));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicMicrometers.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicMillimeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicMicrometers(double cubicmicrometers)
-        {
-            double value = (double) cubicmicrometers;
-            return new Volume(value/1e18);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicMillimeters(Number<T, C> cubicmillimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmillimeters;
+				return new Volume<T, C>(value/1e9);
+			}
 #else
-        public static Volume FromCubicMicrometers(QuantityValue cubicmicrometers)
-        {
-            double value = (double) cubicmicrometers;
-            return new Volume((value/1e18));
-        }
+			public static Volume<T, C> FromCubicMillimeters(Number<T, C> cubicmillimeters)
+			{
+				Number<T,C> value = (Number<T,C>) cubicmillimeters;
+				return new Volume<T, C>(new Number<T,C>(value/1e9));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicMiles.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from CubicYards.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicMiles(double cubicmiles)
-        {
-            double value = (double) cubicmiles;
-            return new Volume(value*4.16818183*1e9);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromCubicYards(Number<T, C> cubicyards)
+			{
+				Number<T,C> value = (Number<T,C>) cubicyards;
+				return new Volume<T, C>(value*0.764554858);
+			}
 #else
-        public static Volume FromCubicMiles(QuantityValue cubicmiles)
-        {
-            double value = (double) cubicmiles;
-            return new Volume((value*4.16818183*1e9));
-        }
+			public static Volume<T, C> FromCubicYards(Number<T, C> cubicyards)
+			{
+				Number<T,C> value = (Number<T,C>) cubicyards;
+				return new Volume<T, C>(new Number<T,C>(value*0.764554858));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicMillimeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Deciliters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicMillimeters(double cubicmillimeters)
-        {
-            double value = (double) cubicmillimeters;
-            return new Volume(value/1e9);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromDeciliters(Number<T, C> deciliters)
+			{
+				Number<T,C> value = (Number<T,C>) deciliters;
+				return new Volume<T, C>((value/1e3) * 1e-1d);
+			}
 #else
-        public static Volume FromCubicMillimeters(QuantityValue cubicmillimeters)
-        {
-            double value = (double) cubicmillimeters;
-            return new Volume((value/1e9));
-        }
+			public static Volume<T, C> FromDeciliters(Number<T, C> deciliters)
+			{
+				Number<T,C> value = (Number<T,C>) deciliters;
+				return new Volume<T, C>(new Number<T,C>((value/1e3) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from CubicYards.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from HectocubicFeet.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromCubicYards(double cubicyards)
-        {
-            double value = (double) cubicyards;
-            return new Volume(value*0.764554858);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromHectocubicFeet(Number<T, C> hectocubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) hectocubicfeet;
+				return new Volume<T, C>((value*0.0283168) * 1e2d);
+			}
 #else
-        public static Volume FromCubicYards(QuantityValue cubicyards)
-        {
-            double value = (double) cubicyards;
-            return new Volume((value*0.764554858));
-        }
+			public static Volume<T, C> FromHectocubicFeet(Number<T, C> hectocubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) hectocubicfeet;
+				return new Volume<T, C>(new Number<T,C>((value*0.0283168) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Deciliters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from HectocubicMeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromDeciliters(double deciliters)
-        {
-            double value = (double) deciliters;
-            return new Volume((value/1e3) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromHectocubicMeters(Number<T, C> hectocubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) hectocubicmeters;
+				return new Volume<T, C>((value) * 1e2d);
+			}
 #else
-        public static Volume FromDeciliters(QuantityValue deciliters)
-        {
-            double value = (double) deciliters;
-            return new Volume(((value/1e3) * 1e-1d));
-        }
+			public static Volume<T, C> FromHectocubicMeters(Number<T, C> hectocubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) hectocubicmeters;
+				return new Volume<T, C>(new Number<T,C>((value) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from HectocubicFeet.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Hectoliters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromHectocubicFeet(double hectocubicfeet)
-        {
-            double value = (double) hectocubicfeet;
-            return new Volume((value*0.0283168) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromHectoliters(Number<T, C> hectoliters)
+			{
+				Number<T,C> value = (Number<T,C>) hectoliters;
+				return new Volume<T, C>((value/1e3) * 1e2d);
+			}
 #else
-        public static Volume FromHectocubicFeet(QuantityValue hectocubicfeet)
-        {
-            double value = (double) hectocubicfeet;
-            return new Volume(((value*0.0283168) * 1e2d));
-        }
+			public static Volume<T, C> FromHectoliters(Number<T, C> hectoliters)
+			{
+				Number<T,C> value = (Number<T,C>) hectoliters;
+				return new Volume<T, C>(new Number<T,C>((value/1e3) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from HectocubicMeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from ImperialBeerBarrels.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromHectocubicMeters(double hectocubicmeters)
-        {
-            double value = (double) hectocubicmeters;
-            return new Volume((value) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromImperialBeerBarrels(Number<T, C> imperialbeerbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) imperialbeerbarrels;
+				return new Volume<T, C>(value*0.16365924);
+			}
 #else
-        public static Volume FromHectocubicMeters(QuantityValue hectocubicmeters)
-        {
-            double value = (double) hectocubicmeters;
-            return new Volume(((value) * 1e2d));
-        }
+			public static Volume<T, C> FromImperialBeerBarrels(Number<T, C> imperialbeerbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) imperialbeerbarrels;
+				return new Volume<T, C>(new Number<T,C>(value*0.16365924));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Hectoliters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from ImperialGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromHectoliters(double hectoliters)
-        {
-            double value = (double) hectoliters;
-            return new Volume((value/1e3) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromImperialGallons(Number<T, C> imperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) imperialgallons;
+				return new Volume<T, C>(value*0.00454609000000181429905810072407);
+			}
 #else
-        public static Volume FromHectoliters(QuantityValue hectoliters)
-        {
-            double value = (double) hectoliters;
-            return new Volume(((value/1e3) * 1e2d));
-        }
+			public static Volume<T, C> FromImperialGallons(Number<T, C> imperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) imperialgallons;
+				return new Volume<T, C>(new Number<T,C>(value*0.00454609000000181429905810072407));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from ImperialBeerBarrels.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from ImperialOunces.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromImperialBeerBarrels(double imperialbeerbarrels)
-        {
-            double value = (double) imperialbeerbarrels;
-            return new Volume(value*0.16365924);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromImperialOunces(Number<T, C> imperialounces)
+			{
+				Number<T,C> value = (Number<T,C>) imperialounces;
+				return new Volume<T, C>(value*2.8413062499962901241875439064617e-5);
+			}
 #else
-        public static Volume FromImperialBeerBarrels(QuantityValue imperialbeerbarrels)
-        {
-            double value = (double) imperialbeerbarrels;
-            return new Volume((value*0.16365924));
-        }
+			public static Volume<T, C> FromImperialOunces(Number<T, C> imperialounces)
+			{
+				Number<T,C> value = (Number<T,C>) imperialounces;
+				return new Volume<T, C>(new Number<T,C>(value*2.8413062499962901241875439064617e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from ImperialGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from KilocubicFeet.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromImperialGallons(double imperialgallons)
-        {
-            double value = (double) imperialgallons;
-            return new Volume(value*0.00454609000000181429905810072407);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromKilocubicFeet(Number<T, C> kilocubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) kilocubicfeet;
+				return new Volume<T, C>((value*0.0283168) * 1e3d);
+			}
 #else
-        public static Volume FromImperialGallons(QuantityValue imperialgallons)
-        {
-            double value = (double) imperialgallons;
-            return new Volume((value*0.00454609000000181429905810072407));
-        }
+			public static Volume<T, C> FromKilocubicFeet(Number<T, C> kilocubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) kilocubicfeet;
+				return new Volume<T, C>(new Number<T,C>((value*0.0283168) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from ImperialOunces.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from KilocubicMeters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromImperialOunces(double imperialounces)
-        {
-            double value = (double) imperialounces;
-            return new Volume(value*2.8413062499962901241875439064617e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromKilocubicMeters(Number<T, C> kilocubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) kilocubicmeters;
+				return new Volume<T, C>((value) * 1e3d);
+			}
 #else
-        public static Volume FromImperialOunces(QuantityValue imperialounces)
-        {
-            double value = (double) imperialounces;
-            return new Volume((value*2.8413062499962901241875439064617e-5));
-        }
+			public static Volume<T, C> FromKilocubicMeters(Number<T, C> kilocubicmeters)
+			{
+				Number<T,C> value = (Number<T,C>) kilocubicmeters;
+				return new Volume<T, C>(new Number<T,C>((value) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from KilocubicFeet.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from KiloimperialGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromKilocubicFeet(double kilocubicfeet)
-        {
-            double value = (double) kilocubicfeet;
-            return new Volume((value*0.0283168) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromKiloimperialGallons(Number<T, C> kiloimperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) kiloimperialgallons;
+				return new Volume<T, C>((value*0.00454609000000181429905810072407) * 1e3d);
+			}
 #else
-        public static Volume FromKilocubicFeet(QuantityValue kilocubicfeet)
-        {
-            double value = (double) kilocubicfeet;
-            return new Volume(((value*0.0283168) * 1e3d));
-        }
+			public static Volume<T, C> FromKiloimperialGallons(Number<T, C> kiloimperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) kiloimperialgallons;
+				return new Volume<T, C>(new Number<T,C>((value*0.00454609000000181429905810072407) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from KilocubicMeters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from KilousGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromKilocubicMeters(double kilocubicmeters)
-        {
-            double value = (double) kilocubicmeters;
-            return new Volume((value) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromKilousGallons(Number<T, C> kilousgallons)
+			{
+				Number<T,C> value = (Number<T,C>) kilousgallons;
+				return new Volume<T, C>((value*0.00378541) * 1e3d);
+			}
 #else
-        public static Volume FromKilocubicMeters(QuantityValue kilocubicmeters)
-        {
-            double value = (double) kilocubicmeters;
-            return new Volume(((value) * 1e3d));
-        }
+			public static Volume<T, C> FromKilousGallons(Number<T, C> kilousgallons)
+			{
+				Number<T,C> value = (Number<T,C>) kilousgallons;
+				return new Volume<T, C>(new Number<T,C>((value*0.00378541) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from KiloimperialGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Liters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromKiloimperialGallons(double kiloimperialgallons)
-        {
-            double value = (double) kiloimperialgallons;
-            return new Volume((value*0.00454609000000181429905810072407) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromLiters(Number<T, C> liters)
+			{
+				Number<T,C> value = (Number<T,C>) liters;
+				return new Volume<T, C>(value/1e3);
+			}
 #else
-        public static Volume FromKiloimperialGallons(QuantityValue kiloimperialgallons)
-        {
-            double value = (double) kiloimperialgallons;
-            return new Volume(((value*0.00454609000000181429905810072407) * 1e3d));
-        }
+			public static Volume<T, C> FromLiters(Number<T, C> liters)
+			{
+				Number<T,C> value = (Number<T,C>) liters;
+				return new Volume<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from KilousGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from MegacubicFeet.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromKilousGallons(double kilousgallons)
-        {
-            double value = (double) kilousgallons;
-            return new Volume((value*0.00378541) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMegacubicFeet(Number<T, C> megacubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) megacubicfeet;
+				return new Volume<T, C>((value*0.0283168) * 1e6d);
+			}
 #else
-        public static Volume FromKilousGallons(QuantityValue kilousgallons)
-        {
-            double value = (double) kilousgallons;
-            return new Volume(((value*0.00378541) * 1e3d));
-        }
+			public static Volume<T, C> FromMegacubicFeet(Number<T, C> megacubicfeet)
+			{
+				Number<T,C> value = (Number<T,C>) megacubicfeet;
+				return new Volume<T, C>(new Number<T,C>((value*0.0283168) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Liters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from MegaimperialGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromLiters(double liters)
-        {
-            double value = (double) liters;
-            return new Volume(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMegaimperialGallons(Number<T, C> megaimperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) megaimperialgallons;
+				return new Volume<T, C>((value*0.00454609000000181429905810072407) * 1e6d);
+			}
 #else
-        public static Volume FromLiters(QuantityValue liters)
-        {
-            double value = (double) liters;
-            return new Volume((value/1e3));
-        }
+			public static Volume<T, C> FromMegaimperialGallons(Number<T, C> megaimperialgallons)
+			{
+				Number<T,C> value = (Number<T,C>) megaimperialgallons;
+				return new Volume<T, C>(new Number<T,C>((value*0.00454609000000181429905810072407) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from MegacubicFeet.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from MegausGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMegacubicFeet(double megacubicfeet)
-        {
-            double value = (double) megacubicfeet;
-            return new Volume((value*0.0283168) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMegausGallons(Number<T, C> megausgallons)
+			{
+				Number<T,C> value = (Number<T,C>) megausgallons;
+				return new Volume<T, C>((value*0.00378541) * 1e6d);
+			}
 #else
-        public static Volume FromMegacubicFeet(QuantityValue megacubicfeet)
-        {
-            double value = (double) megacubicfeet;
-            return new Volume(((value*0.0283168) * 1e6d));
-        }
+			public static Volume<T, C> FromMegausGallons(Number<T, C> megausgallons)
+			{
+				Number<T,C> value = (Number<T,C>) megausgallons;
+				return new Volume<T, C>(new Number<T,C>((value*0.00378541) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from MegaimperialGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from MetricCups.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMegaimperialGallons(double megaimperialgallons)
-        {
-            double value = (double) megaimperialgallons;
-            return new Volume((value*0.00454609000000181429905810072407) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMetricCups(Number<T, C> metriccups)
+			{
+				Number<T,C> value = (Number<T,C>) metriccups;
+				return new Volume<T, C>(value*0.00025);
+			}
 #else
-        public static Volume FromMegaimperialGallons(QuantityValue megaimperialgallons)
-        {
-            double value = (double) megaimperialgallons;
-            return new Volume(((value*0.00454609000000181429905810072407) * 1e6d));
-        }
+			public static Volume<T, C> FromMetricCups(Number<T, C> metriccups)
+			{
+				Number<T,C> value = (Number<T,C>) metriccups;
+				return new Volume<T, C>(new Number<T,C>(value*0.00025));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from MegausGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from MetricTeaspoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMegausGallons(double megausgallons)
-        {
-            double value = (double) megausgallons;
-            return new Volume((value*0.00378541) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMetricTeaspoons(Number<T, C> metricteaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) metricteaspoons;
+				return new Volume<T, C>(value*0.5e-5);
+			}
 #else
-        public static Volume FromMegausGallons(QuantityValue megausgallons)
-        {
-            double value = (double) megausgallons;
-            return new Volume(((value*0.00378541) * 1e6d));
-        }
+			public static Volume<T, C> FromMetricTeaspoons(Number<T, C> metricteaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) metricteaspoons;
+				return new Volume<T, C>(new Number<T,C>(value*0.5e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from MetricCups.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Microliters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMetricCups(double metriccups)
-        {
-            double value = (double) metriccups;
-            return new Volume(value*0.00025);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMicroliters(Number<T, C> microliters)
+			{
+				Number<T,C> value = (Number<T,C>) microliters;
+				return new Volume<T, C>((value/1e3) * 1e-6d);
+			}
 #else
-        public static Volume FromMetricCups(QuantityValue metriccups)
-        {
-            double value = (double) metriccups;
-            return new Volume((value*0.00025));
-        }
+			public static Volume<T, C> FromMicroliters(Number<T, C> microliters)
+			{
+				Number<T,C> value = (Number<T,C>) microliters;
+				return new Volume<T, C>(new Number<T,C>((value/1e3) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from MetricTeaspoons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Milliliters.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMetricTeaspoons(double metricteaspoons)
-        {
-            double value = (double) metricteaspoons;
-            return new Volume(value*0.5e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromMilliliters(Number<T, C> milliliters)
+			{
+				Number<T,C> value = (Number<T,C>) milliliters;
+				return new Volume<T, C>((value/1e3) * 1e-3d);
+			}
 #else
-        public static Volume FromMetricTeaspoons(QuantityValue metricteaspoons)
-        {
-            double value = (double) metricteaspoons;
-            return new Volume((value*0.5e-5));
-        }
+			public static Volume<T, C> FromMilliliters(Number<T, C> milliliters)
+			{
+				Number<T,C> value = (Number<T,C>) milliliters;
+				return new Volume<T, C>(new Number<T,C>((value/1e3) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Microliters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from OilBarrels.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMicroliters(double microliters)
-        {
-            double value = (double) microliters;
-            return new Volume((value/1e3) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromOilBarrels(Number<T, C> oilbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) oilbarrels;
+				return new Volume<T, C>(value*0.158987294928);
+			}
 #else
-        public static Volume FromMicroliters(QuantityValue microliters)
-        {
-            double value = (double) microliters;
-            return new Volume(((value/1e3) * 1e-6d));
-        }
+			public static Volume<T, C> FromOilBarrels(Number<T, C> oilbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) oilbarrels;
+				return new Volume<T, C>(new Number<T,C>(value*0.158987294928));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Milliliters.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Tablespoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromMilliliters(double milliliters)
-        {
-            double value = (double) milliliters;
-            return new Volume((value/1e3) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromTablespoons(Number<T, C> tablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) tablespoons;
+				return new Volume<T, C>(value*1.478676478125e-5);
+			}
 #else
-        public static Volume FromMilliliters(QuantityValue milliliters)
-        {
-            double value = (double) milliliters;
-            return new Volume(((value/1e3) * 1e-3d));
-        }
+			public static Volume<T, C> FromTablespoons(Number<T, C> tablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) tablespoons;
+				return new Volume<T, C>(new Number<T,C>(value*1.478676478125e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from OilBarrels.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from Teaspoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromOilBarrels(double oilbarrels)
-        {
-            double value = (double) oilbarrels;
-            return new Volume(value*0.158987294928);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromTeaspoons(Number<T, C> teaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) teaspoons;
+				return new Volume<T, C>(value*4.92892159375e-6);
+			}
 #else
-        public static Volume FromOilBarrels(QuantityValue oilbarrels)
-        {
-            double value = (double) oilbarrels;
-            return new Volume((value*0.158987294928));
-        }
+			public static Volume<T, C> FromTeaspoons(Number<T, C> teaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) teaspoons;
+				return new Volume<T, C>(new Number<T,C>(value*4.92892159375e-6));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Tablespoons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UkTablespoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromTablespoons(double tablespoons)
-        {
-            double value = (double) tablespoons;
-            return new Volume(value*1.478676478125e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUkTablespoons(Number<T, C> uktablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) uktablespoons;
+				return new Volume<T, C>(value*1.5e-5);
+			}
 #else
-        public static Volume FromTablespoons(QuantityValue tablespoons)
-        {
-            double value = (double) tablespoons;
-            return new Volume((value*1.478676478125e-5));
-        }
+			public static Volume<T, C> FromUkTablespoons(Number<T, C> uktablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) uktablespoons;
+				return new Volume<T, C>(new Number<T,C>(value*1.5e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from Teaspoons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsBeerBarrels.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromTeaspoons(double teaspoons)
-        {
-            double value = (double) teaspoons;
-            return new Volume(value*4.92892159375e-6);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsBeerBarrels(Number<T, C> usbeerbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) usbeerbarrels;
+				return new Volume<T, C>(value*0.1173477658);
+			}
 #else
-        public static Volume FromTeaspoons(QuantityValue teaspoons)
-        {
-            double value = (double) teaspoons;
-            return new Volume((value*4.92892159375e-6));
-        }
+			public static Volume<T, C> FromUsBeerBarrels(Number<T, C> usbeerbarrels)
+			{
+				Number<T,C> value = (Number<T,C>) usbeerbarrels;
+				return new Volume<T, C>(new Number<T,C>(value*0.1173477658));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UkTablespoons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsCustomaryCups.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUkTablespoons(double uktablespoons)
-        {
-            double value = (double) uktablespoons;
-            return new Volume(value*1.5e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsCustomaryCups(Number<T, C> uscustomarycups)
+			{
+				Number<T,C> value = (Number<T,C>) uscustomarycups;
+				return new Volume<T, C>(value*0.0002365882365);
+			}
 #else
-        public static Volume FromUkTablespoons(QuantityValue uktablespoons)
-        {
-            double value = (double) uktablespoons;
-            return new Volume((value*1.5e-5));
-        }
+			public static Volume<T, C> FromUsCustomaryCups(Number<T, C> uscustomarycups)
+			{
+				Number<T,C> value = (Number<T,C>) uscustomarycups;
+				return new Volume<T, C>(new Number<T,C>(value*0.0002365882365));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsBeerBarrels.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsGallons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsBeerBarrels(double usbeerbarrels)
-        {
-            double value = (double) usbeerbarrels;
-            return new Volume(value*0.1173477658);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsGallons(Number<T, C> usgallons)
+			{
+				Number<T,C> value = (Number<T,C>) usgallons;
+				return new Volume<T, C>(value*0.00378541);
+			}
 #else
-        public static Volume FromUsBeerBarrels(QuantityValue usbeerbarrels)
-        {
-            double value = (double) usbeerbarrels;
-            return new Volume((value*0.1173477658));
-        }
+			public static Volume<T, C> FromUsGallons(Number<T, C> usgallons)
+			{
+				Number<T,C> value = (Number<T,C>) usgallons;
+				return new Volume<T, C>(new Number<T,C>(value*0.00378541));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsCustomaryCups.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsLegalCups.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsCustomaryCups(double uscustomarycups)
-        {
-            double value = (double) uscustomarycups;
-            return new Volume(value*0.0002365882365);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsLegalCups(Number<T, C> uslegalcups)
+			{
+				Number<T,C> value = (Number<T,C>) uslegalcups;
+				return new Volume<T, C>(value*0.00024);
+			}
 #else
-        public static Volume FromUsCustomaryCups(QuantityValue uscustomarycups)
-        {
-            double value = (double) uscustomarycups;
-            return new Volume((value*0.0002365882365));
-        }
+			public static Volume<T, C> FromUsLegalCups(Number<T, C> uslegalcups)
+			{
+				Number<T,C> value = (Number<T,C>) uslegalcups;
+				return new Volume<T, C>(new Number<T,C>(value*0.00024));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsGallons.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsOunces.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsGallons(double usgallons)
-        {
-            double value = (double) usgallons;
-            return new Volume(value*0.00378541);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsOunces(Number<T, C> usounces)
+			{
+				Number<T,C> value = (Number<T,C>) usounces;
+				return new Volume<T, C>(value*2.957352956253760505068307980135e-5);
+			}
 #else
-        public static Volume FromUsGallons(QuantityValue usgallons)
-        {
-            double value = (double) usgallons;
-            return new Volume((value*0.00378541));
-        }
+			public static Volume<T, C> FromUsOunces(Number<T, C> usounces)
+			{
+				Number<T,C> value = (Number<T,C>) usounces;
+				return new Volume<T, C>(new Number<T,C>(value*2.957352956253760505068307980135e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsLegalCups.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsTablespoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsLegalCups(double uslegalcups)
-        {
-            double value = (double) uslegalcups;
-            return new Volume(value*0.00024);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsTablespoons(Number<T, C> ustablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) ustablespoons;
+				return new Volume<T, C>(value*1.478676478125e-5);
+			}
 #else
-        public static Volume FromUsLegalCups(QuantityValue uslegalcups)
-        {
-            double value = (double) uslegalcups;
-            return new Volume((value*0.00024));
-        }
+			public static Volume<T, C> FromUsTablespoons(Number<T, C> ustablespoons)
+			{
+				Number<T,C> value = (Number<T,C>) ustablespoons;
+				return new Volume<T, C>(new Number<T,C>(value*1.478676478125e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsOunces.
-        /// </summary>
+			/// <summary>
+			///     Get Volume from UsTeaspoons.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsOunces(double usounces)
-        {
-            double value = (double) usounces;
-            return new Volume(value*2.957352956253760505068307980135e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Volume<T, C> FromUsTeaspoons(Number<T, C> usteaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) usteaspoons;
+				return new Volume<T, C>(value*4.92892159375e-6);
+			}
 #else
-        public static Volume FromUsOunces(QuantityValue usounces)
-        {
-            double value = (double) usounces;
-            return new Volume((value*2.957352956253760505068307980135e-5));
-        }
+			public static Volume<T, C> FromUsTeaspoons(Number<T, C> usteaspoons)
+			{
+				Number<T,C> value = (Number<T,C>) usteaspoons;
+				return new Volume<T, C>(new Number<T,C>(value*4.92892159375e-6));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Volume from UsTablespoons.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="VolumeUnit" /> to <see cref="Volume" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>Volume unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsTablespoons(double ustablespoons)
-        {
-            double value = (double) ustablespoons;
-            return new Volume(value*1.478676478125e-5);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static Volume<T, C> From(double value, VolumeUnit fromUnit)
 #else
-        public static Volume FromUsTablespoons(QuantityValue ustablespoons)
-        {
-            double value = (double) ustablespoons;
-            return new Volume((value*1.478676478125e-5));
-        }
+			public static Volume<T, C> From(Number<T, C> value, VolumeUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case VolumeUnit.AuTablespoon:
+						return FromAuTablespoons(value);
+					case VolumeUnit.Centiliter:
+						return FromCentiliters(value);
+					case VolumeUnit.CubicCentimeter:
+						return FromCubicCentimeters(value);
+					case VolumeUnit.CubicDecimeter:
+						return FromCubicDecimeters(value);
+					case VolumeUnit.CubicFoot:
+						return FromCubicFeet(value);
+					case VolumeUnit.CubicInch:
+						return FromCubicInches(value);
+					case VolumeUnit.CubicKilometer:
+						return FromCubicKilometers(value);
+					case VolumeUnit.CubicMeter:
+						return FromCubicMeters(value);
+					case VolumeUnit.CubicMicrometer:
+						return FromCubicMicrometers(value);
+					case VolumeUnit.CubicMile:
+						return FromCubicMiles(value);
+					case VolumeUnit.CubicMillimeter:
+						return FromCubicMillimeters(value);
+					case VolumeUnit.CubicYard:
+						return FromCubicYards(value);
+					case VolumeUnit.Deciliter:
+						return FromDeciliters(value);
+					case VolumeUnit.HectocubicFoot:
+						return FromHectocubicFeet(value);
+					case VolumeUnit.HectocubicMeter:
+						return FromHectocubicMeters(value);
+					case VolumeUnit.Hectoliter:
+						return FromHectoliters(value);
+					case VolumeUnit.ImperialBeerBarrel:
+						return FromImperialBeerBarrels(value);
+					case VolumeUnit.ImperialGallon:
+						return FromImperialGallons(value);
+					case VolumeUnit.ImperialOunce:
+						return FromImperialOunces(value);
+					case VolumeUnit.KilocubicFoot:
+						return FromKilocubicFeet(value);
+					case VolumeUnit.KilocubicMeter:
+						return FromKilocubicMeters(value);
+					case VolumeUnit.KiloimperialGallon:
+						return FromKiloimperialGallons(value);
+					case VolumeUnit.KilousGallon:
+						return FromKilousGallons(value);
+					case VolumeUnit.Liter:
+						return FromLiters(value);
+					case VolumeUnit.MegacubicFoot:
+						return FromMegacubicFeet(value);
+					case VolumeUnit.MegaimperialGallon:
+						return FromMegaimperialGallons(value);
+					case VolumeUnit.MegausGallon:
+						return FromMegausGallons(value);
+					case VolumeUnit.MetricCup:
+						return FromMetricCups(value);
+					case VolumeUnit.MetricTeaspoon:
+						return FromMetricTeaspoons(value);
+					case VolumeUnit.Microliter:
+						return FromMicroliters(value);
+					case VolumeUnit.Milliliter:
+						return FromMilliliters(value);
+					case VolumeUnit.OilBarrel:
+						return FromOilBarrels(value);
+					case VolumeUnit.Tablespoon:
+						return FromTablespoons(value);
+					case VolumeUnit.Teaspoon:
+						return FromTeaspoons(value);
+					case VolumeUnit.UkTablespoon:
+						return FromUkTablespoons(value);
+					case VolumeUnit.UsBeerBarrel:
+						return FromUsBeerBarrels(value);
+					case VolumeUnit.UsCustomaryCup:
+						return FromUsCustomaryCups(value);
+					case VolumeUnit.UsGallon:
+						return FromUsGallons(value);
+					case VolumeUnit.UsLegalCup:
+						return FromUsLegalCups(value);
+					case VolumeUnit.UsOunce:
+						return FromUsOunces(value);
+					case VolumeUnit.UsTablespoon:
+						return FromUsTablespoons(value);
+					case VolumeUnit.UsTeaspoon:
+						return FromUsTeaspoons(value);
 
-        /// <summary>
-        ///     Get Volume from UsTeaspoons.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Volume FromUsTeaspoons(double usteaspoons)
-        {
-            double value = (double) usteaspoons;
-            return new Volume(value*4.92892159375e-6);
-        }
-#else
-        public static Volume FromUsTeaspoons(QuantityValue usteaspoons)
-        {
-            double value = (double) usteaspoons;
-            return new Volume((value*4.92892159375e-6));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(VolumeUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(VolumeUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable Volume from nullable AuTablespoons.
-        /// </summary>
-        public static Volume? FromAuTablespoons(QuantityValue? autablespoons)
-        {
-            if (autablespoons.HasValue)
-            {
-                return FromAuTablespoons(autablespoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator -(Volume<T, C> right)
+			{
+				return new Volume<T, C>(-right._cubicMeters);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable Centiliters.
-        /// </summary>
-        public static Volume? FromCentiliters(QuantityValue? centiliters)
-        {
-            if (centiliters.HasValue)
-            {
-                return FromCentiliters(centiliters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator +(Volume<T, C> left, Volume<T, C> right)
+			{
+				return new Volume<T, C>(left._cubicMeters + right._cubicMeters);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicCentimeters.
-        /// </summary>
-        public static Volume? FromCubicCentimeters(QuantityValue? cubiccentimeters)
-        {
-            if (cubiccentimeters.HasValue)
-            {
-                return FromCubicCentimeters(cubiccentimeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator -(Volume<T, C> left, Volume<T, C> right)
+			{
+				return new Volume<T, C>(left._cubicMeters - right._cubicMeters);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicDecimeters.
-        /// </summary>
-        public static Volume? FromCubicDecimeters(QuantityValue? cubicdecimeters)
-        {
-            if (cubicdecimeters.HasValue)
-            {
-                return FromCubicDecimeters(cubicdecimeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator *(Number<T, C> left, Volume<T, C> right)
+			{
+				return new Volume<T, C>(left*right._cubicMeters);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicFeet.
-        /// </summary>
-        public static Volume? FromCubicFeet(QuantityValue? cubicfeet)
-        {
-            if (cubicfeet.HasValue)
-            {
-                return FromCubicFeet(cubicfeet.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator *(Volume<T, C> left, double right)
+			{
+				return new Volume<T, C>(left._cubicMeters*right);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicInches.
-        /// </summary>
-        public static Volume? FromCubicInches(QuantityValue? cubicinches)
-        {
-            if (cubicinches.HasValue)
-            {
-                return FromCubicInches(cubicinches.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Volume<T, C> operator /(Volume<T, C> left, double right)
+			{
+				return new Volume<T, C>(left._cubicMeters/right);
+			}
 
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicKilometers.
-        /// </summary>
-        public static Volume? FromCubicKilometers(QuantityValue? cubickilometers)
-        {
-            if (cubickilometers.HasValue)
-            {
-                return FromCubicKilometers(cubickilometers.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicMeters.
-        /// </summary>
-        public static Volume? FromCubicMeters(QuantityValue? cubicmeters)
-        {
-            if (cubicmeters.HasValue)
-            {
-                return FromCubicMeters(cubicmeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicMicrometers.
-        /// </summary>
-        public static Volume? FromCubicMicrometers(QuantityValue? cubicmicrometers)
-        {
-            if (cubicmicrometers.HasValue)
-            {
-                return FromCubicMicrometers(cubicmicrometers.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicMiles.
-        /// </summary>
-        public static Volume? FromCubicMiles(QuantityValue? cubicmiles)
-        {
-            if (cubicmiles.HasValue)
-            {
-                return FromCubicMiles(cubicmiles.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicMillimeters.
-        /// </summary>
-        public static Volume? FromCubicMillimeters(QuantityValue? cubicmillimeters)
-        {
-            if (cubicmillimeters.HasValue)
-            {
-                return FromCubicMillimeters(cubicmillimeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable CubicYards.
-        /// </summary>
-        public static Volume? FromCubicYards(QuantityValue? cubicyards)
-        {
-            if (cubicyards.HasValue)
-            {
-                return FromCubicYards(cubicyards.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Deciliters.
-        /// </summary>
-        public static Volume? FromDeciliters(QuantityValue? deciliters)
-        {
-            if (deciliters.HasValue)
-            {
-                return FromDeciliters(deciliters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable HectocubicFeet.
-        /// </summary>
-        public static Volume? FromHectocubicFeet(QuantityValue? hectocubicfeet)
-        {
-            if (hectocubicfeet.HasValue)
-            {
-                return FromHectocubicFeet(hectocubicfeet.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable HectocubicMeters.
-        /// </summary>
-        public static Volume? FromHectocubicMeters(QuantityValue? hectocubicmeters)
-        {
-            if (hectocubicmeters.HasValue)
-            {
-                return FromHectocubicMeters(hectocubicmeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Hectoliters.
-        /// </summary>
-        public static Volume? FromHectoliters(QuantityValue? hectoliters)
-        {
-            if (hectoliters.HasValue)
-            {
-                return FromHectoliters(hectoliters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable ImperialBeerBarrels.
-        /// </summary>
-        public static Volume? FromImperialBeerBarrels(QuantityValue? imperialbeerbarrels)
-        {
-            if (imperialbeerbarrels.HasValue)
-            {
-                return FromImperialBeerBarrels(imperialbeerbarrels.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable ImperialGallons.
-        /// </summary>
-        public static Volume? FromImperialGallons(QuantityValue? imperialgallons)
-        {
-            if (imperialgallons.HasValue)
-            {
-                return FromImperialGallons(imperialgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable ImperialOunces.
-        /// </summary>
-        public static Volume? FromImperialOunces(QuantityValue? imperialounces)
-        {
-            if (imperialounces.HasValue)
-            {
-                return FromImperialOunces(imperialounces.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable KilocubicFeet.
-        /// </summary>
-        public static Volume? FromKilocubicFeet(QuantityValue? kilocubicfeet)
-        {
-            if (kilocubicfeet.HasValue)
-            {
-                return FromKilocubicFeet(kilocubicfeet.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable KilocubicMeters.
-        /// </summary>
-        public static Volume? FromKilocubicMeters(QuantityValue? kilocubicmeters)
-        {
-            if (kilocubicmeters.HasValue)
-            {
-                return FromKilocubicMeters(kilocubicmeters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable KiloimperialGallons.
-        /// </summary>
-        public static Volume? FromKiloimperialGallons(QuantityValue? kiloimperialgallons)
-        {
-            if (kiloimperialgallons.HasValue)
-            {
-                return FromKiloimperialGallons(kiloimperialgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable KilousGallons.
-        /// </summary>
-        public static Volume? FromKilousGallons(QuantityValue? kilousgallons)
-        {
-            if (kilousgallons.HasValue)
-            {
-                return FromKilousGallons(kilousgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Liters.
-        /// </summary>
-        public static Volume? FromLiters(QuantityValue? liters)
-        {
-            if (liters.HasValue)
-            {
-                return FromLiters(liters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable MegacubicFeet.
-        /// </summary>
-        public static Volume? FromMegacubicFeet(QuantityValue? megacubicfeet)
-        {
-            if (megacubicfeet.HasValue)
-            {
-                return FromMegacubicFeet(megacubicfeet.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable MegaimperialGallons.
-        /// </summary>
-        public static Volume? FromMegaimperialGallons(QuantityValue? megaimperialgallons)
-        {
-            if (megaimperialgallons.HasValue)
-            {
-                return FromMegaimperialGallons(megaimperialgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable MegausGallons.
-        /// </summary>
-        public static Volume? FromMegausGallons(QuantityValue? megausgallons)
-        {
-            if (megausgallons.HasValue)
-            {
-                return FromMegausGallons(megausgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable MetricCups.
-        /// </summary>
-        public static Volume? FromMetricCups(QuantityValue? metriccups)
-        {
-            if (metriccups.HasValue)
-            {
-                return FromMetricCups(metriccups.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable MetricTeaspoons.
-        /// </summary>
-        public static Volume? FromMetricTeaspoons(QuantityValue? metricteaspoons)
-        {
-            if (metricteaspoons.HasValue)
-            {
-                return FromMetricTeaspoons(metricteaspoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Microliters.
-        /// </summary>
-        public static Volume? FromMicroliters(QuantityValue? microliters)
-        {
-            if (microliters.HasValue)
-            {
-                return FromMicroliters(microliters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Milliliters.
-        /// </summary>
-        public static Volume? FromMilliliters(QuantityValue? milliliters)
-        {
-            if (milliliters.HasValue)
-            {
-                return FromMilliliters(milliliters.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable OilBarrels.
-        /// </summary>
-        public static Volume? FromOilBarrels(QuantityValue? oilbarrels)
-        {
-            if (oilbarrels.HasValue)
-            {
-                return FromOilBarrels(oilbarrels.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Tablespoons.
-        /// </summary>
-        public static Volume? FromTablespoons(QuantityValue? tablespoons)
-        {
-            if (tablespoons.HasValue)
-            {
-                return FromTablespoons(tablespoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable Teaspoons.
-        /// </summary>
-        public static Volume? FromTeaspoons(QuantityValue? teaspoons)
-        {
-            if (teaspoons.HasValue)
-            {
-                return FromTeaspoons(teaspoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UkTablespoons.
-        /// </summary>
-        public static Volume? FromUkTablespoons(QuantityValue? uktablespoons)
-        {
-            if (uktablespoons.HasValue)
-            {
-                return FromUkTablespoons(uktablespoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsBeerBarrels.
-        /// </summary>
-        public static Volume? FromUsBeerBarrels(QuantityValue? usbeerbarrels)
-        {
-            if (usbeerbarrels.HasValue)
-            {
-                return FromUsBeerBarrels(usbeerbarrels.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsCustomaryCups.
-        /// </summary>
-        public static Volume? FromUsCustomaryCups(QuantityValue? uscustomarycups)
-        {
-            if (uscustomarycups.HasValue)
-            {
-                return FromUsCustomaryCups(uscustomarycups.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsGallons.
-        /// </summary>
-        public static Volume? FromUsGallons(QuantityValue? usgallons)
-        {
-            if (usgallons.HasValue)
-            {
-                return FromUsGallons(usgallons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsLegalCups.
-        /// </summary>
-        public static Volume? FromUsLegalCups(QuantityValue? uslegalcups)
-        {
-            if (uslegalcups.HasValue)
-            {
-                return FromUsLegalCups(uslegalcups.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsOunces.
-        /// </summary>
-        public static Volume? FromUsOunces(QuantityValue? usounces)
-        {
-            if (usounces.HasValue)
-            {
-                return FromUsOunces(usounces.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsTablespoons.
-        /// </summary>
-        public static Volume? FromUsTablespoons(QuantityValue? ustablespoons)
-        {
-            if (ustablespoons.HasValue)
-            {
-                return FromUsTablespoons(ustablespoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Volume from nullable UsTeaspoons.
-        /// </summary>
-        public static Volume? FromUsTeaspoons(QuantityValue? usteaspoons)
-        {
-            if (usteaspoons.HasValue)
-            {
-                return FromUsTeaspoons(usteaspoons.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(Volume<T, C> left, Volume<T, C> right)
+			{
+				return Convert.ToDouble(left._cubicMeters/right._cubicMeters);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="VolumeUnit" /> to <see cref="Volume" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Volume unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is Volume<T, C>)) throw new ArgumentException("Expected type Volume.", "obj");
+				return CompareTo((Volume<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static Volume From(double value, VolumeUnit fromUnit)
+			internal
 #else
-        public static Volume From(QuantityValue value, VolumeUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case VolumeUnit.AuTablespoon:
-                    return FromAuTablespoons(value);
-                case VolumeUnit.Centiliter:
-                    return FromCentiliters(value);
-                case VolumeUnit.CubicCentimeter:
-                    return FromCubicCentimeters(value);
-                case VolumeUnit.CubicDecimeter:
-                    return FromCubicDecimeters(value);
-                case VolumeUnit.CubicFoot:
-                    return FromCubicFeet(value);
-                case VolumeUnit.CubicInch:
-                    return FromCubicInches(value);
-                case VolumeUnit.CubicKilometer:
-                    return FromCubicKilometers(value);
-                case VolumeUnit.CubicMeter:
-                    return FromCubicMeters(value);
-                case VolumeUnit.CubicMicrometer:
-                    return FromCubicMicrometers(value);
-                case VolumeUnit.CubicMile:
-                    return FromCubicMiles(value);
-                case VolumeUnit.CubicMillimeter:
-                    return FromCubicMillimeters(value);
-                case VolumeUnit.CubicYard:
-                    return FromCubicYards(value);
-                case VolumeUnit.Deciliter:
-                    return FromDeciliters(value);
-                case VolumeUnit.HectocubicFoot:
-                    return FromHectocubicFeet(value);
-                case VolumeUnit.HectocubicMeter:
-                    return FromHectocubicMeters(value);
-                case VolumeUnit.Hectoliter:
-                    return FromHectoliters(value);
-                case VolumeUnit.ImperialBeerBarrel:
-                    return FromImperialBeerBarrels(value);
-                case VolumeUnit.ImperialGallon:
-                    return FromImperialGallons(value);
-                case VolumeUnit.ImperialOunce:
-                    return FromImperialOunces(value);
-                case VolumeUnit.KilocubicFoot:
-                    return FromKilocubicFeet(value);
-                case VolumeUnit.KilocubicMeter:
-                    return FromKilocubicMeters(value);
-                case VolumeUnit.KiloimperialGallon:
-                    return FromKiloimperialGallons(value);
-                case VolumeUnit.KilousGallon:
-                    return FromKilousGallons(value);
-                case VolumeUnit.Liter:
-                    return FromLiters(value);
-                case VolumeUnit.MegacubicFoot:
-                    return FromMegacubicFeet(value);
-                case VolumeUnit.MegaimperialGallon:
-                    return FromMegaimperialGallons(value);
-                case VolumeUnit.MegausGallon:
-                    return FromMegausGallons(value);
-                case VolumeUnit.MetricCup:
-                    return FromMetricCups(value);
-                case VolumeUnit.MetricTeaspoon:
-                    return FromMetricTeaspoons(value);
-                case VolumeUnit.Microliter:
-                    return FromMicroliters(value);
-                case VolumeUnit.Milliliter:
-                    return FromMilliliters(value);
-                case VolumeUnit.OilBarrel:
-                    return FromOilBarrels(value);
-                case VolumeUnit.Tablespoon:
-                    return FromTablespoons(value);
-                case VolumeUnit.Teaspoon:
-                    return FromTeaspoons(value);
-                case VolumeUnit.UkTablespoon:
-                    return FromUkTablespoons(value);
-                case VolumeUnit.UsBeerBarrel:
-                    return FromUsBeerBarrels(value);
-                case VolumeUnit.UsCustomaryCup:
-                    return FromUsCustomaryCups(value);
-                case VolumeUnit.UsGallon:
-                    return FromUsGallons(value);
-                case VolumeUnit.UsLegalCup:
-                    return FromUsLegalCups(value);
-                case VolumeUnit.UsOunce:
-                    return FromUsOunces(value);
-                case VolumeUnit.UsTablespoon:
-                    return FromUsTablespoons(value);
-                case VolumeUnit.UsTeaspoon:
-                    return FromUsTeaspoons(value);
+			int CompareTo(Volume<T, C> other)
+			{
+				return _cubicMeters.CompareTo(other._cubicMeters);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="VolumeUnit" /> to <see cref="Volume" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Volume unit value.</returns>
-        public static Volume? From(QuantityValue? value, VolumeUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case VolumeUnit.AuTablespoon:
-                    return FromAuTablespoons(value.Value);
-                case VolumeUnit.Centiliter:
-                    return FromCentiliters(value.Value);
-                case VolumeUnit.CubicCentimeter:
-                    return FromCubicCentimeters(value.Value);
-                case VolumeUnit.CubicDecimeter:
-                    return FromCubicDecimeters(value.Value);
-                case VolumeUnit.CubicFoot:
-                    return FromCubicFeet(value.Value);
-                case VolumeUnit.CubicInch:
-                    return FromCubicInches(value.Value);
-                case VolumeUnit.CubicKilometer:
-                    return FromCubicKilometers(value.Value);
-                case VolumeUnit.CubicMeter:
-                    return FromCubicMeters(value.Value);
-                case VolumeUnit.CubicMicrometer:
-                    return FromCubicMicrometers(value.Value);
-                case VolumeUnit.CubicMile:
-                    return FromCubicMiles(value.Value);
-                case VolumeUnit.CubicMillimeter:
-                    return FromCubicMillimeters(value.Value);
-                case VolumeUnit.CubicYard:
-                    return FromCubicYards(value.Value);
-                case VolumeUnit.Deciliter:
-                    return FromDeciliters(value.Value);
-                case VolumeUnit.HectocubicFoot:
-                    return FromHectocubicFeet(value.Value);
-                case VolumeUnit.HectocubicMeter:
-                    return FromHectocubicMeters(value.Value);
-                case VolumeUnit.Hectoliter:
-                    return FromHectoliters(value.Value);
-                case VolumeUnit.ImperialBeerBarrel:
-                    return FromImperialBeerBarrels(value.Value);
-                case VolumeUnit.ImperialGallon:
-                    return FromImperialGallons(value.Value);
-                case VolumeUnit.ImperialOunce:
-                    return FromImperialOunces(value.Value);
-                case VolumeUnit.KilocubicFoot:
-                    return FromKilocubicFeet(value.Value);
-                case VolumeUnit.KilocubicMeter:
-                    return FromKilocubicMeters(value.Value);
-                case VolumeUnit.KiloimperialGallon:
-                    return FromKiloimperialGallons(value.Value);
-                case VolumeUnit.KilousGallon:
-                    return FromKilousGallons(value.Value);
-                case VolumeUnit.Liter:
-                    return FromLiters(value.Value);
-                case VolumeUnit.MegacubicFoot:
-                    return FromMegacubicFeet(value.Value);
-                case VolumeUnit.MegaimperialGallon:
-                    return FromMegaimperialGallons(value.Value);
-                case VolumeUnit.MegausGallon:
-                    return FromMegausGallons(value.Value);
-                case VolumeUnit.MetricCup:
-                    return FromMetricCups(value.Value);
-                case VolumeUnit.MetricTeaspoon:
-                    return FromMetricTeaspoons(value.Value);
-                case VolumeUnit.Microliter:
-                    return FromMicroliters(value.Value);
-                case VolumeUnit.Milliliter:
-                    return FromMilliliters(value.Value);
-                case VolumeUnit.OilBarrel:
-                    return FromOilBarrels(value.Value);
-                case VolumeUnit.Tablespoon:
-                    return FromTablespoons(value.Value);
-                case VolumeUnit.Teaspoon:
-                    return FromTeaspoons(value.Value);
-                case VolumeUnit.UkTablespoon:
-                    return FromUkTablespoons(value.Value);
-                case VolumeUnit.UsBeerBarrel:
-                    return FromUsBeerBarrels(value.Value);
-                case VolumeUnit.UsCustomaryCup:
-                    return FromUsCustomaryCups(value.Value);
-                case VolumeUnit.UsGallon:
-                    return FromUsGallons(value.Value);
-                case VolumeUnit.UsLegalCup:
-                    return FromUsLegalCups(value.Value);
-                case VolumeUnit.UsOunce:
-                    return FromUsOunces(value.Value);
-                case VolumeUnit.UsTablespoon:
-                    return FromUsTablespoons(value.Value);
-                case VolumeUnit.UsTeaspoon:
-                    return FromUsTeaspoons(value.Value);
+			public static bool operator <=(Volume<T, C> left, Volume<T, C> right)
+			{
+				return left._cubicMeters <= right._cubicMeters;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(Volume<T, C> left, Volume<T, C> right)
+			{
+				return left._cubicMeters >= right._cubicMeters;
+			}
+
+			public static bool operator <(Volume<T, C> left, Volume<T, C> right)
+			{
+				return left._cubicMeters < right._cubicMeters;
+			}
+
+			public static bool operator >(Volume<T, C> left, Volume<T, C> right)
+			{
+				return left._cubicMeters > right._cubicMeters;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(Volume<T, C> left, Volume<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._cubicMeters == right._cubicMeters;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(Volume<T, C> left, Volume<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._cubicMeters != right._cubicMeters;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(VolumeUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(VolumeUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static Volume operator -(Volume right)
-        {
-            return new Volume(-right._cubicMeters);
-        }
-
-        public static Volume operator +(Volume left, Volume right)
-        {
-            return new Volume(left._cubicMeters + right._cubicMeters);
-        }
-
-        public static Volume operator -(Volume left, Volume right)
-        {
-            return new Volume(left._cubicMeters - right._cubicMeters);
-        }
-
-        public static Volume operator *(double left, Volume right)
-        {
-            return new Volume(left*right._cubicMeters);
-        }
-
-        public static Volume operator *(Volume left, double right)
-        {
-            return new Volume(left._cubicMeters*(double)right);
-        }
-
-        public static Volume operator /(Volume left, double right)
-        {
-            return new Volume(left._cubicMeters/(double)right);
-        }
-
-        public static double operator /(Volume left, Volume right)
-        {
-            return Convert.ToDouble(left._cubicMeters/right._cubicMeters);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is Volume)) throw new ArgumentException("Expected type Volume.", "obj");
-            return CompareTo((Volume) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(Volume other)
-        {
-            return _cubicMeters.CompareTo(other._cubicMeters);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(Volume left, Volume right)
-        {
-            return left._cubicMeters <= right._cubicMeters;
-        }
-
-        public static bool operator >=(Volume left, Volume right)
-        {
-            return left._cubicMeters >= right._cubicMeters;
-        }
-
-        public static bool operator <(Volume left, Volume right)
-        {
-            return left._cubicMeters < right._cubicMeters;
-        }
-
-        public static bool operator >(Volume left, Volume right)
-        {
-            return left._cubicMeters > right._cubicMeters;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(Volume left, Volume right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._cubicMeters == right._cubicMeters;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(Volume left, Volume right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._cubicMeters != right._cubicMeters;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _cubicMeters.Equals(((Volume) obj)._cubicMeters);
-        }
+				return _cubicMeters.Equals(((Volume<T, C>) obj)._cubicMeters);
+			}
 
-        /// <summary>
-        ///     Compare equality to another Volume by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(Volume other, Volume maxError)
-        {
-            return Math.Abs(_cubicMeters - other._cubicMeters) <= maxError._cubicMeters;
-        }
+			/// <summary>
+			///     Compare equality to another Volume by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(Volume<T, C> other, Volume<T, C> maxError)
+			{
+				return Math.Abs((decimal)_cubicMeters - (decimal)other._cubicMeters) <= maxError._cubicMeters;
+			}
 
-        public override int GetHashCode()
-        {
-            return _cubicMeters.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _cubicMeters.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(VolumeUnit unit)
-        {
-            switch (unit)
-            {
-                case VolumeUnit.AuTablespoon:
-                    return AuTablespoons;
-                case VolumeUnit.Centiliter:
-                    return Centiliters;
-                case VolumeUnit.CubicCentimeter:
-                    return CubicCentimeters;
-                case VolumeUnit.CubicDecimeter:
-                    return CubicDecimeters;
-                case VolumeUnit.CubicFoot:
-                    return CubicFeet;
-                case VolumeUnit.CubicInch:
-                    return CubicInches;
-                case VolumeUnit.CubicKilometer:
-                    return CubicKilometers;
-                case VolumeUnit.CubicMeter:
-                    return CubicMeters;
-                case VolumeUnit.CubicMicrometer:
-                    return CubicMicrometers;
-                case VolumeUnit.CubicMile:
-                    return CubicMiles;
-                case VolumeUnit.CubicMillimeter:
-                    return CubicMillimeters;
-                case VolumeUnit.CubicYard:
-                    return CubicYards;
-                case VolumeUnit.Deciliter:
-                    return Deciliters;
-                case VolumeUnit.HectocubicFoot:
-                    return HectocubicFeet;
-                case VolumeUnit.HectocubicMeter:
-                    return HectocubicMeters;
-                case VolumeUnit.Hectoliter:
-                    return Hectoliters;
-                case VolumeUnit.ImperialBeerBarrel:
-                    return ImperialBeerBarrels;
-                case VolumeUnit.ImperialGallon:
-                    return ImperialGallons;
-                case VolumeUnit.ImperialOunce:
-                    return ImperialOunces;
-                case VolumeUnit.KilocubicFoot:
-                    return KilocubicFeet;
-                case VolumeUnit.KilocubicMeter:
-                    return KilocubicMeters;
-                case VolumeUnit.KiloimperialGallon:
-                    return KiloimperialGallons;
-                case VolumeUnit.KilousGallon:
-                    return KilousGallons;
-                case VolumeUnit.Liter:
-                    return Liters;
-                case VolumeUnit.MegacubicFoot:
-                    return MegacubicFeet;
-                case VolumeUnit.MegaimperialGallon:
-                    return MegaimperialGallons;
-                case VolumeUnit.MegausGallon:
-                    return MegausGallons;
-                case VolumeUnit.MetricCup:
-                    return MetricCups;
-                case VolumeUnit.MetricTeaspoon:
-                    return MetricTeaspoons;
-                case VolumeUnit.Microliter:
-                    return Microliters;
-                case VolumeUnit.Milliliter:
-                    return Milliliters;
-                case VolumeUnit.OilBarrel:
-                    return OilBarrels;
-                case VolumeUnit.Tablespoon:
-                    return Tablespoons;
-                case VolumeUnit.Teaspoon:
-                    return Teaspoons;
-                case VolumeUnit.UkTablespoon:
-                    return UkTablespoons;
-                case VolumeUnit.UsBeerBarrel:
-                    return UsBeerBarrels;
-                case VolumeUnit.UsCustomaryCup:
-                    return UsCustomaryCups;
-                case VolumeUnit.UsGallon:
-                    return UsGallons;
-                case VolumeUnit.UsLegalCup:
-                    return UsLegalCups;
-                case VolumeUnit.UsOunce:
-                    return UsOunces;
-                case VolumeUnit.UsTablespoon:
-                    return UsTablespoons;
-                case VolumeUnit.UsTeaspoon:
-                    return UsTeaspoons;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(VolumeUnit unit)
+			{
+				switch (unit)
+				{
+					case VolumeUnit.AuTablespoon:
+						return AuTablespoons;
+					case VolumeUnit.Centiliter:
+						return Centiliters;
+					case VolumeUnit.CubicCentimeter:
+						return CubicCentimeters;
+					case VolumeUnit.CubicDecimeter:
+						return CubicDecimeters;
+					case VolumeUnit.CubicFoot:
+						return CubicFeet;
+					case VolumeUnit.CubicInch:
+						return CubicInches;
+					case VolumeUnit.CubicKilometer:
+						return CubicKilometers;
+					case VolumeUnit.CubicMeter:
+						return CubicMeters;
+					case VolumeUnit.CubicMicrometer:
+						return CubicMicrometers;
+					case VolumeUnit.CubicMile:
+						return CubicMiles;
+					case VolumeUnit.CubicMillimeter:
+						return CubicMillimeters;
+					case VolumeUnit.CubicYard:
+						return CubicYards;
+					case VolumeUnit.Deciliter:
+						return Deciliters;
+					case VolumeUnit.HectocubicFoot:
+						return HectocubicFeet;
+					case VolumeUnit.HectocubicMeter:
+						return HectocubicMeters;
+					case VolumeUnit.Hectoliter:
+						return Hectoliters;
+					case VolumeUnit.ImperialBeerBarrel:
+						return ImperialBeerBarrels;
+					case VolumeUnit.ImperialGallon:
+						return ImperialGallons;
+					case VolumeUnit.ImperialOunce:
+						return ImperialOunces;
+					case VolumeUnit.KilocubicFoot:
+						return KilocubicFeet;
+					case VolumeUnit.KilocubicMeter:
+						return KilocubicMeters;
+					case VolumeUnit.KiloimperialGallon:
+						return KiloimperialGallons;
+					case VolumeUnit.KilousGallon:
+						return KilousGallons;
+					case VolumeUnit.Liter:
+						return Liters;
+					case VolumeUnit.MegacubicFoot:
+						return MegacubicFeet;
+					case VolumeUnit.MegaimperialGallon:
+						return MegaimperialGallons;
+					case VolumeUnit.MegausGallon:
+						return MegausGallons;
+					case VolumeUnit.MetricCup:
+						return MetricCups;
+					case VolumeUnit.MetricTeaspoon:
+						return MetricTeaspoons;
+					case VolumeUnit.Microliter:
+						return Microliters;
+					case VolumeUnit.Milliliter:
+						return Milliliters;
+					case VolumeUnit.OilBarrel:
+						return OilBarrels;
+					case VolumeUnit.Tablespoon:
+						return Tablespoons;
+					case VolumeUnit.Teaspoon:
+						return Teaspoons;
+					case VolumeUnit.UkTablespoon:
+						return UkTablespoons;
+					case VolumeUnit.UsBeerBarrel:
+						return UsBeerBarrels;
+					case VolumeUnit.UsCustomaryCup:
+						return UsCustomaryCups;
+					case VolumeUnit.UsGallon:
+						return UsGallons;
+					case VolumeUnit.UsLegalCup:
+						return UsLegalCups;
+					case VolumeUnit.UsOunce:
+						return UsOunces;
+					case VolumeUnit.UsTablespoon:
+						return UsTablespoons;
+					case VolumeUnit.UsTeaspoon:
+						return UsTeaspoons;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Volume Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Volume<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Volume Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Volume<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<Volume, VolumeUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    VolumeUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromCubicMeters(x.CubicMeters + y.CubicMeters));
-        }
+					return QuantityParser.Parse<Volume<T, C>, VolumeUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						VolumeUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromCubicMeters((Number<T, C>)x.CubicMeters + y.CubicMeters));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out Volume result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out Volume<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Volume result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(Volume);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Volume<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(Volume<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static VolumeUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static VolumeUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static VolumeUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static VolumeUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static VolumeUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static VolumeUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<VolumeUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<VolumeUnit>(str.Trim());
 
-            if (unit == VolumeUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized VolumeUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == VolumeUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized VolumeUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is CubicMeter
-        /// </summary>
-        public static VolumeUnit ToStringDefaultUnit { get; set; } = VolumeUnit.CubicMeter;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is CubicMeter
+			/// </summary>
+			public static VolumeUnit ToStringDefaultUnit { get; set; } = VolumeUnit.CubicMeter;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(VolumeUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(VolumeUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(VolumeUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(VolumeUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(VolumeUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(VolumeUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(VolumeUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(VolumeUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of Volume
-        /// </summary>
-        public static Volume MaxValue
-        {
-            get
-            {
-                return new Volume(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of Volume
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of Volume
-        /// </summary>
-        public static Volume MinValue
-        {
-            get
-            {
-                return new Volume(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of Volume
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

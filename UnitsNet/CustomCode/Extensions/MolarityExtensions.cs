@@ -19,13 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     public static class MolarityExtensions
     {
-        public static Density ToDensity(this Molarity molarity, Mass molecularWeight)
+        public static Density<double, DoubleCalculator> ToDensity(this Molarity<double, DoubleCalculator> molarity, Mass<double, DoubleCalculator> molecularWeight)
         {
-            return Molarity.ToDensity(molarity, molecularWeight);
+            return Molarity<double, DoubleCalculator>.ToDensity(molarity, molecularWeight);
         }
     }
 }

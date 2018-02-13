@@ -19,7 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,22 +30,24 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class BrakeSpecificFuelConsumption
 #else
-    public partial struct BrakeSpecificFuelConsumption
+    public partial class BrakeSpecificFuelConsumption<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static MassFlow operator *(BrakeSpecificFuelConsumption bsfc, Power power)
+        public static MassFlow<T, C> operator *(BrakeSpecificFuelConsumption<T, C> bsfc, Power<T, C> power)
         {
-            return MassFlow.FromKilogramsPerSecond(bsfc.KilogramsPerJoule*power.Watts);
+            return MassFlow<T, C>.FromKilogramsPerSecond(bsfc.KilogramsPerJoule*power.Watts);
         }
 
-        public static SpecificEnergy operator /(double value, BrakeSpecificFuelConsumption bsfc)
+        public static SpecificEnergy<T, C> operator /(double value, BrakeSpecificFuelConsumption<T, C> bsfc)
         {
-            return SpecificEnergy.FromJoulesPerKilogram(value/bsfc.KilogramsPerJoule);
+            return SpecificEnergy<T, C>.FromJoulesPerKilogram(value/bsfc.KilogramsPerJoule);
         }
 
-        public static double operator *(BrakeSpecificFuelConsumption bsfc, SpecificEnergy specificEnergy)
+        public static Number<T, C> operator *(BrakeSpecificFuelConsumption<T, C> bsfc, SpecificEnergy<T, C> specificEnergy)
         {
             return specificEnergy.JoulesPerKilogram*bsfc.KilogramsPerJoule;
         }

@@ -21,88 +21,103 @@
 
 using System;
 using System.Collections.Generic;
+using UnitsNet.InternalHelpers.Calculators;
 
 namespace UnitsNet
 {
+    public class Vector2 : UnitsNet.Generic.Vector2<double, DoubleCalculator> { }
+
+    namespace Generic
+    {
 #if WINDOWS_UWP
-    public struct Vector2
-    {
-        public double X;
-        public double Y;
-    }
+        public struct Vector2
+        {
+            public double X;
+            public double Y;
+        }
 #else
-    public struct Vector2 : IEquatable<Vector2>
-    {
-        public readonly double X;
-        public readonly double Y;
-
-        public Vector2(double x, double y)
+        public class Vector2<T, C> : IEquatable<Vector2<T, C>>
+            where T : struct
+            where C : INumberCalculator<T>, new()
         {
-            X = x;
-            Y = y;
-        }
+            public readonly Number<T, C> X;
+            public readonly Number<T, C> Y;
 
-        public Vector2(double xy) : this()
-        {
-            X = xy;
-            Y = xy;
-        }
-
-        #region Equality
-
-        private static IEqualityComparer<Vector2> XyComparer { get; } = new XyEqualityComparer();
-
-        public bool Equals(Vector2 other)
-        {
-            return XyComparer.Equals(this, other);
-        }
-
-        public static bool operator !=(Vector2 left, Vector2 right)
-        {
-            return !XyComparer.Equals(left, right);
-        }
-
-        public static bool operator ==(Vector2 left, Vector2 right)
-        {
-            return XyComparer.Equals(left, right);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Vector2 && Equals((Vector2) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
+            public Vector2()
             {
-                return (X.GetHashCode()*397) ^ Y.GetHashCode();
-            }
-        }
-
-        private sealed class XyEqualityComparer : IEqualityComparer<Vector2>
-        {
-            public bool Equals(Vector2 x, Vector2 y)
-            {
-                return x.X.Equals(y.X) && x.Y.Equals(y.Y);
+                X = 0;
+                Y = 0;
             }
 
-            public int GetHashCode(Vector2 obj)
+            public Vector2(Number<T, C> x, Number<T, C> y)
+            {
+                X = x;
+                Y = y;
+            }
+
+            public Vector2(Number<T, C> xy) : this()
+            {
+                X = xy;
+                Y = xy;
+            }
+
+            #region Equality
+
+            private static IEqualityComparer<Vector2<T, C>> XyComparer { get; } = new XyEqualityComparer();
+
+            public bool Equals(Vector2<T, C> other)
+            {
+                return XyComparer.Equals(this, other);
+            }
+
+            public static bool operator !=(Vector2<T, C> left, Vector2<T, C> right)
+            {
+                return !XyComparer.Equals(left, right);
+            }
+
+            public static bool operator ==(Vector2<T, C> left, Vector2<T, C> right)
+            {
+                return XyComparer.Equals(left, right);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                return obj is Vector2<T, C> && Equals((Vector2<T, C>) obj);
+            }
+
+            public override int GetHashCode()
             {
                 unchecked
                 {
-                    return (obj.X.GetHashCode()*397) ^ obj.Y.GetHashCode();
+                    return (X.GetHashCode()*397) ^ Y.GetHashCode();
                 }
             }
-        }
 
-        #endregion
+            private sealed class XyEqualityComparer : IEqualityComparer<Vector2<T, C>>
+            {
+                public bool Equals(Vector2<T, C> x, Vector2<T, C> y)
+                {
+                    return x.X.Equals(y.X) && x.Y.Equals(y.Y);
+                }
 
-        public override string ToString()
-        {
-            return $"[{X:0.####}, {Y:0.####}]";
+                public int GetHashCode(Vector2<T, C> obj)
+                {
+                    unchecked
+                    {
+                        return (obj.X.GetHashCode()*397) ^ obj.Y.GetHashCode();
+                    }
+                }
+            }
+
+            #endregion
+
+            public override string ToString()
+            {
+                return $"[{X:0.####}, {Y:0.####}]";
+            }
         }
-    }
 #endif
+
+    }
 }

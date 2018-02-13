@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Temperature change rate is the ratio of the temperature change to the time during which the change occurred (value of temperature changes per unit time).
     /// </summary>
@@ -63,1038 +64,829 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class TemperatureChangeRate : UnitsNet.Generic.TemperatureChangeRate<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class TemperatureChangeRate
+		public sealed partial class TemperatureChangeRate
 #else
-    public partial struct TemperatureChangeRate : IComparable, IComparable<TemperatureChangeRate>
+		public partial class TemperatureChangeRate <T, C> : IComparable, IComparable<TemperatureChangeRate<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of TemperatureChangeRate.
-        /// </summary>
-        private readonly double _degreesCelsiusPerSecond;
+		{
+			/// <summary>
+			///     Base unit of TemperatureChangeRate.
+			/// </summary>
+			private readonly Number<T, C> _degreesCelsiusPerSecond;
 
-        // Windows Runtime Component requires a default constructor
+			public TemperatureChangeRate() : this(new Number<T,C>())
+			{
+			}
+
+			public TemperatureChangeRate(T degreescelsiuspersecond)
+			{
+				_degreesCelsiusPerSecond = (degreescelsiuspersecond);
+			}
+
+			public TemperatureChangeRate(Number<T, C> degreescelsiuspersecond)
+			{
+				_degreesCelsiusPerSecond = (degreescelsiuspersecond);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.TemperatureChangeRate;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static TemperatureChangeRateUnit BaseUnit
+			{
+				get { return TemperatureChangeRateUnit.DegreeCelsiusPerSecond; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the TemperatureChangeRate quantity.
+			/// </summary>
+			public static TemperatureChangeRateUnit[] Units { get; } = Enum.GetValues(typeof(TemperatureChangeRateUnit)).Cast<TemperatureChangeRateUnit>().ToArray();
+
+			/// <summary>
+			///     Get TemperatureChangeRate in CentidegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> CentidegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in DecadegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> DecadegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e1d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in DecidegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> DecidegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in DegreesCelsiusPerMinute.
+			/// </summary>
+			public Number<T, C> DegreesCelsiusPerMinute
+			{
+				get { return _degreesCelsiusPerSecond*60; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in DegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> DegreesCelsiusPerSecond
+			{
+				get { return _degreesCelsiusPerSecond; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in HectodegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> HectodegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e2d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in KilodegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> KilodegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in MicrodegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> MicrodegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in MillidegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> MillidegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate in NanodegreesCelsiusPerSecond.
+			/// </summary>
+			public Number<T, C> NanodegreesCelsiusPerSecond
+			{
+				get { return (_degreesCelsiusPerSecond) / 1e-9d; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static TemperatureChangeRate<T, C> Zero
+			{
+				get { return new TemperatureChangeRate<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get TemperatureChangeRate from CentidegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        public TemperatureChangeRate() : this(0)
-        {
-        }
-#endif
-
-        public TemperatureChangeRate(double degreescelsiuspersecond)
-        {
-            _degreesCelsiusPerSecond = Convert.ToDouble(degreescelsiuspersecond);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromCentidegreesCelsiusPerSecond(Number<T, C> centidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) centidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e-2d);
+			}
 #else
-        public
+			public static TemperatureChangeRate<T, C> FromCentidegreesCelsiusPerSecond(Number<T, C> centidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) centidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e-2d));
+			}
 #endif
-        TemperatureChangeRate(long degreescelsiuspersecond)
-        {
-            _degreesCelsiusPerSecond = Convert.ToDouble(degreescelsiuspersecond);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get TemperatureChangeRate from DecadegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromDecadegreesCelsiusPerSecond(Number<T, C> decadegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decadegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e1d);
+			}
 #else
-        public
+			public static TemperatureChangeRate<T, C> FromDecadegreesCelsiusPerSecond(Number<T, C> decadegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decadegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e1d));
+			}
 #endif
-        TemperatureChangeRate(decimal degreescelsiuspersecond)
-        {
-            _degreesCelsiusPerSecond = Convert.ToDouble(degreescelsiuspersecond);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.TemperatureChangeRate;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static TemperatureChangeRateUnit BaseUnit
-        {
-            get { return TemperatureChangeRateUnit.DegreeCelsiusPerSecond; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the TemperatureChangeRate quantity.
-        /// </summary>
-        public static TemperatureChangeRateUnit[] Units { get; } = Enum.GetValues(typeof(TemperatureChangeRateUnit)).Cast<TemperatureChangeRateUnit>().ToArray();
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in CentidegreesCelsiusPerSecond.
-        /// </summary>
-        public double CentidegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in DecadegreesCelsiusPerSecond.
-        /// </summary>
-        public double DecadegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e1d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in DecidegreesCelsiusPerSecond.
-        /// </summary>
-        public double DecidegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in DegreesCelsiusPerMinute.
-        /// </summary>
-        public double DegreesCelsiusPerMinute
-        {
-            get { return _degreesCelsiusPerSecond*60; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in DegreesCelsiusPerSecond.
-        /// </summary>
-        public double DegreesCelsiusPerSecond
-        {
-            get { return _degreesCelsiusPerSecond; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in HectodegreesCelsiusPerSecond.
-        /// </summary>
-        public double HectodegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e2d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in KilodegreesCelsiusPerSecond.
-        /// </summary>
-        public double KilodegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in MicrodegreesCelsiusPerSecond.
-        /// </summary>
-        public double MicrodegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in MillidegreesCelsiusPerSecond.
-        /// </summary>
-        public double MillidegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate in NanodegreesCelsiusPerSecond.
-        /// </summary>
-        public double NanodegreesCelsiusPerSecond
-        {
-            get { return (_degreesCelsiusPerSecond) / 1e-9d; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static TemperatureChangeRate Zero
-        {
-            get { return new TemperatureChangeRate(); }
-        }
-
-        /// <summary>
-        ///     Get TemperatureChangeRate from CentidegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from DecidegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromCentidegreesCelsiusPerSecond(double centidegreescelsiuspersecond)
-        {
-            double value = (double) centidegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromDecidegreesCelsiusPerSecond(Number<T, C> decidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e-1d);
+			}
 #else
-        public static TemperatureChangeRate FromCentidegreesCelsiusPerSecond(QuantityValue centidegreescelsiuspersecond)
-        {
-            double value = (double) centidegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e-2d));
-        }
+			public static TemperatureChangeRate<T, C> FromDecidegreesCelsiusPerSecond(Number<T, C> decidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from DecadegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from DegreesCelsiusPerMinute.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromDecadegreesCelsiusPerSecond(double decadegreescelsiuspersecond)
-        {
-            double value = (double) decadegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromDegreesCelsiusPerMinute(Number<T, C> degreescelsiusperminute)
+			{
+				Number<T,C> value = (Number<T,C>) degreescelsiusperminute;
+				return new TemperatureChangeRate<T, C>(value/60);
+			}
 #else
-        public static TemperatureChangeRate FromDecadegreesCelsiusPerSecond(QuantityValue decadegreescelsiuspersecond)
-        {
-            double value = (double) decadegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e1d));
-        }
+			public static TemperatureChangeRate<T, C> FromDegreesCelsiusPerMinute(Number<T, C> degreescelsiusperminute)
+			{
+				Number<T,C> value = (Number<T,C>) degreescelsiusperminute;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>(value/60));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from DecidegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from DegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromDecidegreesCelsiusPerSecond(double decidegreescelsiuspersecond)
-        {
-            double value = (double) decidegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromDegreesCelsiusPerSecond(Number<T, C> degreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) degreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(value);
+			}
 #else
-        public static TemperatureChangeRate FromDecidegreesCelsiusPerSecond(QuantityValue decidegreescelsiuspersecond)
-        {
-            double value = (double) decidegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e-1d));
-        }
+			public static TemperatureChangeRate<T, C> FromDegreesCelsiusPerSecond(Number<T, C> degreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) degreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from DegreesCelsiusPerMinute.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from HectodegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromDegreesCelsiusPerMinute(double degreescelsiusperminute)
-        {
-            double value = (double) degreescelsiusperminute;
-            return new TemperatureChangeRate(value/60);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromHectodegreesCelsiusPerSecond(Number<T, C> hectodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) hectodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e2d);
+			}
 #else
-        public static TemperatureChangeRate FromDegreesCelsiusPerMinute(QuantityValue degreescelsiusperminute)
-        {
-            double value = (double) degreescelsiusperminute;
-            return new TemperatureChangeRate((value/60));
-        }
+			public static TemperatureChangeRate<T, C> FromHectodegreesCelsiusPerSecond(Number<T, C> hectodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) hectodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from DegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from KilodegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromDegreesCelsiusPerSecond(double degreescelsiuspersecond)
-        {
-            double value = (double) degreescelsiuspersecond;
-            return new TemperatureChangeRate(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromKilodegreesCelsiusPerSecond(Number<T, C> kilodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) kilodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e3d);
+			}
 #else
-        public static TemperatureChangeRate FromDegreesCelsiusPerSecond(QuantityValue degreescelsiuspersecond)
-        {
-            double value = (double) degreescelsiuspersecond;
-            return new TemperatureChangeRate((value));
-        }
+			public static TemperatureChangeRate<T, C> FromKilodegreesCelsiusPerSecond(Number<T, C> kilodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) kilodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from HectodegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from MicrodegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromHectodegreesCelsiusPerSecond(double hectodegreescelsiuspersecond)
-        {
-            double value = (double) hectodegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromMicrodegreesCelsiusPerSecond(Number<T, C> microdegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) microdegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e-6d);
+			}
 #else
-        public static TemperatureChangeRate FromHectodegreesCelsiusPerSecond(QuantityValue hectodegreescelsiuspersecond)
-        {
-            double value = (double) hectodegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e2d));
-        }
+			public static TemperatureChangeRate<T, C> FromMicrodegreesCelsiusPerSecond(Number<T, C> microdegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) microdegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from KilodegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from MillidegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromKilodegreesCelsiusPerSecond(double kilodegreescelsiuspersecond)
-        {
-            double value = (double) kilodegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromMillidegreesCelsiusPerSecond(Number<T, C> millidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) millidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e-3d);
+			}
 #else
-        public static TemperatureChangeRate FromKilodegreesCelsiusPerSecond(QuantityValue kilodegreescelsiuspersecond)
-        {
-            double value = (double) kilodegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e3d));
-        }
+			public static TemperatureChangeRate<T, C> FromMillidegreesCelsiusPerSecond(Number<T, C> millidegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) millidegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from MicrodegreesCelsiusPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get TemperatureChangeRate from NanodegreesCelsiusPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromMicrodegreesCelsiusPerSecond(double microdegreescelsiuspersecond)
-        {
-            double value = (double) microdegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static TemperatureChangeRate<T, C> FromNanodegreesCelsiusPerSecond(Number<T, C> nanodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) nanodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>((value) * 1e-9d);
+			}
 #else
-        public static TemperatureChangeRate FromMicrodegreesCelsiusPerSecond(QuantityValue microdegreescelsiuspersecond)
-        {
-            double value = (double) microdegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e-6d));
-        }
+			public static TemperatureChangeRate<T, C> FromNanodegreesCelsiusPerSecond(Number<T, C> nanodegreescelsiuspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) nanodegreescelsiuspersecond;
+				return new TemperatureChangeRate<T, C>(new Number<T,C>((value) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from MillidegreesCelsiusPerSecond.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="TemperatureChangeRateUnit" /> to <see cref="TemperatureChangeRate" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>TemperatureChangeRate unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromMillidegreesCelsiusPerSecond(double millidegreescelsiuspersecond)
-        {
-            double value = (double) millidegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e-3d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static TemperatureChangeRate<T, C> From(double value, TemperatureChangeRateUnit fromUnit)
 #else
-        public static TemperatureChangeRate FromMillidegreesCelsiusPerSecond(QuantityValue millidegreescelsiuspersecond)
-        {
-            double value = (double) millidegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e-3d));
-        }
+			public static TemperatureChangeRate<T, C> From(Number<T, C> value, TemperatureChangeRateUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case TemperatureChangeRateUnit.CentidegreeCelsiusPerSecond:
+						return FromCentidegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.DecadegreeCelsiusPerSecond:
+						return FromDecadegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.DecidegreeCelsiusPerSecond:
+						return FromDecidegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.DegreeCelsiusPerMinute:
+						return FromDegreesCelsiusPerMinute(value);
+					case TemperatureChangeRateUnit.DegreeCelsiusPerSecond:
+						return FromDegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.HectodegreeCelsiusPerSecond:
+						return FromHectodegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.KilodegreeCelsiusPerSecond:
+						return FromKilodegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.MicrodegreeCelsiusPerSecond:
+						return FromMicrodegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.MillidegreeCelsiusPerSecond:
+						return FromMillidegreesCelsiusPerSecond(value);
+					case TemperatureChangeRateUnit.NanodegreeCelsiusPerSecond:
+						return FromNanodegreesCelsiusPerSecond(value);
 
-        /// <summary>
-        ///     Get TemperatureChangeRate from NanodegreesCelsiusPerSecond.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static TemperatureChangeRate FromNanodegreesCelsiusPerSecond(double nanodegreescelsiuspersecond)
-        {
-            double value = (double) nanodegreescelsiuspersecond;
-            return new TemperatureChangeRate((value) * 1e-9d);
-        }
-#else
-        public static TemperatureChangeRate FromNanodegreesCelsiusPerSecond(QuantityValue nanodegreescelsiuspersecond)
-        {
-            double value = (double) nanodegreescelsiuspersecond;
-            return new TemperatureChangeRate(((value) * 1e-9d));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(TemperatureChangeRateUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable CentidegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromCentidegreesCelsiusPerSecond(QuantityValue? centidegreescelsiuspersecond)
-        {
-            if (centidegreescelsiuspersecond.HasValue)
-            {
-                return FromCentidegreesCelsiusPerSecond(centidegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator -(TemperatureChangeRate<T, C> right)
+			{
+				return new TemperatureChangeRate<T, C>(-right._degreesCelsiusPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable DecadegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromDecadegreesCelsiusPerSecond(QuantityValue? decadegreescelsiuspersecond)
-        {
-            if (decadegreescelsiuspersecond.HasValue)
-            {
-                return FromDecadegreesCelsiusPerSecond(decadegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator +(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return new TemperatureChangeRate<T, C>(left._degreesCelsiusPerSecond + right._degreesCelsiusPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable DecidegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromDecidegreesCelsiusPerSecond(QuantityValue? decidegreescelsiuspersecond)
-        {
-            if (decidegreescelsiuspersecond.HasValue)
-            {
-                return FromDecidegreesCelsiusPerSecond(decidegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator -(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return new TemperatureChangeRate<T, C>(left._degreesCelsiusPerSecond - right._degreesCelsiusPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable DegreesCelsiusPerMinute.
-        /// </summary>
-        public static TemperatureChangeRate? FromDegreesCelsiusPerMinute(QuantityValue? degreescelsiusperminute)
-        {
-            if (degreescelsiusperminute.HasValue)
-            {
-                return FromDegreesCelsiusPerMinute(degreescelsiusperminute.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator *(Number<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return new TemperatureChangeRate<T, C>(left*right._degreesCelsiusPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable DegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromDegreesCelsiusPerSecond(QuantityValue? degreescelsiuspersecond)
-        {
-            if (degreescelsiuspersecond.HasValue)
-            {
-                return FromDegreesCelsiusPerSecond(degreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator *(TemperatureChangeRate<T, C> left, double right)
+			{
+				return new TemperatureChangeRate<T, C>(left._degreesCelsiusPerSecond*right);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable HectodegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromHectodegreesCelsiusPerSecond(QuantityValue? hectodegreescelsiuspersecond)
-        {
-            if (hectodegreescelsiuspersecond.HasValue)
-            {
-                return FromHectodegreesCelsiusPerSecond(hectodegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static TemperatureChangeRate<T, C> operator /(TemperatureChangeRate<T, C> left, double right)
+			{
+				return new TemperatureChangeRate<T, C>(left._degreesCelsiusPerSecond/right);
+			}
 
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable KilodegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromKilodegreesCelsiusPerSecond(QuantityValue? kilodegreescelsiuspersecond)
-        {
-            if (kilodegreescelsiuspersecond.HasValue)
-            {
-                return FromKilodegreesCelsiusPerSecond(kilodegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable MicrodegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromMicrodegreesCelsiusPerSecond(QuantityValue? microdegreescelsiuspersecond)
-        {
-            if (microdegreescelsiuspersecond.HasValue)
-            {
-                return FromMicrodegreesCelsiusPerSecond(microdegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable MillidegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromMillidegreesCelsiusPerSecond(QuantityValue? millidegreescelsiuspersecond)
-        {
-            if (millidegreescelsiuspersecond.HasValue)
-            {
-                return FromMillidegreesCelsiusPerSecond(millidegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable TemperatureChangeRate from nullable NanodegreesCelsiusPerSecond.
-        /// </summary>
-        public static TemperatureChangeRate? FromNanodegreesCelsiusPerSecond(QuantityValue? nanodegreescelsiuspersecond)
-        {
-            if (nanodegreescelsiuspersecond.HasValue)
-            {
-                return FromNanodegreesCelsiusPerSecond(nanodegreescelsiuspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return Convert.ToDouble(left._degreesCelsiusPerSecond/right._degreesCelsiusPerSecond);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="TemperatureChangeRateUnit" /> to <see cref="TemperatureChangeRate" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>TemperatureChangeRate unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is TemperatureChangeRate<T, C>)) throw new ArgumentException("Expected type TemperatureChangeRate.", "obj");
+				return CompareTo((TemperatureChangeRate<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static TemperatureChangeRate From(double value, TemperatureChangeRateUnit fromUnit)
+			internal
 #else
-        public static TemperatureChangeRate From(QuantityValue value, TemperatureChangeRateUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case TemperatureChangeRateUnit.CentidegreeCelsiusPerSecond:
-                    return FromCentidegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.DecadegreeCelsiusPerSecond:
-                    return FromDecadegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.DecidegreeCelsiusPerSecond:
-                    return FromDecidegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.DegreeCelsiusPerMinute:
-                    return FromDegreesCelsiusPerMinute(value);
-                case TemperatureChangeRateUnit.DegreeCelsiusPerSecond:
-                    return FromDegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.HectodegreeCelsiusPerSecond:
-                    return FromHectodegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.KilodegreeCelsiusPerSecond:
-                    return FromKilodegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.MicrodegreeCelsiusPerSecond:
-                    return FromMicrodegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.MillidegreeCelsiusPerSecond:
-                    return FromMillidegreesCelsiusPerSecond(value);
-                case TemperatureChangeRateUnit.NanodegreeCelsiusPerSecond:
-                    return FromNanodegreesCelsiusPerSecond(value);
+			int CompareTo(TemperatureChangeRate<T, C> other)
+			{
+				return _degreesCelsiusPerSecond.CompareTo(other._degreesCelsiusPerSecond);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="TemperatureChangeRateUnit" /> to <see cref="TemperatureChangeRate" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>TemperatureChangeRate unit value.</returns>
-        public static TemperatureChangeRate? From(QuantityValue? value, TemperatureChangeRateUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case TemperatureChangeRateUnit.CentidegreeCelsiusPerSecond:
-                    return FromCentidegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.DecadegreeCelsiusPerSecond:
-                    return FromDecadegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.DecidegreeCelsiusPerSecond:
-                    return FromDecidegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.DegreeCelsiusPerMinute:
-                    return FromDegreesCelsiusPerMinute(value.Value);
-                case TemperatureChangeRateUnit.DegreeCelsiusPerSecond:
-                    return FromDegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.HectodegreeCelsiusPerSecond:
-                    return FromHectodegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.KilodegreeCelsiusPerSecond:
-                    return FromKilodegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.MicrodegreeCelsiusPerSecond:
-                    return FromMicrodegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.MillidegreeCelsiusPerSecond:
-                    return FromMillidegreesCelsiusPerSecond(value.Value);
-                case TemperatureChangeRateUnit.NanodegreeCelsiusPerSecond:
-                    return FromNanodegreesCelsiusPerSecond(value.Value);
+			public static bool operator <=(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return left._degreesCelsiusPerSecond <= right._degreesCelsiusPerSecond;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return left._degreesCelsiusPerSecond >= right._degreesCelsiusPerSecond;
+			}
+
+			public static bool operator <(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return left._degreesCelsiusPerSecond < right._degreesCelsiusPerSecond;
+			}
+
+			public static bool operator >(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				return left._degreesCelsiusPerSecond > right._degreesCelsiusPerSecond;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._degreesCelsiusPerSecond == right._degreesCelsiusPerSecond;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(TemperatureChangeRate<T, C> left, TemperatureChangeRate<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._degreesCelsiusPerSecond != right._degreesCelsiusPerSecond;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(TemperatureChangeRateUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static TemperatureChangeRate operator -(TemperatureChangeRate right)
-        {
-            return new TemperatureChangeRate(-right._degreesCelsiusPerSecond);
-        }
-
-        public static TemperatureChangeRate operator +(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return new TemperatureChangeRate(left._degreesCelsiusPerSecond + right._degreesCelsiusPerSecond);
-        }
-
-        public static TemperatureChangeRate operator -(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return new TemperatureChangeRate(left._degreesCelsiusPerSecond - right._degreesCelsiusPerSecond);
-        }
-
-        public static TemperatureChangeRate operator *(double left, TemperatureChangeRate right)
-        {
-            return new TemperatureChangeRate(left*right._degreesCelsiusPerSecond);
-        }
-
-        public static TemperatureChangeRate operator *(TemperatureChangeRate left, double right)
-        {
-            return new TemperatureChangeRate(left._degreesCelsiusPerSecond*(double)right);
-        }
-
-        public static TemperatureChangeRate operator /(TemperatureChangeRate left, double right)
-        {
-            return new TemperatureChangeRate(left._degreesCelsiusPerSecond/(double)right);
-        }
-
-        public static double operator /(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return Convert.ToDouble(left._degreesCelsiusPerSecond/right._degreesCelsiusPerSecond);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is TemperatureChangeRate)) throw new ArgumentException("Expected type TemperatureChangeRate.", "obj");
-            return CompareTo((TemperatureChangeRate) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(TemperatureChangeRate other)
-        {
-            return _degreesCelsiusPerSecond.CompareTo(other._degreesCelsiusPerSecond);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return left._degreesCelsiusPerSecond <= right._degreesCelsiusPerSecond;
-        }
-
-        public static bool operator >=(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return left._degreesCelsiusPerSecond >= right._degreesCelsiusPerSecond;
-        }
-
-        public static bool operator <(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return left._degreesCelsiusPerSecond < right._degreesCelsiusPerSecond;
-        }
-
-        public static bool operator >(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            return left._degreesCelsiusPerSecond > right._degreesCelsiusPerSecond;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._degreesCelsiusPerSecond == right._degreesCelsiusPerSecond;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(TemperatureChangeRate left, TemperatureChangeRate right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._degreesCelsiusPerSecond != right._degreesCelsiusPerSecond;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _degreesCelsiusPerSecond.Equals(((TemperatureChangeRate) obj)._degreesCelsiusPerSecond);
-        }
+				return _degreesCelsiusPerSecond.Equals(((TemperatureChangeRate<T, C>) obj)._degreesCelsiusPerSecond);
+			}
 
-        /// <summary>
-        ///     Compare equality to another TemperatureChangeRate by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(TemperatureChangeRate other, TemperatureChangeRate maxError)
-        {
-            return Math.Abs(_degreesCelsiusPerSecond - other._degreesCelsiusPerSecond) <= maxError._degreesCelsiusPerSecond;
-        }
+			/// <summary>
+			///     Compare equality to another TemperatureChangeRate by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(TemperatureChangeRate<T, C> other, TemperatureChangeRate<T, C> maxError)
+			{
+				return Math.Abs((decimal)_degreesCelsiusPerSecond - (decimal)other._degreesCelsiusPerSecond) <= maxError._degreesCelsiusPerSecond;
+			}
 
-        public override int GetHashCode()
-        {
-            return _degreesCelsiusPerSecond.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _degreesCelsiusPerSecond.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(TemperatureChangeRateUnit unit)
-        {
-            switch (unit)
-            {
-                case TemperatureChangeRateUnit.CentidegreeCelsiusPerSecond:
-                    return CentidegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.DecadegreeCelsiusPerSecond:
-                    return DecadegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.DecidegreeCelsiusPerSecond:
-                    return DecidegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.DegreeCelsiusPerMinute:
-                    return DegreesCelsiusPerMinute;
-                case TemperatureChangeRateUnit.DegreeCelsiusPerSecond:
-                    return DegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.HectodegreeCelsiusPerSecond:
-                    return HectodegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.KilodegreeCelsiusPerSecond:
-                    return KilodegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.MicrodegreeCelsiusPerSecond:
-                    return MicrodegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.MillidegreeCelsiusPerSecond:
-                    return MillidegreesCelsiusPerSecond;
-                case TemperatureChangeRateUnit.NanodegreeCelsiusPerSecond:
-                    return NanodegreesCelsiusPerSecond;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(TemperatureChangeRateUnit unit)
+			{
+				switch (unit)
+				{
+					case TemperatureChangeRateUnit.CentidegreeCelsiusPerSecond:
+						return CentidegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.DecadegreeCelsiusPerSecond:
+						return DecadegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.DecidegreeCelsiusPerSecond:
+						return DecidegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.DegreeCelsiusPerMinute:
+						return DegreesCelsiusPerMinute;
+					case TemperatureChangeRateUnit.DegreeCelsiusPerSecond:
+						return DegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.HectodegreeCelsiusPerSecond:
+						return HectodegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.KilodegreeCelsiusPerSecond:
+						return KilodegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.MicrodegreeCelsiusPerSecond:
+						return MicrodegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.MillidegreeCelsiusPerSecond:
+						return MillidegreesCelsiusPerSecond;
+					case TemperatureChangeRateUnit.NanodegreeCelsiusPerSecond:
+						return NanodegreesCelsiusPerSecond;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static TemperatureChangeRate Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static TemperatureChangeRate<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static TemperatureChangeRate Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static TemperatureChangeRate<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<TemperatureChangeRate, TemperatureChangeRateUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    TemperatureChangeRateUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromDegreesCelsiusPerSecond(x.DegreesCelsiusPerSecond + y.DegreesCelsiusPerSecond));
-        }
+					return QuantityParser.Parse<TemperatureChangeRate<T, C>, TemperatureChangeRateUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						TemperatureChangeRateUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromDegreesCelsiusPerSecond((Number<T, C>)x.DegreesCelsiusPerSecond + y.DegreesCelsiusPerSecond));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out TemperatureChangeRate result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out TemperatureChangeRate<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out TemperatureChangeRate result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(TemperatureChangeRate);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out TemperatureChangeRate<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(TemperatureChangeRate<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static TemperatureChangeRateUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static TemperatureChangeRateUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static TemperatureChangeRateUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static TemperatureChangeRateUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static TemperatureChangeRateUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static TemperatureChangeRateUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<TemperatureChangeRateUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<TemperatureChangeRateUnit>(str.Trim());
 
-            if (unit == TemperatureChangeRateUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized TemperatureChangeRateUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == TemperatureChangeRateUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized TemperatureChangeRateUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is DegreeCelsiusPerSecond
-        /// </summary>
-        public static TemperatureChangeRateUnit ToStringDefaultUnit { get; set; } = TemperatureChangeRateUnit.DegreeCelsiusPerSecond;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is DegreeCelsiusPerSecond
+			/// </summary>
+			public static TemperatureChangeRateUnit ToStringDefaultUnit { get; set; } = TemperatureChangeRateUnit.DegreeCelsiusPerSecond;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(TemperatureChangeRateUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(TemperatureChangeRateUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(TemperatureChangeRateUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of TemperatureChangeRate
-        /// </summary>
-        public static TemperatureChangeRate MaxValue
-        {
-            get
-            {
-                return new TemperatureChangeRate(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of TemperatureChangeRate
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of TemperatureChangeRate
-        /// </summary>
-        public static TemperatureChangeRate MinValue
-        {
-            get
-            {
-                return new TemperatureChangeRate(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of TemperatureChangeRate
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

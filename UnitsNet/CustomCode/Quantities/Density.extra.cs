@@ -19,7 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,7 +30,9 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Density
 #else
-    public partial struct Density
+    public partial class Density<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         /// <summary>
@@ -35,31 +40,31 @@ namespace UnitsNet
         /// </summary>
         /// <param name="molarity"></param>
         /// <param name="molecularWeight"></param>
-        public static Density FromMolarity(Molarity molarity, Mass molecularWeight)
+        public static Density<T, C> FromMolarity(Molarity<T, C> molarity, Mass<T, C> molecularWeight)
         {
-            return new Density(molarity.MolesPerCubicMeter * molecularWeight.Kilograms);
+            return new Density<T, C>(molarity.MolesPerCubicMeter * molecularWeight.Kilograms);
         }
 
-        public static Molarity ToMolarity(Density density, Mass molecularWeight)
+        public static Molarity<T, C> ToMolarity(Density<T, C> density, Mass<T, C> molecularWeight)
         {
-            return Molarity.FromMolesPerCubicMeter(density.KilogramsPerCubicMeter / molecularWeight.Kilograms);
+            return Molarity<T, C>.FromMolesPerCubicMeter(density.KilogramsPerCubicMeter / molecularWeight.Kilograms);
         }
 
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Mass operator *(Density density, Volume volume)
+        public static Mass<T, C> operator *(Density<T, C> density, Volume<T, C> volume)
         {
-            return Mass.FromKilograms(density.KilogramsPerCubicMeter * volume.CubicMeters);
+            return Mass<T, C>.FromKilograms(density.KilogramsPerCubicMeter * volume.CubicMeters);
         }
 
-        public static Mass operator *(Volume volume, Density density)
+        public static Mass<T, C> operator *(Volume<T, C> volume, Density<T, C> density)
         {
-            return Mass.FromKilograms(density.KilogramsPerCubicMeter * volume.CubicMeters);
+            return Mass<T, C>.FromKilograms(density.KilogramsPerCubicMeter * volume.CubicMeters);
         }
 
-        public static DynamicViscosity operator *(Density density, KinematicViscosity kinematicViscosity)
+        public static DynamicViscosity<T, C> operator *(Density<T, C> density, KinematicViscosity<T, C> kinematicViscosity)
         {
-            return DynamicViscosity.FromNewtonSecondsPerMeterSquared(kinematicViscosity.SquareMetersPerSecond * density.KilogramsPerCubicMeter);
+            return DynamicViscosity<T, C>.FromNewtonSecondsPerMeterSquared(kinematicViscosity.SquareMetersPerSecond * density.KilogramsPerCubicMeter);
         }
 #endif
     }

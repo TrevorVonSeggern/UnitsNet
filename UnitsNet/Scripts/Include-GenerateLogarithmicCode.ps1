@@ -26,44 +26,44 @@ function GenerateLogarithmicArithmeticOperators([string]$quantityName, [string]$
 
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static $quantityName operator -($quantityName right)
+        public static $quantityName<T, C> operator -($quantityName<T, C> right)
         {
-            return new $quantityName(-right.$baseUnitFieldName);
+            return new $quantityName<T, C>(-right.$baseUnitFieldName);
         }
 
-        public static $quantityName operator +($quantityName left, $quantityName right)
+        public static $quantityName<T, C> operator +($quantityName<T, C> left, $quantityName<T, C> right)
         {
             // Logarithmic addition
             // Formula: $x*log10(10^(x/$x) + 10^(y/$x))
-            return new $quantityName($x*Math.Log10(Math.Pow(10, left.$baseUnitFieldName/$x) + Math.Pow(10, right.$baseUnitFieldName/$x)));
+            return new $quantityName<T, C>($x*Math.Log10(Math.Pow(10, left.$baseUnitFieldName/$x) + Math.Pow(10, right.$baseUnitFieldName/$x)));
         }
 
-        public static $quantityName operator -($quantityName left, $quantityName right)
+        public static $quantityName<T, C> operator -($quantityName<T, C> left, $quantityName<T, C> right)
         {
             // Logarithmic subtraction
             // Formula: $x*log10(10^(x/$x) - 10^(y/$x))
-            return new $quantityName($x*Math.Log10(Math.Pow(10, left.$baseUnitFieldName/$x) - Math.Pow(10, right.$baseUnitFieldName/$x)));
+            return new $quantityName<T, C>($x*Math.Log10(Math.Pow(10, left.$baseUnitFieldName/$x) - Math.Pow(10, right.$baseUnitFieldName/$x)));
         }
 
-        public static $quantityName operator *($baseType left, $quantityName right)
+        public static $quantityName<T, C> operator *($baseType left, $quantityName<T, C> right)
         {
             // Logarithmic multiplication = addition
-            return new $quantityName(left + right.$baseUnitFieldName);
+            return new $quantityName<T, C>(left + right.$baseUnitFieldName);
         }
 
-        public static $quantityName operator *($quantityName left, double right)
+        public static $quantityName<T, C> operator *($quantityName<T, C> left, double right)
         {
             // Logarithmic multiplication = addition
-            return new $quantityName(left.$baseUnitFieldName + ($baseType)right);
+            return new $quantityName<T, C>(left.$baseUnitFieldName + ($baseType)right);
         }
 
-        public static $quantityName operator /($quantityName left, double right)
+        public static $quantityName<T, C> operator /($quantityName<T, C> left, double right)
         {
             // Logarithmic division = subtraction
-            return new $quantityName(left.$baseUnitFieldName - ($baseType)right);
+            return new $quantityName<T, C>(left.$baseUnitFieldName - ($baseType)right);
         }
 
-        public static double operator /($quantityName left, $quantityName right)
+        public static double operator /($quantityName<T, C> left, $quantityName<T, C> right)
         {
             // Logarithmic division = subtraction
             return Convert.ToDouble(left.$baseUnitFieldName - right.$baseUnitFieldName);

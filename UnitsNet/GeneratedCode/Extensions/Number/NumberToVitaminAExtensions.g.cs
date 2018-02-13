@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,34 +48,19 @@ namespace UnitsNet.Extensions.NumberToVitaminA
         #region InternationalUnit
 
         /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
-        public static VitaminA InternationalUnits(this int value) => VitaminA.FromInternationalUnits(value);
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double?)"/>
-        public static VitaminA? InternationalUnits(this int? value) => VitaminA.FromInternationalUnits(value);
+        public static VitaminA InternationalUnits(this int value) => (VitaminA)VitaminA.FromInternationalUnits(value);
+	
+        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
+        public static VitaminA InternationalUnits(this long value) => (VitaminA)VitaminA.FromInternationalUnits(value);
 
         /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
-        public static VitaminA InternationalUnits(this long value) => VitaminA.FromInternationalUnits(value);
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double?)"/>
-        public static VitaminA? InternationalUnits(this long? value) => VitaminA.FromInternationalUnits(value);
+        public static VitaminA InternationalUnits(this double value) => (VitaminA)VitaminA.FromInternationalUnits(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
-        public static VitaminA InternationalUnits(this double value) => VitaminA.FromInternationalUnits(value);
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double?)"/>
-        public static VitaminA? InternationalUnits(this double? value) => VitaminA.FromInternationalUnits(value);
+        public static VitaminA InternationalUnits(this float value) => (VitaminA)VitaminA.FromInternationalUnits(value);
 
         /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
-        public static VitaminA InternationalUnits(this float value) => VitaminA.FromInternationalUnits(value);
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double?)"/>
-        public static VitaminA? InternationalUnits(this float? value) => VitaminA.FromInternationalUnits(value);
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double)"/>
-        public static VitaminA InternationalUnits(this decimal value) => VitaminA.FromInternationalUnits(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="VitaminA.FromInternationalUnits(double?)"/>
-        public static VitaminA? InternationalUnits(this decimal? value) => VitaminA.FromInternationalUnits(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static VitaminA InternationalUnits(this decimal value) => (VitaminA)VitaminA.FromInternationalUnits(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

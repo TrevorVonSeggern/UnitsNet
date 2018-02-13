@@ -20,8 +20,9 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -29,7 +30,9 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Level
 #else
-    public partial struct Level
+    public partial class Level<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         /// <summary>
@@ -49,7 +52,18 @@ namespace UnitsNet
             if ((reference == 0) || ((quantity > 0) && (reference < 0)))
                 throw new ArgumentOutOfRangeException(nameof(reference), errorMessage);
 
-            _decibels = 10*Math.Log10(quantity/reference);
+            _decibels = 10 * Math.Log10(quantity / reference);
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the logarithmic <see cref="Level" /> struct which is the ratio of a quantity Q to a
+        ///     reference value of that quantity Q0.
+        /// </summary>
+        /// <param name="quantity">The quantity.</param>
+        /// <param name="reference">The reference value that <paramref name="quantity" /> is compared to.</param>
+        public Level(Number<T, C> quantity, Number<T, C> reference)
+            : this(new C().ConvertToDouble(quantity), new C().ConvertToDouble(reference))
+        {
         }
     }
 }

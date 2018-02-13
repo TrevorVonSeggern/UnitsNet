@@ -42,6 +42,7 @@ function GenerateNumberExtensionsSourceCode($quantity)
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -56,34 +57,19 @@ namespace UnitsNet.Extensions.NumberTo$quantityName
         #region $($unit.SingularName)
 
         /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
-        public static $quantityName $($unit.PluralName)(this int value) => $quantityName.From$($unit.PluralName)(value);
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double?)"/>
-        public static $($quantityName)? $($unit.PluralName)(this int? value) => $quantityName.From$($unit.PluralName)(value);
+        public static $quantityName $($unit.PluralName)(this int value) => ($quantityName)$quantityName.From$($unit.PluralName)(value);
+	
+        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
+        public static $quantityName $($unit.PluralName)(this long value) => ($quantityName)$quantityName.From$($unit.PluralName)(value);
 
         /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
-        public static $quantityName $($unit.PluralName)(this long value) => $quantityName.From$($unit.PluralName)(value);
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double?)"/>
-        public static $($quantityName)? $($unit.PluralName)(this long? value) => $quantityName.From$($unit.PluralName)(value);
+        public static $quantityName $($unit.PluralName)(this double value) => ($quantityName)$quantityName.From$($unit.PluralName)(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
-        public static $quantityName $($unit.PluralName)(this double value) => $quantityName.From$($unit.PluralName)(value);
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double?)"/>
-        public static $($quantityName)? $($unit.PluralName)(this double? value) => $quantityName.From$($unit.PluralName)(value);
+        public static $quantityName $($unit.PluralName)(this float value) => ($quantityName)$quantityName.From$($unit.PluralName)(value);
 
         /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
-        public static $quantityName $($unit.PluralName)(this float value) => $quantityName.From$($unit.PluralName)(value);
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double?)"/>
-        public static $($quantityName)? $($unit.PluralName)(this float? value) => $quantityName.From$($unit.PluralName)(value);
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double)"/>
-        public static $quantityName $($unit.PluralName)(this decimal value) => $quantityName.From$($unit.PluralName)(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="$quantityName.From$($unit.PluralName)(double?)"/>
-        public static $($quantityName)? $($unit.PluralName)(this decimal? value) => $quantityName.From$($unit.PluralName)(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static $quantityName $($unit.PluralName)(this decimal value) => ($quantityName)$quantityName.From$($unit.PluralName)(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,21 +27,23 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class LapseRate
 #else
-    public partial struct LapseRate
+    public partial class LapseRate<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Length operator /(TemperatureDelta left, LapseRate right)
+        public static Length<T, C> operator /(TemperatureDelta<T, C> left, LapseRate<T, C> right)
         {
-            return Length.FromKilometers(left.KelvinsDelta / right.DegreesCelciusPerKilometer);
+            return Length<T, C>.FromKilometers(left.KelvinsDelta / right.DegreesCelciusPerKilometer);
         }
 
-        public static TemperatureDelta operator *(Length left, LapseRate right) => right * left;
+        public static TemperatureDelta<T, C> operator *(Length<T, C> left, LapseRate<T, C> right) => right * left;
 
-        public static TemperatureDelta operator *(LapseRate left, Length right)
+        public static TemperatureDelta<T, C> operator *(LapseRate<T, C> left, Length<T, C> right)
         {
-            return TemperatureDelta.FromDegreesCelsiusDelta(left.DegreesCelciusPerKilometer * right.Kilometers);
+            return TemperatureDelta<T, C>.FromDegreesCelsiusDelta(left.DegreesCelciusPerKilometer * right.Kilometers);
         }
 #endif
     }

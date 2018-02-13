@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Time is a dimension in which events can be ordered from the past through the present into the future, and also the measure of durations of events and the intervals between them.
     /// </summary>
@@ -63,1038 +64,829 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class Duration : UnitsNet.Generic.Duration<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class Duration
+		public sealed partial class Duration
 #else
-    public partial struct Duration : IComparable, IComparable<Duration>
+		public partial class Duration <T, C> : IComparable, IComparable<Duration<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of Duration.
-        /// </summary>
-        private readonly double _seconds;
+		{
+			/// <summary>
+			///     Base unit of Duration.
+			/// </summary>
+			private readonly Number<T, C> _seconds;
 
-        // Windows Runtime Component requires a default constructor
+			public Duration() : this(new Number<T,C>())
+			{
+			}
+
+			public Duration(T seconds)
+			{
+				_seconds = (seconds);
+			}
+
+			public Duration(Number<T, C> seconds)
+			{
+				_seconds = (seconds);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.Duration;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static DurationUnit BaseUnit
+			{
+				get { return DurationUnit.Second; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the Duration quantity.
+			/// </summary>
+			public static DurationUnit[] Units { get; } = Enum.GetValues(typeof(DurationUnit)).Cast<DurationUnit>().ToArray();
+
+			/// <summary>
+			///     Get Duration in Days.
+			/// </summary>
+			public Number<T, C> Days
+			{
+				get { return _seconds/(24*3600); }
+			}
+
+			/// <summary>
+			///     Get Duration in Hours.
+			/// </summary>
+			public Number<T, C> Hours
+			{
+				get { return _seconds/3600; }
+			}
+
+			/// <summary>
+			///     Get Duration in Microseconds.
+			/// </summary>
+			public Number<T, C> Microseconds
+			{
+				get { return _seconds*1e6; }
+			}
+
+			/// <summary>
+			///     Get Duration in Milliseconds.
+			/// </summary>
+			public Number<T, C> Milliseconds
+			{
+				get { return _seconds*1e3; }
+			}
+
+			/// <summary>
+			///     Get Duration in Minutes.
+			/// </summary>
+			public Number<T, C> Minutes
+			{
+				get { return _seconds/60; }
+			}
+
+			/// <summary>
+			///     Get Duration in Months.
+			/// </summary>
+			public Number<T, C> Months
+			{
+				get { return _seconds/(30*24*3600); }
+			}
+
+			/// <summary>
+			///     Get Duration in Nanoseconds.
+			/// </summary>
+			public Number<T, C> Nanoseconds
+			{
+				get { return _seconds*1e9; }
+			}
+
+			/// <summary>
+			///     Get Duration in Seconds.
+			/// </summary>
+			public Number<T, C> Seconds
+			{
+				get { return _seconds; }
+			}
+
+			/// <summary>
+			///     Get Duration in Weeks.
+			/// </summary>
+			public Number<T, C> Weeks
+			{
+				get { return _seconds/(7*24*3600); }
+			}
+
+			/// <summary>
+			///     Get Duration in Years.
+			/// </summary>
+			public Number<T, C> Years
+			{
+				get { return _seconds/(365*24*3600); }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static Duration<T, C> Zero
+			{
+				get { return new Duration<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get Duration from Days.
+			/// </summary>
 #if WINDOWS_UWP
-        public Duration() : this(0)
-        {
-        }
-#endif
-
-        public Duration(double seconds)
-        {
-            _seconds = Convert.ToDouble(seconds);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromDays(Number<T, C> days)
+			{
+				Number<T,C> value = (Number<T,C>) days;
+				return new Duration<T, C>(value*24*3600);
+			}
 #else
-        public
+			public static Duration<T, C> FromDays(Number<T, C> days)
+			{
+				Number<T,C> value = (Number<T,C>) days;
+				return new Duration<T, C>(new Number<T,C>(value*24*3600));
+			}
 #endif
-        Duration(long seconds)
-        {
-            _seconds = Convert.ToDouble(seconds);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get Duration from Hours.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromHours(Number<T, C> hours)
+			{
+				Number<T,C> value = (Number<T,C>) hours;
+				return new Duration<T, C>(value*3600);
+			}
 #else
-        public
+			public static Duration<T, C> FromHours(Number<T, C> hours)
+			{
+				Number<T,C> value = (Number<T,C>) hours;
+				return new Duration<T, C>(new Number<T,C>(value*3600));
+			}
 #endif
-        Duration(decimal seconds)
-        {
-            _seconds = Convert.ToDouble(seconds);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.Duration;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static DurationUnit BaseUnit
-        {
-            get { return DurationUnit.Second; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the Duration quantity.
-        /// </summary>
-        public static DurationUnit[] Units { get; } = Enum.GetValues(typeof(DurationUnit)).Cast<DurationUnit>().ToArray();
-
-        /// <summary>
-        ///     Get Duration in Days.
-        /// </summary>
-        public double Days
-        {
-            get { return _seconds/(24*3600); }
-        }
-
-        /// <summary>
-        ///     Get Duration in Hours.
-        /// </summary>
-        public double Hours
-        {
-            get { return _seconds/3600; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Microseconds.
-        /// </summary>
-        public double Microseconds
-        {
-            get { return _seconds*1e6; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Milliseconds.
-        /// </summary>
-        public double Milliseconds
-        {
-            get { return _seconds*1e3; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Minutes.
-        /// </summary>
-        public double Minutes
-        {
-            get { return _seconds/60; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Months.
-        /// </summary>
-        public double Months
-        {
-            get { return _seconds/(30*24*3600); }
-        }
-
-        /// <summary>
-        ///     Get Duration in Nanoseconds.
-        /// </summary>
-        public double Nanoseconds
-        {
-            get { return _seconds*1e9; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Seconds.
-        /// </summary>
-        public double Seconds
-        {
-            get { return _seconds; }
-        }
-
-        /// <summary>
-        ///     Get Duration in Weeks.
-        /// </summary>
-        public double Weeks
-        {
-            get { return _seconds/(7*24*3600); }
-        }
-
-        /// <summary>
-        ///     Get Duration in Years.
-        /// </summary>
-        public double Years
-        {
-            get { return _seconds/(365*24*3600); }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static Duration Zero
-        {
-            get { return new Duration(); }
-        }
-
-        /// <summary>
-        ///     Get Duration from Days.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Microseconds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromDays(double days)
-        {
-            double value = (double) days;
-            return new Duration(value*24*3600);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromMicroseconds(Number<T, C> microseconds)
+			{
+				Number<T,C> value = (Number<T,C>) microseconds;
+				return new Duration<T, C>(value/1e6);
+			}
 #else
-        public static Duration FromDays(QuantityValue days)
-        {
-            double value = (double) days;
-            return new Duration((value*24*3600));
-        }
+			public static Duration<T, C> FromMicroseconds(Number<T, C> microseconds)
+			{
+				Number<T,C> value = (Number<T,C>) microseconds;
+				return new Duration<T, C>(new Number<T,C>(value/1e6));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Hours.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Milliseconds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromHours(double hours)
-        {
-            double value = (double) hours;
-            return new Duration(value*3600);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromMilliseconds(Number<T, C> milliseconds)
+			{
+				Number<T,C> value = (Number<T,C>) milliseconds;
+				return new Duration<T, C>(value/1e3);
+			}
 #else
-        public static Duration FromHours(QuantityValue hours)
-        {
-            double value = (double) hours;
-            return new Duration((value*3600));
-        }
+			public static Duration<T, C> FromMilliseconds(Number<T, C> milliseconds)
+			{
+				Number<T,C> value = (Number<T,C>) milliseconds;
+				return new Duration<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Microseconds.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Minutes.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromMicroseconds(double microseconds)
-        {
-            double value = (double) microseconds;
-            return new Duration(value/1e6);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromMinutes(Number<T, C> minutes)
+			{
+				Number<T,C> value = (Number<T,C>) minutes;
+				return new Duration<T, C>(value*60);
+			}
 #else
-        public static Duration FromMicroseconds(QuantityValue microseconds)
-        {
-            double value = (double) microseconds;
-            return new Duration((value/1e6));
-        }
+			public static Duration<T, C> FromMinutes(Number<T, C> minutes)
+			{
+				Number<T,C> value = (Number<T,C>) minutes;
+				return new Duration<T, C>(new Number<T,C>(value*60));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Milliseconds.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Months.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromMilliseconds(double milliseconds)
-        {
-            double value = (double) milliseconds;
-            return new Duration(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromMonths(Number<T, C> months)
+			{
+				Number<T,C> value = (Number<T,C>) months;
+				return new Duration<T, C>(value*30*24*3600);
+			}
 #else
-        public static Duration FromMilliseconds(QuantityValue milliseconds)
-        {
-            double value = (double) milliseconds;
-            return new Duration((value/1e3));
-        }
+			public static Duration<T, C> FromMonths(Number<T, C> months)
+			{
+				Number<T,C> value = (Number<T,C>) months;
+				return new Duration<T, C>(new Number<T,C>(value*30*24*3600));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Minutes.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Nanoseconds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromMinutes(double minutes)
-        {
-            double value = (double) minutes;
-            return new Duration(value*60);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromNanoseconds(Number<T, C> nanoseconds)
+			{
+				Number<T,C> value = (Number<T,C>) nanoseconds;
+				return new Duration<T, C>(value/1e9);
+			}
 #else
-        public static Duration FromMinutes(QuantityValue minutes)
-        {
-            double value = (double) minutes;
-            return new Duration((value*60));
-        }
+			public static Duration<T, C> FromNanoseconds(Number<T, C> nanoseconds)
+			{
+				Number<T,C> value = (Number<T,C>) nanoseconds;
+				return new Duration<T, C>(new Number<T,C>(value/1e9));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Months.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Seconds.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromMonths(double months)
-        {
-            double value = (double) months;
-            return new Duration(value*30*24*3600);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromSeconds(Number<T, C> seconds)
+			{
+				Number<T,C> value = (Number<T,C>) seconds;
+				return new Duration<T, C>(value);
+			}
 #else
-        public static Duration FromMonths(QuantityValue months)
-        {
-            double value = (double) months;
-            return new Duration((value*30*24*3600));
-        }
+			public static Duration<T, C> FromSeconds(Number<T, C> seconds)
+			{
+				Number<T,C> value = (Number<T,C>) seconds;
+				return new Duration<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Nanoseconds.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Weeks.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromNanoseconds(double nanoseconds)
-        {
-            double value = (double) nanoseconds;
-            return new Duration(value/1e9);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromWeeks(Number<T, C> weeks)
+			{
+				Number<T,C> value = (Number<T,C>) weeks;
+				return new Duration<T, C>(value*7*24*3600);
+			}
 #else
-        public static Duration FromNanoseconds(QuantityValue nanoseconds)
-        {
-            double value = (double) nanoseconds;
-            return new Duration((value/1e9));
-        }
+			public static Duration<T, C> FromWeeks(Number<T, C> weeks)
+			{
+				Number<T,C> value = (Number<T,C>) weeks;
+				return new Duration<T, C>(new Number<T,C>(value*7*24*3600));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Seconds.
-        /// </summary>
+			/// <summary>
+			///     Get Duration from Years.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromSeconds(double seconds)
-        {
-            double value = (double) seconds;
-            return new Duration(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Duration<T, C> FromYears(Number<T, C> years)
+			{
+				Number<T,C> value = (Number<T,C>) years;
+				return new Duration<T, C>(value*365*24*3600);
+			}
 #else
-        public static Duration FromSeconds(QuantityValue seconds)
-        {
-            double value = (double) seconds;
-            return new Duration((value));
-        }
+			public static Duration<T, C> FromYears(Number<T, C> years)
+			{
+				Number<T,C> value = (Number<T,C>) years;
+				return new Duration<T, C>(new Number<T,C>(value*365*24*3600));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Duration from Weeks.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="DurationUnit" /> to <see cref="Duration" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>Duration unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromWeeks(double weeks)
-        {
-            double value = (double) weeks;
-            return new Duration(value*7*24*3600);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static Duration<T, C> From(double value, DurationUnit fromUnit)
 #else
-        public static Duration FromWeeks(QuantityValue weeks)
-        {
-            double value = (double) weeks;
-            return new Duration((value*7*24*3600));
-        }
+			public static Duration<T, C> From(Number<T, C> value, DurationUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case DurationUnit.Day:
+						return FromDays(value);
+					case DurationUnit.Hour:
+						return FromHours(value);
+					case DurationUnit.Microsecond:
+						return FromMicroseconds(value);
+					case DurationUnit.Millisecond:
+						return FromMilliseconds(value);
+					case DurationUnit.Minute:
+						return FromMinutes(value);
+					case DurationUnit.Month:
+						return FromMonths(value);
+					case DurationUnit.Nanosecond:
+						return FromNanoseconds(value);
+					case DurationUnit.Second:
+						return FromSeconds(value);
+					case DurationUnit.Week:
+						return FromWeeks(value);
+					case DurationUnit.Year:
+						return FromYears(value);
 
-        /// <summary>
-        ///     Get Duration from Years.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Duration FromYears(double years)
-        {
-            double value = (double) years;
-            return new Duration(value*365*24*3600);
-        }
-#else
-        public static Duration FromYears(QuantityValue years)
-        {
-            double value = (double) years;
-            return new Duration((value*365*24*3600));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(DurationUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(DurationUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable Duration from nullable Days.
-        /// </summary>
-        public static Duration? FromDays(QuantityValue? days)
-        {
-            if (days.HasValue)
-            {
-                return FromDays(days.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator -(Duration<T, C> right)
+			{
+				return new Duration<T, C>(-right._seconds);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Hours.
-        /// </summary>
-        public static Duration? FromHours(QuantityValue? hours)
-        {
-            if (hours.HasValue)
-            {
-                return FromHours(hours.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator +(Duration<T, C> left, Duration<T, C> right)
+			{
+				return new Duration<T, C>(left._seconds + right._seconds);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Microseconds.
-        /// </summary>
-        public static Duration? FromMicroseconds(QuantityValue? microseconds)
-        {
-            if (microseconds.HasValue)
-            {
-                return FromMicroseconds(microseconds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator -(Duration<T, C> left, Duration<T, C> right)
+			{
+				return new Duration<T, C>(left._seconds - right._seconds);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Milliseconds.
-        /// </summary>
-        public static Duration? FromMilliseconds(QuantityValue? milliseconds)
-        {
-            if (milliseconds.HasValue)
-            {
-                return FromMilliseconds(milliseconds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator *(Number<T, C> left, Duration<T, C> right)
+			{
+				return new Duration<T, C>(left*right._seconds);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Minutes.
-        /// </summary>
-        public static Duration? FromMinutes(QuantityValue? minutes)
-        {
-            if (minutes.HasValue)
-            {
-                return FromMinutes(minutes.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator *(Duration<T, C> left, double right)
+			{
+				return new Duration<T, C>(left._seconds*right);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Months.
-        /// </summary>
-        public static Duration? FromMonths(QuantityValue? months)
-        {
-            if (months.HasValue)
-            {
-                return FromMonths(months.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Duration<T, C> operator /(Duration<T, C> left, double right)
+			{
+				return new Duration<T, C>(left._seconds/right);
+			}
 
-        /// <summary>
-        ///     Get nullable Duration from nullable Nanoseconds.
-        /// </summary>
-        public static Duration? FromNanoseconds(QuantityValue? nanoseconds)
-        {
-            if (nanoseconds.HasValue)
-            {
-                return FromNanoseconds(nanoseconds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Duration from nullable Seconds.
-        /// </summary>
-        public static Duration? FromSeconds(QuantityValue? seconds)
-        {
-            if (seconds.HasValue)
-            {
-                return FromSeconds(seconds.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Duration from nullable Weeks.
-        /// </summary>
-        public static Duration? FromWeeks(QuantityValue? weeks)
-        {
-            if (weeks.HasValue)
-            {
-                return FromWeeks(weeks.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Duration from nullable Years.
-        /// </summary>
-        public static Duration? FromYears(QuantityValue? years)
-        {
-            if (years.HasValue)
-            {
-                return FromYears(years.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(Duration<T, C> left, Duration<T, C> right)
+			{
+				return Convert.ToDouble(left._seconds/right._seconds);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="DurationUnit" /> to <see cref="Duration" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Duration unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is Duration<T, C>)) throw new ArgumentException("Expected type Duration.", "obj");
+				return CompareTo((Duration<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static Duration From(double value, DurationUnit fromUnit)
+			internal
 #else
-        public static Duration From(QuantityValue value, DurationUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case DurationUnit.Day:
-                    return FromDays(value);
-                case DurationUnit.Hour:
-                    return FromHours(value);
-                case DurationUnit.Microsecond:
-                    return FromMicroseconds(value);
-                case DurationUnit.Millisecond:
-                    return FromMilliseconds(value);
-                case DurationUnit.Minute:
-                    return FromMinutes(value);
-                case DurationUnit.Month:
-                    return FromMonths(value);
-                case DurationUnit.Nanosecond:
-                    return FromNanoseconds(value);
-                case DurationUnit.Second:
-                    return FromSeconds(value);
-                case DurationUnit.Week:
-                    return FromWeeks(value);
-                case DurationUnit.Year:
-                    return FromYears(value);
+			int CompareTo(Duration<T, C> other)
+			{
+				return _seconds.CompareTo(other._seconds);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="DurationUnit" /> to <see cref="Duration" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Duration unit value.</returns>
-        public static Duration? From(QuantityValue? value, DurationUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case DurationUnit.Day:
-                    return FromDays(value.Value);
-                case DurationUnit.Hour:
-                    return FromHours(value.Value);
-                case DurationUnit.Microsecond:
-                    return FromMicroseconds(value.Value);
-                case DurationUnit.Millisecond:
-                    return FromMilliseconds(value.Value);
-                case DurationUnit.Minute:
-                    return FromMinutes(value.Value);
-                case DurationUnit.Month:
-                    return FromMonths(value.Value);
-                case DurationUnit.Nanosecond:
-                    return FromNanoseconds(value.Value);
-                case DurationUnit.Second:
-                    return FromSeconds(value.Value);
-                case DurationUnit.Week:
-                    return FromWeeks(value.Value);
-                case DurationUnit.Year:
-                    return FromYears(value.Value);
+			public static bool operator <=(Duration<T, C> left, Duration<T, C> right)
+			{
+				return left._seconds <= right._seconds;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(Duration<T, C> left, Duration<T, C> right)
+			{
+				return left._seconds >= right._seconds;
+			}
+
+			public static bool operator <(Duration<T, C> left, Duration<T, C> right)
+			{
+				return left._seconds < right._seconds;
+			}
+
+			public static bool operator >(Duration<T, C> left, Duration<T, C> right)
+			{
+				return left._seconds > right._seconds;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(Duration<T, C> left, Duration<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._seconds == right._seconds;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(Duration<T, C> left, Duration<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._seconds != right._seconds;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(DurationUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(DurationUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static Duration operator -(Duration right)
-        {
-            return new Duration(-right._seconds);
-        }
-
-        public static Duration operator +(Duration left, Duration right)
-        {
-            return new Duration(left._seconds + right._seconds);
-        }
-
-        public static Duration operator -(Duration left, Duration right)
-        {
-            return new Duration(left._seconds - right._seconds);
-        }
-
-        public static Duration operator *(double left, Duration right)
-        {
-            return new Duration(left*right._seconds);
-        }
-
-        public static Duration operator *(Duration left, double right)
-        {
-            return new Duration(left._seconds*(double)right);
-        }
-
-        public static Duration operator /(Duration left, double right)
-        {
-            return new Duration(left._seconds/(double)right);
-        }
-
-        public static double operator /(Duration left, Duration right)
-        {
-            return Convert.ToDouble(left._seconds/right._seconds);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is Duration)) throw new ArgumentException("Expected type Duration.", "obj");
-            return CompareTo((Duration) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(Duration other)
-        {
-            return _seconds.CompareTo(other._seconds);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(Duration left, Duration right)
-        {
-            return left._seconds <= right._seconds;
-        }
-
-        public static bool operator >=(Duration left, Duration right)
-        {
-            return left._seconds >= right._seconds;
-        }
-
-        public static bool operator <(Duration left, Duration right)
-        {
-            return left._seconds < right._seconds;
-        }
-
-        public static bool operator >(Duration left, Duration right)
-        {
-            return left._seconds > right._seconds;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(Duration left, Duration right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._seconds == right._seconds;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(Duration left, Duration right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._seconds != right._seconds;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _seconds.Equals(((Duration) obj)._seconds);
-        }
+				return _seconds.Equals(((Duration<T, C>) obj)._seconds);
+			}
 
-        /// <summary>
-        ///     Compare equality to another Duration by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(Duration other, Duration maxError)
-        {
-            return Math.Abs(_seconds - other._seconds) <= maxError._seconds;
-        }
+			/// <summary>
+			///     Compare equality to another Duration by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(Duration<T, C> other, Duration<T, C> maxError)
+			{
+				return Math.Abs((decimal)_seconds - (decimal)other._seconds) <= maxError._seconds;
+			}
 
-        public override int GetHashCode()
-        {
-            return _seconds.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _seconds.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(DurationUnit unit)
-        {
-            switch (unit)
-            {
-                case DurationUnit.Day:
-                    return Days;
-                case DurationUnit.Hour:
-                    return Hours;
-                case DurationUnit.Microsecond:
-                    return Microseconds;
-                case DurationUnit.Millisecond:
-                    return Milliseconds;
-                case DurationUnit.Minute:
-                    return Minutes;
-                case DurationUnit.Month:
-                    return Months;
-                case DurationUnit.Nanosecond:
-                    return Nanoseconds;
-                case DurationUnit.Second:
-                    return Seconds;
-                case DurationUnit.Week:
-                    return Weeks;
-                case DurationUnit.Year:
-                    return Years;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(DurationUnit unit)
+			{
+				switch (unit)
+				{
+					case DurationUnit.Day:
+						return Days;
+					case DurationUnit.Hour:
+						return Hours;
+					case DurationUnit.Microsecond:
+						return Microseconds;
+					case DurationUnit.Millisecond:
+						return Milliseconds;
+					case DurationUnit.Minute:
+						return Minutes;
+					case DurationUnit.Month:
+						return Months;
+					case DurationUnit.Nanosecond:
+						return Nanoseconds;
+					case DurationUnit.Second:
+						return Seconds;
+					case DurationUnit.Week:
+						return Weeks;
+					case DurationUnit.Year:
+						return Years;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Duration Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Duration<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Duration Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Duration<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<Duration, DurationUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    DurationUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromSeconds(x.Seconds + y.Seconds));
-        }
+					return QuantityParser.Parse<Duration<T, C>, DurationUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						DurationUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromSeconds((Number<T, C>)x.Seconds + y.Seconds));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out Duration result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out Duration<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Duration result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(Duration);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Duration<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(Duration<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static DurationUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static DurationUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static DurationUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static DurationUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static DurationUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static DurationUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<DurationUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<DurationUnit>(str.Trim());
 
-            if (unit == DurationUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized DurationUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == DurationUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized DurationUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is Second
-        /// </summary>
-        public static DurationUnit ToStringDefaultUnit { get; set; } = DurationUnit.Second;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is Second
+			/// </summary>
+			public static DurationUnit ToStringDefaultUnit { get; set; } = DurationUnit.Second;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(DurationUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(DurationUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(DurationUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(DurationUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(DurationUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(DurationUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(DurationUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(DurationUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of Duration
-        /// </summary>
-        public static Duration MaxValue
-        {
-            get
-            {
-                return new Duration(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of Duration
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of Duration
-        /// </summary>
-        public static Duration MinValue
-        {
-            get
-            {
-                return new Duration(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of Duration
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

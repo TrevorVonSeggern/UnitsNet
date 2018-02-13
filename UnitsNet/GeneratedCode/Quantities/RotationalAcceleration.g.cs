@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Angular acceleration is the rate of change of rotational speed.
     /// </summary>
@@ -63,662 +64,589 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class RotationalAcceleration : UnitsNet.Generic.RotationalAcceleration<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class RotationalAcceleration
+		public sealed partial class RotationalAcceleration
 #else
-    public partial struct RotationalAcceleration : IComparable, IComparable<RotationalAcceleration>
+		public partial class RotationalAcceleration <T, C> : IComparable, IComparable<RotationalAcceleration<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of RotationalAcceleration.
-        /// </summary>
-        private readonly double _radiansPerSecondSquared;
+		{
+			/// <summary>
+			///     Base unit of RotationalAcceleration.
+			/// </summary>
+			private readonly Number<T, C> _radiansPerSecondSquared;
 
-        // Windows Runtime Component requires a default constructor
+			public RotationalAcceleration() : this(new Number<T,C>())
+			{
+			}
+
+			public RotationalAcceleration(T radianspersecondsquared)
+			{
+				_radiansPerSecondSquared = (radianspersecondsquared);
+			}
+
+			public RotationalAcceleration(Number<T, C> radianspersecondsquared)
+			{
+				_radiansPerSecondSquared = (radianspersecondsquared);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.RotationalAcceleration;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static RotationalAccelerationUnit BaseUnit
+			{
+				get { return RotationalAccelerationUnit.RadianPerSecondSquared; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the RotationalAcceleration quantity.
+			/// </summary>
+			public static RotationalAccelerationUnit[] Units { get; } = Enum.GetValues(typeof(RotationalAccelerationUnit)).Cast<RotationalAccelerationUnit>().ToArray();
+
+			/// <summary>
+			///     Get RotationalAcceleration in DegreesPerSecondSquared.
+			/// </summary>
+			public Number<T, C> DegreesPerSecondSquared
+			{
+				get { return (180/Math.PI)*_radiansPerSecondSquared; }
+			}
+
+			/// <summary>
+			///     Get RotationalAcceleration in RadiansPerSecondSquared.
+			/// </summary>
+			public Number<T, C> RadiansPerSecondSquared
+			{
+				get { return _radiansPerSecondSquared; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static RotationalAcceleration<T, C> Zero
+			{
+				get { return new RotationalAcceleration<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get RotationalAcceleration from DegreesPerSecondSquared.
+			/// </summary>
 #if WINDOWS_UWP
-        public RotationalAcceleration() : this(0)
-        {
-        }
-#endif
-
-        public RotationalAcceleration(double radianspersecondsquared)
-        {
-            _radiansPerSecondSquared = Convert.ToDouble(radianspersecondsquared);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static RotationalAcceleration<T, C> FromDegreesPerSecondSquared(Number<T, C> degreespersecondsquared)
+			{
+				Number<T,C> value = (Number<T,C>) degreespersecondsquared;
+				return new RotationalAcceleration<T, C>((Math.PI/180)*value);
+			}
 #else
-        public
+			public static RotationalAcceleration<T, C> FromDegreesPerSecondSquared(Number<T, C> degreespersecondsquared)
+			{
+				Number<T,C> value = (Number<T,C>) degreespersecondsquared;
+				return new RotationalAcceleration<T, C>(new Number<T,C>((Math.PI/180)*value));
+			}
 #endif
-        RotationalAcceleration(long radianspersecondsquared)
-        {
-            _radiansPerSecondSquared = Convert.ToDouble(radianspersecondsquared);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get RotationalAcceleration from RadiansPerSecondSquared.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static RotationalAcceleration<T, C> FromRadiansPerSecondSquared(Number<T, C> radianspersecondsquared)
+			{
+				Number<T,C> value = (Number<T,C>) radianspersecondsquared;
+				return new RotationalAcceleration<T, C>(value);
+			}
 #else
-        public
+			public static RotationalAcceleration<T, C> FromRadiansPerSecondSquared(Number<T, C> radianspersecondsquared)
+			{
+				Number<T,C> value = (Number<T,C>) radianspersecondsquared;
+				return new RotationalAcceleration<T, C>(new Number<T,C>(value));
+			}
 #endif
-        RotationalAcceleration(decimal radianspersecondsquared)
-        {
-            _radiansPerSecondSquared = Convert.ToDouble(radianspersecondsquared);
-        }
 
-        #region Properties
 
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.RotationalAcceleration;
 
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static RotationalAccelerationUnit BaseUnit
-        {
-            get { return RotationalAccelerationUnit.RadianPerSecondSquared; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the RotationalAcceleration quantity.
-        /// </summary>
-        public static RotationalAccelerationUnit[] Units { get; } = Enum.GetValues(typeof(RotationalAccelerationUnit)).Cast<RotationalAccelerationUnit>().ToArray();
-
-        /// <summary>
-        ///     Get RotationalAcceleration in DegreesPerSecondSquared.
-        /// </summary>
-        public double DegreesPerSecondSquared
-        {
-            get { return (180/Math.PI)*_radiansPerSecondSquared; }
-        }
-
-        /// <summary>
-        ///     Get RotationalAcceleration in RadiansPerSecondSquared.
-        /// </summary>
-        public double RadiansPerSecondSquared
-        {
-            get { return _radiansPerSecondSquared; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static RotationalAcceleration Zero
-        {
-            get { return new RotationalAcceleration(); }
-        }
-
-        /// <summary>
-        ///     Get RotationalAcceleration from DegreesPerSecondSquared.
-        /// </summary>
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="RotationalAccelerationUnit" /> to <see cref="RotationalAcceleration" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>RotationalAcceleration unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static RotationalAcceleration FromDegreesPerSecondSquared(double degreespersecondsquared)
-        {
-            double value = (double) degreespersecondsquared;
-            return new RotationalAcceleration((Math.PI/180)*value);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static RotationalAcceleration<T, C> From(double value, RotationalAccelerationUnit fromUnit)
 #else
-        public static RotationalAcceleration FromDegreesPerSecondSquared(QuantityValue degreespersecondsquared)
-        {
-            double value = (double) degreespersecondsquared;
-            return new RotationalAcceleration(((Math.PI/180)*value));
-        }
+			public static RotationalAcceleration<T, C> From(Number<T, C> value, RotationalAccelerationUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case RotationalAccelerationUnit.DegreePerSecondSquared:
+						return FromDegreesPerSecondSquared(value);
+					case RotationalAccelerationUnit.RadianPerSecondSquared:
+						return FromRadiansPerSecondSquared(value);
 
-        /// <summary>
-        ///     Get RotationalAcceleration from RadiansPerSecondSquared.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static RotationalAcceleration FromRadiansPerSecondSquared(double radianspersecondsquared)
-        {
-            double value = (double) radianspersecondsquared;
-            return new RotationalAcceleration(value);
-        }
-#else
-        public static RotationalAcceleration FromRadiansPerSecondSquared(QuantityValue radianspersecondsquared)
-        {
-            double value = (double) radianspersecondsquared;
-            return new RotationalAcceleration((value));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(RotationalAccelerationUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(RotationalAccelerationUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable RotationalAcceleration from nullable DegreesPerSecondSquared.
-        /// </summary>
-        public static RotationalAcceleration? FromDegreesPerSecondSquared(QuantityValue? degreespersecondsquared)
-        {
-            if (degreespersecondsquared.HasValue)
-            {
-                return FromDegreesPerSecondSquared(degreespersecondsquared.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static RotationalAcceleration<T, C> operator -(RotationalAcceleration<T, C> right)
+			{
+				return new RotationalAcceleration<T, C>(-right._radiansPerSecondSquared);
+			}
 
-        /// <summary>
-        ///     Get nullable RotationalAcceleration from nullable RadiansPerSecondSquared.
-        /// </summary>
-        public static RotationalAcceleration? FromRadiansPerSecondSquared(QuantityValue? radianspersecondsquared)
-        {
-            if (radianspersecondsquared.HasValue)
-            {
-                return FromRadiansPerSecondSquared(radianspersecondsquared.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static RotationalAcceleration<T, C> operator +(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return new RotationalAcceleration<T, C>(left._radiansPerSecondSquared + right._radiansPerSecondSquared);
+			}
 
+			public static RotationalAcceleration<T, C> operator -(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return new RotationalAcceleration<T, C>(left._radiansPerSecondSquared - right._radiansPerSecondSquared);
+			}
+
+			public static RotationalAcceleration<T, C> operator *(Number<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return new RotationalAcceleration<T, C>(left*right._radiansPerSecondSquared);
+			}
+
+			public static RotationalAcceleration<T, C> operator *(RotationalAcceleration<T, C> left, double right)
+			{
+				return new RotationalAcceleration<T, C>(left._radiansPerSecondSquared*right);
+			}
+
+			public static RotationalAcceleration<T, C> operator /(RotationalAcceleration<T, C> left, double right)
+			{
+				return new RotationalAcceleration<T, C>(left._radiansPerSecondSquared/right);
+			}
+
+			public static double operator /(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return Convert.ToDouble(left._radiansPerSecondSquared/right._radiansPerSecondSquared);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="RotationalAccelerationUnit" /> to <see cref="RotationalAcceleration" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>RotationalAcceleration unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is RotationalAcceleration<T, C>)) throw new ArgumentException("Expected type RotationalAcceleration.", "obj");
+				return CompareTo((RotationalAcceleration<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static RotationalAcceleration From(double value, RotationalAccelerationUnit fromUnit)
+			internal
 #else
-        public static RotationalAcceleration From(QuantityValue value, RotationalAccelerationUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case RotationalAccelerationUnit.DegreePerSecondSquared:
-                    return FromDegreesPerSecondSquared(value);
-                case RotationalAccelerationUnit.RadianPerSecondSquared:
-                    return FromRadiansPerSecondSquared(value);
+			int CompareTo(RotationalAcceleration<T, C> other)
+			{
+				return _radiansPerSecondSquared.CompareTo(other._radiansPerSecondSquared);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="RotationalAccelerationUnit" /> to <see cref="RotationalAcceleration" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>RotationalAcceleration unit value.</returns>
-        public static RotationalAcceleration? From(QuantityValue? value, RotationalAccelerationUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case RotationalAccelerationUnit.DegreePerSecondSquared:
-                    return FromDegreesPerSecondSquared(value.Value);
-                case RotationalAccelerationUnit.RadianPerSecondSquared:
-                    return FromRadiansPerSecondSquared(value.Value);
+			public static bool operator <=(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return left._radiansPerSecondSquared <= right._radiansPerSecondSquared;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return left._radiansPerSecondSquared >= right._radiansPerSecondSquared;
+			}
+
+			public static bool operator <(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return left._radiansPerSecondSquared < right._radiansPerSecondSquared;
+			}
+
+			public static bool operator >(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				return left._radiansPerSecondSquared > right._radiansPerSecondSquared;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._radiansPerSecondSquared == right._radiansPerSecondSquared;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(RotationalAcceleration<T, C> left, RotationalAcceleration<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._radiansPerSecondSquared != right._radiansPerSecondSquared;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(RotationalAccelerationUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(RotationalAccelerationUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static RotationalAcceleration operator -(RotationalAcceleration right)
-        {
-            return new RotationalAcceleration(-right._radiansPerSecondSquared);
-        }
-
-        public static RotationalAcceleration operator +(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return new RotationalAcceleration(left._radiansPerSecondSquared + right._radiansPerSecondSquared);
-        }
-
-        public static RotationalAcceleration operator -(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return new RotationalAcceleration(left._radiansPerSecondSquared - right._radiansPerSecondSquared);
-        }
-
-        public static RotationalAcceleration operator *(double left, RotationalAcceleration right)
-        {
-            return new RotationalAcceleration(left*right._radiansPerSecondSquared);
-        }
-
-        public static RotationalAcceleration operator *(RotationalAcceleration left, double right)
-        {
-            return new RotationalAcceleration(left._radiansPerSecondSquared*(double)right);
-        }
-
-        public static RotationalAcceleration operator /(RotationalAcceleration left, double right)
-        {
-            return new RotationalAcceleration(left._radiansPerSecondSquared/(double)right);
-        }
-
-        public static double operator /(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return Convert.ToDouble(left._radiansPerSecondSquared/right._radiansPerSecondSquared);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is RotationalAcceleration)) throw new ArgumentException("Expected type RotationalAcceleration.", "obj");
-            return CompareTo((RotationalAcceleration) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(RotationalAcceleration other)
-        {
-            return _radiansPerSecondSquared.CompareTo(other._radiansPerSecondSquared);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return left._radiansPerSecondSquared <= right._radiansPerSecondSquared;
-        }
-
-        public static bool operator >=(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return left._radiansPerSecondSquared >= right._radiansPerSecondSquared;
-        }
-
-        public static bool operator <(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return left._radiansPerSecondSquared < right._radiansPerSecondSquared;
-        }
-
-        public static bool operator >(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            return left._radiansPerSecondSquared > right._radiansPerSecondSquared;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._radiansPerSecondSquared == right._radiansPerSecondSquared;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(RotationalAcceleration left, RotationalAcceleration right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._radiansPerSecondSquared != right._radiansPerSecondSquared;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _radiansPerSecondSquared.Equals(((RotationalAcceleration) obj)._radiansPerSecondSquared);
-        }
+				return _radiansPerSecondSquared.Equals(((RotationalAcceleration<T, C>) obj)._radiansPerSecondSquared);
+			}
 
-        /// <summary>
-        ///     Compare equality to another RotationalAcceleration by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(RotationalAcceleration other, RotationalAcceleration maxError)
-        {
-            return Math.Abs(_radiansPerSecondSquared - other._radiansPerSecondSquared) <= maxError._radiansPerSecondSquared;
-        }
+			/// <summary>
+			///     Compare equality to another RotationalAcceleration by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(RotationalAcceleration<T, C> other, RotationalAcceleration<T, C> maxError)
+			{
+				return Math.Abs((decimal)_radiansPerSecondSquared - (decimal)other._radiansPerSecondSquared) <= maxError._radiansPerSecondSquared;
+			}
 
-        public override int GetHashCode()
-        {
-            return _radiansPerSecondSquared.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _radiansPerSecondSquared.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(RotationalAccelerationUnit unit)
-        {
-            switch (unit)
-            {
-                case RotationalAccelerationUnit.DegreePerSecondSquared:
-                    return DegreesPerSecondSquared;
-                case RotationalAccelerationUnit.RadianPerSecondSquared:
-                    return RadiansPerSecondSquared;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(RotationalAccelerationUnit unit)
+			{
+				switch (unit)
+				{
+					case RotationalAccelerationUnit.DegreePerSecondSquared:
+						return DegreesPerSecondSquared;
+					case RotationalAccelerationUnit.RadianPerSecondSquared:
+						return RadiansPerSecondSquared;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static RotationalAcceleration Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static RotationalAcceleration<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static RotationalAcceleration Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static RotationalAcceleration<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<RotationalAcceleration, RotationalAccelerationUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    RotationalAccelerationUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromRadiansPerSecondSquared(x.RadiansPerSecondSquared + y.RadiansPerSecondSquared));
-        }
+					return QuantityParser.Parse<RotationalAcceleration<T, C>, RotationalAccelerationUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						RotationalAccelerationUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromRadiansPerSecondSquared((Number<T, C>)x.RadiansPerSecondSquared + y.RadiansPerSecondSquared));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out RotationalAcceleration result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out RotationalAcceleration<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out RotationalAcceleration result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(RotationalAcceleration);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out RotationalAcceleration<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(RotationalAcceleration<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static RotationalAccelerationUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static RotationalAccelerationUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static RotationalAccelerationUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static RotationalAccelerationUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static RotationalAccelerationUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static RotationalAccelerationUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<RotationalAccelerationUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<RotationalAccelerationUnit>(str.Trim());
 
-            if (unit == RotationalAccelerationUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized RotationalAccelerationUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == RotationalAccelerationUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized RotationalAccelerationUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is RadianPerSecondSquared
-        /// </summary>
-        public static RotationalAccelerationUnit ToStringDefaultUnit { get; set; } = RotationalAccelerationUnit.RadianPerSecondSquared;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is RadianPerSecondSquared
+			/// </summary>
+			public static RotationalAccelerationUnit ToStringDefaultUnit { get; set; } = RotationalAccelerationUnit.RadianPerSecondSquared;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(RotationalAccelerationUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(RotationalAccelerationUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(RotationalAccelerationUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of RotationalAcceleration
-        /// </summary>
-        public static RotationalAcceleration MaxValue
-        {
-            get
-            {
-                return new RotationalAcceleration(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of RotationalAcceleration
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of RotationalAcceleration
-        /// </summary>
-        public static RotationalAcceleration MinValue
-        {
-            get
-            {
-                return new RotationalAcceleration(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of RotationalAcceleration
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

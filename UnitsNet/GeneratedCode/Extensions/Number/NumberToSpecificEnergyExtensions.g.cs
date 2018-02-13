@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,272 +48,152 @@ namespace UnitsNet.Extensions.NumberToSpecificEnergy
         #region CaloriePerGram
 
         /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
-        public static SpecificEnergy CaloriesPerGram(this int value) => SpecificEnergy.FromCaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double?)"/>
-        public static SpecificEnergy? CaloriesPerGram(this int? value) => SpecificEnergy.FromCaloriesPerGram(value);
+        public static SpecificEnergy CaloriesPerGram(this int value) => (SpecificEnergy)SpecificEnergy.FromCaloriesPerGram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
+        public static SpecificEnergy CaloriesPerGram(this long value) => (SpecificEnergy)SpecificEnergy.FromCaloriesPerGram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
-        public static SpecificEnergy CaloriesPerGram(this long value) => SpecificEnergy.FromCaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double?)"/>
-        public static SpecificEnergy? CaloriesPerGram(this long? value) => SpecificEnergy.FromCaloriesPerGram(value);
+        public static SpecificEnergy CaloriesPerGram(this double value) => (SpecificEnergy)SpecificEnergy.FromCaloriesPerGram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
-        public static SpecificEnergy CaloriesPerGram(this double value) => SpecificEnergy.FromCaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double?)"/>
-        public static SpecificEnergy? CaloriesPerGram(this double? value) => SpecificEnergy.FromCaloriesPerGram(value);
+        public static SpecificEnergy CaloriesPerGram(this float value) => (SpecificEnergy)SpecificEnergy.FromCaloriesPerGram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
-        public static SpecificEnergy CaloriesPerGram(this float value) => SpecificEnergy.FromCaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double?)"/>
-        public static SpecificEnergy? CaloriesPerGram(this float? value) => SpecificEnergy.FromCaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double)"/>
-        public static SpecificEnergy CaloriesPerGram(this decimal value) => SpecificEnergy.FromCaloriesPerGram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromCaloriesPerGram(double?)"/>
-        public static SpecificEnergy? CaloriesPerGram(this decimal? value) => SpecificEnergy.FromCaloriesPerGram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy CaloriesPerGram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromCaloriesPerGram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region JoulePerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
-        public static SpecificEnergy JoulesPerKilogram(this int value) => SpecificEnergy.FromJoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? JoulesPerKilogram(this int? value) => SpecificEnergy.FromJoulesPerKilogram(value);
+        public static SpecificEnergy JoulesPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromJoulesPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
+        public static SpecificEnergy JoulesPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromJoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
-        public static SpecificEnergy JoulesPerKilogram(this long value) => SpecificEnergy.FromJoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? JoulesPerKilogram(this long? value) => SpecificEnergy.FromJoulesPerKilogram(value);
+        public static SpecificEnergy JoulesPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromJoulesPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
-        public static SpecificEnergy JoulesPerKilogram(this double value) => SpecificEnergy.FromJoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? JoulesPerKilogram(this double? value) => SpecificEnergy.FromJoulesPerKilogram(value);
+        public static SpecificEnergy JoulesPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromJoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
-        public static SpecificEnergy JoulesPerKilogram(this float value) => SpecificEnergy.FromJoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? JoulesPerKilogram(this float? value) => SpecificEnergy.FromJoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double)"/>
-        public static SpecificEnergy JoulesPerKilogram(this decimal value) => SpecificEnergy.FromJoulesPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromJoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? JoulesPerKilogram(this decimal? value) => SpecificEnergy.FromJoulesPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy JoulesPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromJoulesPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilocaloriePerGram
 
         /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
-        public static SpecificEnergy KilocaloriesPerGram(this int value) => SpecificEnergy.FromKilocaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double?)"/>
-        public static SpecificEnergy? KilocaloriesPerGram(this int? value) => SpecificEnergy.FromKilocaloriesPerGram(value);
+        public static SpecificEnergy KilocaloriesPerGram(this int value) => (SpecificEnergy)SpecificEnergy.FromKilocaloriesPerGram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
+        public static SpecificEnergy KilocaloriesPerGram(this long value) => (SpecificEnergy)SpecificEnergy.FromKilocaloriesPerGram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
-        public static SpecificEnergy KilocaloriesPerGram(this long value) => SpecificEnergy.FromKilocaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double?)"/>
-        public static SpecificEnergy? KilocaloriesPerGram(this long? value) => SpecificEnergy.FromKilocaloriesPerGram(value);
+        public static SpecificEnergy KilocaloriesPerGram(this double value) => (SpecificEnergy)SpecificEnergy.FromKilocaloriesPerGram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
-        public static SpecificEnergy KilocaloriesPerGram(this double value) => SpecificEnergy.FromKilocaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double?)"/>
-        public static SpecificEnergy? KilocaloriesPerGram(this double? value) => SpecificEnergy.FromKilocaloriesPerGram(value);
+        public static SpecificEnergy KilocaloriesPerGram(this float value) => (SpecificEnergy)SpecificEnergy.FromKilocaloriesPerGram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
-        public static SpecificEnergy KilocaloriesPerGram(this float value) => SpecificEnergy.FromKilocaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double?)"/>
-        public static SpecificEnergy? KilocaloriesPerGram(this float? value) => SpecificEnergy.FromKilocaloriesPerGram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double)"/>
-        public static SpecificEnergy KilocaloriesPerGram(this decimal value) => SpecificEnergy.FromKilocaloriesPerGram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilocaloriesPerGram(double?)"/>
-        public static SpecificEnergy? KilocaloriesPerGram(this decimal? value) => SpecificEnergy.FromKilocaloriesPerGram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy KilocaloriesPerGram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromKilocaloriesPerGram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilojoulePerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
-        public static SpecificEnergy KilojoulesPerKilogram(this int value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? KilojoulesPerKilogram(this int? value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
+        public static SpecificEnergy KilojoulesPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromKilojoulesPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
+        public static SpecificEnergy KilojoulesPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromKilojoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
-        public static SpecificEnergy KilojoulesPerKilogram(this long value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? KilojoulesPerKilogram(this long? value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
+        public static SpecificEnergy KilojoulesPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromKilojoulesPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
-        public static SpecificEnergy KilojoulesPerKilogram(this double value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? KilojoulesPerKilogram(this double? value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
+        public static SpecificEnergy KilojoulesPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromKilojoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
-        public static SpecificEnergy KilojoulesPerKilogram(this float value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? KilojoulesPerKilogram(this float? value) => SpecificEnergy.FromKilojoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double)"/>
-        public static SpecificEnergy KilojoulesPerKilogram(this decimal value) => SpecificEnergy.FromKilojoulesPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilojoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? KilojoulesPerKilogram(this decimal? value) => SpecificEnergy.FromKilojoulesPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy KilojoulesPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromKilojoulesPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region KilowattHourPerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
-        public static SpecificEnergy KilowattHoursPerKilogram(this int value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? KilowattHoursPerKilogram(this int? value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
+        public static SpecificEnergy KilowattHoursPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromKilowattHoursPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
+        public static SpecificEnergy KilowattHoursPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromKilowattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
-        public static SpecificEnergy KilowattHoursPerKilogram(this long value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? KilowattHoursPerKilogram(this long? value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
+        public static SpecificEnergy KilowattHoursPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromKilowattHoursPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
-        public static SpecificEnergy KilowattHoursPerKilogram(this double value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? KilowattHoursPerKilogram(this double? value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
+        public static SpecificEnergy KilowattHoursPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromKilowattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
-        public static SpecificEnergy KilowattHoursPerKilogram(this float value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? KilowattHoursPerKilogram(this float? value) => SpecificEnergy.FromKilowattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double)"/>
-        public static SpecificEnergy KilowattHoursPerKilogram(this decimal value) => SpecificEnergy.FromKilowattHoursPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromKilowattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? KilowattHoursPerKilogram(this decimal? value) => SpecificEnergy.FromKilowattHoursPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy KilowattHoursPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromKilowattHoursPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MegajoulePerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
-        public static SpecificEnergy MegajoulesPerKilogram(this int value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? MegajoulesPerKilogram(this int? value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
+        public static SpecificEnergy MegajoulesPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromMegajoulesPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
+        public static SpecificEnergy MegajoulesPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromMegajoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
-        public static SpecificEnergy MegajoulesPerKilogram(this long value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? MegajoulesPerKilogram(this long? value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
+        public static SpecificEnergy MegajoulesPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromMegajoulesPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
-        public static SpecificEnergy MegajoulesPerKilogram(this double value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? MegajoulesPerKilogram(this double? value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
+        public static SpecificEnergy MegajoulesPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromMegajoulesPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
-        public static SpecificEnergy MegajoulesPerKilogram(this float value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? MegajoulesPerKilogram(this float? value) => SpecificEnergy.FromMegajoulesPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double)"/>
-        public static SpecificEnergy MegajoulesPerKilogram(this decimal value) => SpecificEnergy.FromMegajoulesPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegajoulesPerKilogram(double?)"/>
-        public static SpecificEnergy? MegajoulesPerKilogram(this decimal? value) => SpecificEnergy.FromMegajoulesPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy MegajoulesPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromMegajoulesPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region MegawattHourPerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
-        public static SpecificEnergy MegawattHoursPerKilogram(this int value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? MegawattHoursPerKilogram(this int? value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
+        public static SpecificEnergy MegawattHoursPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromMegawattHoursPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
+        public static SpecificEnergy MegawattHoursPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromMegawattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
-        public static SpecificEnergy MegawattHoursPerKilogram(this long value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? MegawattHoursPerKilogram(this long? value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
+        public static SpecificEnergy MegawattHoursPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromMegawattHoursPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
-        public static SpecificEnergy MegawattHoursPerKilogram(this double value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? MegawattHoursPerKilogram(this double? value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
+        public static SpecificEnergy MegawattHoursPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromMegawattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
-        public static SpecificEnergy MegawattHoursPerKilogram(this float value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? MegawattHoursPerKilogram(this float? value) => SpecificEnergy.FromMegawattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double)"/>
-        public static SpecificEnergy MegawattHoursPerKilogram(this decimal value) => SpecificEnergy.FromMegawattHoursPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromMegawattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? MegawattHoursPerKilogram(this decimal? value) => SpecificEnergy.FromMegawattHoursPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy MegawattHoursPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromMegawattHoursPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region WattHourPerKilogram
 
         /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
-        public static SpecificEnergy WattHoursPerKilogram(this int value) => SpecificEnergy.FromWattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? WattHoursPerKilogram(this int? value) => SpecificEnergy.FromWattHoursPerKilogram(value);
+        public static SpecificEnergy WattHoursPerKilogram(this int value) => (SpecificEnergy)SpecificEnergy.FromWattHoursPerKilogram(value);
+	
+        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
+        public static SpecificEnergy WattHoursPerKilogram(this long value) => (SpecificEnergy)SpecificEnergy.FromWattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
-        public static SpecificEnergy WattHoursPerKilogram(this long value) => SpecificEnergy.FromWattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? WattHoursPerKilogram(this long? value) => SpecificEnergy.FromWattHoursPerKilogram(value);
+        public static SpecificEnergy WattHoursPerKilogram(this double value) => (SpecificEnergy)SpecificEnergy.FromWattHoursPerKilogram(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
-        public static SpecificEnergy WattHoursPerKilogram(this double value) => SpecificEnergy.FromWattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? WattHoursPerKilogram(this double? value) => SpecificEnergy.FromWattHoursPerKilogram(value);
+        public static SpecificEnergy WattHoursPerKilogram(this float value) => (SpecificEnergy)SpecificEnergy.FromWattHoursPerKilogram(value);
 
         /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
-        public static SpecificEnergy WattHoursPerKilogram(this float value) => SpecificEnergy.FromWattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? WattHoursPerKilogram(this float? value) => SpecificEnergy.FromWattHoursPerKilogram(value);
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double)"/>
-        public static SpecificEnergy WattHoursPerKilogram(this decimal value) => SpecificEnergy.FromWattHoursPerKilogram(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="SpecificEnergy.FromWattHoursPerKilogram(double?)"/>
-        public static SpecificEnergy? WattHoursPerKilogram(this decimal? value) => SpecificEnergy.FromWattHoursPerKilogram(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static SpecificEnergy WattHoursPerKilogram(this decimal value) => (SpecificEnergy)SpecificEnergy.FromWattHoursPerKilogram(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

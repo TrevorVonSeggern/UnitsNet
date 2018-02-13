@@ -19,6 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     /// <summary>
@@ -35,9 +38,9 @@ namespace UnitsNet.CustomCode.Extensions
         ///         <c>var powerRatio = power.ToPowerRatio();</c>
         ///     </example>
         /// </remarks>
-        public static PowerRatio ToPowerRatio(this Power power)
+        public static PowerRatio<double, DoubleCalculator> ToPowerRatio(this Power<double, DoubleCalculator> power)
         {
-            return PowerRatio.FromPower(power);
+            return PowerRatio<double, DoubleCalculator>.FromPower(power);
         }
     }
 }

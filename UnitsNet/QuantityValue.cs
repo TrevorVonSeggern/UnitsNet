@@ -22,6 +22,7 @@
 // Operator overloads not supported in Windows Runtime Components, we use 'double' type instead
 #if !WINDOWS_UWP
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 namespace UnitsNet
 {
@@ -34,13 +35,15 @@ namespace UnitsNet
     ///     From 8 (int, long, double, decimal + each nullable) down to 2 (QuantityValue and QuantityValue?).
     ///     This also adds more numeric types with no extra overhead, such as float, short and byte.
     /// </remarks>
-    public struct QuantityValue
+    public struct QuantityValue<T, C>
+        where T : struct
+        where C : INumberCalculator<T>, new()
     {
-        private readonly double _value;
+        private readonly Number<T, C> _value;
 
         // Obsolete is used to communicate how they should use this type, instead of making the constructor private and have them figure it out
         [Obsolete("Do not use this constructor. Instead pass any numeric value such as int, long, float, double, decimal, short or byte directly and it will be implicitly casted to double.")]
-        private QuantityValue(double val)
+        private QuantityValue(Number<T, C> val)
         {
             _value = val;
         }
@@ -48,19 +51,19 @@ namespace UnitsNet
         #region To QuantityValue
 
 #pragma warning disable 618
-        public static implicit operator QuantityValue(double val) => new QuantityValue(val);
-        public static implicit operator QuantityValue(float val) => new QuantityValue(val);
-        public static implicit operator QuantityValue(long val) => new QuantityValue(val);
-        public static implicit operator QuantityValue(decimal val) => new QuantityValue(Convert.ToDouble(val));
-        public static implicit operator QuantityValue(short val) => new QuantityValue(val);
-        public static implicit operator QuantityValue(byte val) => new QuantityValue(val);
+        public static implicit operator QuantityValue<T, C>(double val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
+        public static implicit operator QuantityValue<T, C>(float val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
+        public static implicit operator QuantityValue<T, C>(long val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
+        public static implicit operator QuantityValue<T, C>(decimal val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
+        public static implicit operator QuantityValue<T, C>(short val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
+        public static implicit operator QuantityValue<T, C>(byte val) => new QuantityValue<T, C>(new Number<T, C>(new C().ConvertToNumber(val)));
 #pragma warning restore 618
         
         #endregion
 
         #region To double
 
-        public static explicit operator double(QuantityValue number) => number._value;
+        public static explicit operator Number<T, C>(QuantityValue<T, C> number) => number._value;
 
         #endregion
     }

@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Molar entropy is amount of energy required to increase temperature of 1 mole substance by 1 Kelvin.
     /// </summary>
@@ -63,709 +64,619 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class MolarEntropy : UnitsNet.Generic.MolarEntropy<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class MolarEntropy
+		public sealed partial class MolarEntropy
 #else
-    public partial struct MolarEntropy : IComparable, IComparable<MolarEntropy>
+		public partial class MolarEntropy <T, C> : IComparable, IComparable<MolarEntropy<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of MolarEntropy.
-        /// </summary>
-        private readonly double _joulesPerMoleKelvin;
+		{
+			/// <summary>
+			///     Base unit of MolarEntropy.
+			/// </summary>
+			private readonly Number<T, C> _joulesPerMoleKelvin;
 
-        // Windows Runtime Component requires a default constructor
+			public MolarEntropy() : this(new Number<T,C>())
+			{
+			}
+
+			public MolarEntropy(T joulespermolekelvin)
+			{
+				_joulesPerMoleKelvin = (joulespermolekelvin);
+			}
+
+			public MolarEntropy(Number<T, C> joulespermolekelvin)
+			{
+				_joulesPerMoleKelvin = (joulespermolekelvin);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.MolarEntropy;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static MolarEntropyUnit BaseUnit
+			{
+				get { return MolarEntropyUnit.JoulePerMoleKelvin; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the MolarEntropy quantity.
+			/// </summary>
+			public static MolarEntropyUnit[] Units { get; } = Enum.GetValues(typeof(MolarEntropyUnit)).Cast<MolarEntropyUnit>().ToArray();
+
+			/// <summary>
+			///     Get MolarEntropy in JoulesPerMoleKelvin.
+			/// </summary>
+			public Number<T, C> JoulesPerMoleKelvin
+			{
+				get { return _joulesPerMoleKelvin; }
+			}
+
+			/// <summary>
+			///     Get MolarEntropy in KilojoulesPerMoleKelvin.
+			/// </summary>
+			public Number<T, C> KilojoulesPerMoleKelvin
+			{
+				get { return (_joulesPerMoleKelvin) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get MolarEntropy in MegajoulesPerMoleKelvin.
+			/// </summary>
+			public Number<T, C> MegajoulesPerMoleKelvin
+			{
+				get { return (_joulesPerMoleKelvin) / 1e6d; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static MolarEntropy<T, C> Zero
+			{
+				get { return new MolarEntropy<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get MolarEntropy from JoulesPerMoleKelvin.
+			/// </summary>
 #if WINDOWS_UWP
-        public MolarEntropy() : this(0)
-        {
-        }
-#endif
-
-        public MolarEntropy(double joulespermolekelvin)
-        {
-            _joulesPerMoleKelvin = Convert.ToDouble(joulespermolekelvin);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarEntropy<T, C> FromJoulesPerMoleKelvin(Number<T, C> joulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) joulespermolekelvin;
+				return new MolarEntropy<T, C>(value);
+			}
 #else
-        public
+			public static MolarEntropy<T, C> FromJoulesPerMoleKelvin(Number<T, C> joulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) joulespermolekelvin;
+				return new MolarEntropy<T, C>(new Number<T,C>(value));
+			}
 #endif
-        MolarEntropy(long joulespermolekelvin)
-        {
-            _joulesPerMoleKelvin = Convert.ToDouble(joulespermolekelvin);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get MolarEntropy from KilojoulesPerMoleKelvin.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarEntropy<T, C> FromKilojoulesPerMoleKelvin(Number<T, C> kilojoulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) kilojoulespermolekelvin;
+				return new MolarEntropy<T, C>((value) * 1e3d);
+			}
 #else
-        public
+			public static MolarEntropy<T, C> FromKilojoulesPerMoleKelvin(Number<T, C> kilojoulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) kilojoulespermolekelvin;
+				return new MolarEntropy<T, C>(new Number<T,C>((value) * 1e3d));
+			}
 #endif
-        MolarEntropy(decimal joulespermolekelvin)
-        {
-            _joulesPerMoleKelvin = Convert.ToDouble(joulespermolekelvin);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.MolarEntropy;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static MolarEntropyUnit BaseUnit
-        {
-            get { return MolarEntropyUnit.JoulePerMoleKelvin; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the MolarEntropy quantity.
-        /// </summary>
-        public static MolarEntropyUnit[] Units { get; } = Enum.GetValues(typeof(MolarEntropyUnit)).Cast<MolarEntropyUnit>().ToArray();
-
-        /// <summary>
-        ///     Get MolarEntropy in JoulesPerMoleKelvin.
-        /// </summary>
-        public double JoulesPerMoleKelvin
-        {
-            get { return _joulesPerMoleKelvin; }
-        }
-
-        /// <summary>
-        ///     Get MolarEntropy in KilojoulesPerMoleKelvin.
-        /// </summary>
-        public double KilojoulesPerMoleKelvin
-        {
-            get { return (_joulesPerMoleKelvin) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get MolarEntropy in MegajoulesPerMoleKelvin.
-        /// </summary>
-        public double MegajoulesPerMoleKelvin
-        {
-            get { return (_joulesPerMoleKelvin) / 1e6d; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static MolarEntropy Zero
-        {
-            get { return new MolarEntropy(); }
-        }
-
-        /// <summary>
-        ///     Get MolarEntropy from JoulesPerMoleKelvin.
-        /// </summary>
+			/// <summary>
+			///     Get MolarEntropy from MegajoulesPerMoleKelvin.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarEntropy FromJoulesPerMoleKelvin(double joulespermolekelvin)
-        {
-            double value = (double) joulespermolekelvin;
-            return new MolarEntropy(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static MolarEntropy<T, C> FromMegajoulesPerMoleKelvin(Number<T, C> megajoulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) megajoulespermolekelvin;
+				return new MolarEntropy<T, C>((value) * 1e6d);
+			}
 #else
-        public static MolarEntropy FromJoulesPerMoleKelvin(QuantityValue joulespermolekelvin)
-        {
-            double value = (double) joulespermolekelvin;
-            return new MolarEntropy((value));
-        }
+			public static MolarEntropy<T, C> FromMegajoulesPerMoleKelvin(Number<T, C> megajoulespermolekelvin)
+			{
+				Number<T,C> value = (Number<T,C>) megajoulespermolekelvin;
+				return new MolarEntropy<T, C>(new Number<T,C>((value) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get MolarEntropy from KilojoulesPerMoleKelvin.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="MolarEntropyUnit" /> to <see cref="MolarEntropy" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>MolarEntropy unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarEntropy FromKilojoulesPerMoleKelvin(double kilojoulespermolekelvin)
-        {
-            double value = (double) kilojoulespermolekelvin;
-            return new MolarEntropy((value) * 1e3d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static MolarEntropy<T, C> From(double value, MolarEntropyUnit fromUnit)
 #else
-        public static MolarEntropy FromKilojoulesPerMoleKelvin(QuantityValue kilojoulespermolekelvin)
-        {
-            double value = (double) kilojoulespermolekelvin;
-            return new MolarEntropy(((value) * 1e3d));
-        }
+			public static MolarEntropy<T, C> From(Number<T, C> value, MolarEntropyUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case MolarEntropyUnit.JoulePerMoleKelvin:
+						return FromJoulesPerMoleKelvin(value);
+					case MolarEntropyUnit.KilojoulePerMoleKelvin:
+						return FromKilojoulesPerMoleKelvin(value);
+					case MolarEntropyUnit.MegajoulePerMoleKelvin:
+						return FromMegajoulesPerMoleKelvin(value);
 
-        /// <summary>
-        ///     Get MolarEntropy from MegajoulesPerMoleKelvin.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static MolarEntropy FromMegajoulesPerMoleKelvin(double megajoulespermolekelvin)
-        {
-            double value = (double) megajoulespermolekelvin;
-            return new MolarEntropy((value) * 1e6d);
-        }
-#else
-        public static MolarEntropy FromMegajoulesPerMoleKelvin(QuantityValue megajoulespermolekelvin)
-        {
-            double value = (double) megajoulespermolekelvin;
-            return new MolarEntropy(((value) * 1e6d));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarEntropyUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(MolarEntropyUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable MolarEntropy from nullable JoulesPerMoleKelvin.
-        /// </summary>
-        public static MolarEntropy? FromJoulesPerMoleKelvin(QuantityValue? joulespermolekelvin)
-        {
-            if (joulespermolekelvin.HasValue)
-            {
-                return FromJoulesPerMoleKelvin(joulespermolekelvin.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarEntropy<T, C> operator -(MolarEntropy<T, C> right)
+			{
+				return new MolarEntropy<T, C>(-right._joulesPerMoleKelvin);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarEntropy from nullable KilojoulesPerMoleKelvin.
-        /// </summary>
-        public static MolarEntropy? FromKilojoulesPerMoleKelvin(QuantityValue? kilojoulespermolekelvin)
-        {
-            if (kilojoulespermolekelvin.HasValue)
-            {
-                return FromKilojoulesPerMoleKelvin(kilojoulespermolekelvin.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarEntropy<T, C> operator +(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return new MolarEntropy<T, C>(left._joulesPerMoleKelvin + right._joulesPerMoleKelvin);
+			}
 
-        /// <summary>
-        ///     Get nullable MolarEntropy from nullable MegajoulesPerMoleKelvin.
-        /// </summary>
-        public static MolarEntropy? FromMegajoulesPerMoleKelvin(QuantityValue? megajoulespermolekelvin)
-        {
-            if (megajoulespermolekelvin.HasValue)
-            {
-                return FromMegajoulesPerMoleKelvin(megajoulespermolekelvin.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static MolarEntropy<T, C> operator -(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return new MolarEntropy<T, C>(left._joulesPerMoleKelvin - right._joulesPerMoleKelvin);
+			}
 
+			public static MolarEntropy<T, C> operator *(Number<T, C> left, MolarEntropy<T, C> right)
+			{
+				return new MolarEntropy<T, C>(left*right._joulesPerMoleKelvin);
+			}
+
+			public static MolarEntropy<T, C> operator *(MolarEntropy<T, C> left, double right)
+			{
+				return new MolarEntropy<T, C>(left._joulesPerMoleKelvin*right);
+			}
+
+			public static MolarEntropy<T, C> operator /(MolarEntropy<T, C> left, double right)
+			{
+				return new MolarEntropy<T, C>(left._joulesPerMoleKelvin/right);
+			}
+
+			public static double operator /(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return Convert.ToDouble(left._joulesPerMoleKelvin/right._joulesPerMoleKelvin);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarEntropyUnit" /> to <see cref="MolarEntropy" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>MolarEntropy unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is MolarEntropy<T, C>)) throw new ArgumentException("Expected type MolarEntropy.", "obj");
+				return CompareTo((MolarEntropy<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static MolarEntropy From(double value, MolarEntropyUnit fromUnit)
+			internal
 #else
-        public static MolarEntropy From(QuantityValue value, MolarEntropyUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case MolarEntropyUnit.JoulePerMoleKelvin:
-                    return FromJoulesPerMoleKelvin(value);
-                case MolarEntropyUnit.KilojoulePerMoleKelvin:
-                    return FromKilojoulesPerMoleKelvin(value);
-                case MolarEntropyUnit.MegajoulePerMoleKelvin:
-                    return FromMegajoulesPerMoleKelvin(value);
+			int CompareTo(MolarEntropy<T, C> other)
+			{
+				return _joulesPerMoleKelvin.CompareTo(other._joulesPerMoleKelvin);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="MolarEntropyUnit" /> to <see cref="MolarEntropy" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>MolarEntropy unit value.</returns>
-        public static MolarEntropy? From(QuantityValue? value, MolarEntropyUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case MolarEntropyUnit.JoulePerMoleKelvin:
-                    return FromJoulesPerMoleKelvin(value.Value);
-                case MolarEntropyUnit.KilojoulePerMoleKelvin:
-                    return FromKilojoulesPerMoleKelvin(value.Value);
-                case MolarEntropyUnit.MegajoulePerMoleKelvin:
-                    return FromMegajoulesPerMoleKelvin(value.Value);
+			public static bool operator <=(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return left._joulesPerMoleKelvin <= right._joulesPerMoleKelvin;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return left._joulesPerMoleKelvin >= right._joulesPerMoleKelvin;
+			}
+
+			public static bool operator <(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return left._joulesPerMoleKelvin < right._joulesPerMoleKelvin;
+			}
+
+			public static bool operator >(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				return left._joulesPerMoleKelvin > right._joulesPerMoleKelvin;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._joulesPerMoleKelvin == right._joulesPerMoleKelvin;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(MolarEntropy<T, C> left, MolarEntropy<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._joulesPerMoleKelvin != right._joulesPerMoleKelvin;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarEntropyUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(MolarEntropyUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static MolarEntropy operator -(MolarEntropy right)
-        {
-            return new MolarEntropy(-right._joulesPerMoleKelvin);
-        }
-
-        public static MolarEntropy operator +(MolarEntropy left, MolarEntropy right)
-        {
-            return new MolarEntropy(left._joulesPerMoleKelvin + right._joulesPerMoleKelvin);
-        }
-
-        public static MolarEntropy operator -(MolarEntropy left, MolarEntropy right)
-        {
-            return new MolarEntropy(left._joulesPerMoleKelvin - right._joulesPerMoleKelvin);
-        }
-
-        public static MolarEntropy operator *(double left, MolarEntropy right)
-        {
-            return new MolarEntropy(left*right._joulesPerMoleKelvin);
-        }
-
-        public static MolarEntropy operator *(MolarEntropy left, double right)
-        {
-            return new MolarEntropy(left._joulesPerMoleKelvin*(double)right);
-        }
-
-        public static MolarEntropy operator /(MolarEntropy left, double right)
-        {
-            return new MolarEntropy(left._joulesPerMoleKelvin/(double)right);
-        }
-
-        public static double operator /(MolarEntropy left, MolarEntropy right)
-        {
-            return Convert.ToDouble(left._joulesPerMoleKelvin/right._joulesPerMoleKelvin);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is MolarEntropy)) throw new ArgumentException("Expected type MolarEntropy.", "obj");
-            return CompareTo((MolarEntropy) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(MolarEntropy other)
-        {
-            return _joulesPerMoleKelvin.CompareTo(other._joulesPerMoleKelvin);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(MolarEntropy left, MolarEntropy right)
-        {
-            return left._joulesPerMoleKelvin <= right._joulesPerMoleKelvin;
-        }
-
-        public static bool operator >=(MolarEntropy left, MolarEntropy right)
-        {
-            return left._joulesPerMoleKelvin >= right._joulesPerMoleKelvin;
-        }
-
-        public static bool operator <(MolarEntropy left, MolarEntropy right)
-        {
-            return left._joulesPerMoleKelvin < right._joulesPerMoleKelvin;
-        }
-
-        public static bool operator >(MolarEntropy left, MolarEntropy right)
-        {
-            return left._joulesPerMoleKelvin > right._joulesPerMoleKelvin;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(MolarEntropy left, MolarEntropy right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._joulesPerMoleKelvin == right._joulesPerMoleKelvin;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(MolarEntropy left, MolarEntropy right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._joulesPerMoleKelvin != right._joulesPerMoleKelvin;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _joulesPerMoleKelvin.Equals(((MolarEntropy) obj)._joulesPerMoleKelvin);
-        }
+				return _joulesPerMoleKelvin.Equals(((MolarEntropy<T, C>) obj)._joulesPerMoleKelvin);
+			}
 
-        /// <summary>
-        ///     Compare equality to another MolarEntropy by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(MolarEntropy other, MolarEntropy maxError)
-        {
-            return Math.Abs(_joulesPerMoleKelvin - other._joulesPerMoleKelvin) <= maxError._joulesPerMoleKelvin;
-        }
+			/// <summary>
+			///     Compare equality to another MolarEntropy by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(MolarEntropy<T, C> other, MolarEntropy<T, C> maxError)
+			{
+				return Math.Abs((decimal)_joulesPerMoleKelvin - (decimal)other._joulesPerMoleKelvin) <= maxError._joulesPerMoleKelvin;
+			}
 
-        public override int GetHashCode()
-        {
-            return _joulesPerMoleKelvin.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _joulesPerMoleKelvin.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(MolarEntropyUnit unit)
-        {
-            switch (unit)
-            {
-                case MolarEntropyUnit.JoulePerMoleKelvin:
-                    return JoulesPerMoleKelvin;
-                case MolarEntropyUnit.KilojoulePerMoleKelvin:
-                    return KilojoulesPerMoleKelvin;
-                case MolarEntropyUnit.MegajoulePerMoleKelvin:
-                    return MegajoulesPerMoleKelvin;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(MolarEntropyUnit unit)
+			{
+				switch (unit)
+				{
+					case MolarEntropyUnit.JoulePerMoleKelvin:
+						return JoulesPerMoleKelvin;
+					case MolarEntropyUnit.KilojoulePerMoleKelvin:
+						return KilojoulesPerMoleKelvin;
+					case MolarEntropyUnit.MegajoulePerMoleKelvin:
+						return MegajoulesPerMoleKelvin;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static MolarEntropy Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static MolarEntropy<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static MolarEntropy Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static MolarEntropy<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<MolarEntropy, MolarEntropyUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    MolarEntropyUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromJoulesPerMoleKelvin(x.JoulesPerMoleKelvin + y.JoulesPerMoleKelvin));
-        }
+					return QuantityParser.Parse<MolarEntropy<T, C>, MolarEntropyUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						MolarEntropyUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromJoulesPerMoleKelvin((Number<T, C>)x.JoulesPerMoleKelvin + y.JoulesPerMoleKelvin));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out MolarEntropy result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out MolarEntropy<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out MolarEntropy result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(MolarEntropy);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out MolarEntropy<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(MolarEntropy<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarEntropyUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarEntropyUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static MolarEntropyUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static MolarEntropyUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static MolarEntropyUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static MolarEntropyUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<MolarEntropyUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<MolarEntropyUnit>(str.Trim());
 
-            if (unit == MolarEntropyUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarEntropyUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == MolarEntropyUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized MolarEntropyUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is JoulePerMoleKelvin
-        /// </summary>
-        public static MolarEntropyUnit ToStringDefaultUnit { get; set; } = MolarEntropyUnit.JoulePerMoleKelvin;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is JoulePerMoleKelvin
+			/// </summary>
+			public static MolarEntropyUnit ToStringDefaultUnit { get; set; } = MolarEntropyUnit.JoulePerMoleKelvin;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarEntropyUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarEntropyUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(MolarEntropyUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of MolarEntropy
-        /// </summary>
-        public static MolarEntropy MaxValue
-        {
-            get
-            {
-                return new MolarEntropy(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of MolarEntropy
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of MolarEntropy
-        /// </summary>
-        public static MolarEntropy MinValue
-        {
-            get
-            {
-                return new MolarEntropy(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of MolarEntropy
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

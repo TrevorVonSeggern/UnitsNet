@@ -24,7 +24,7 @@ using System;
 
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -32,59 +32,61 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Power
 #else
-    public partial struct Power
+    public partial class Power<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Energy operator *(Power power, TimeSpan time)
+        public static Energy<T, C> operator *(Power<T, C> power, TimeSpan time)
         {
-            return Energy.FromJoules(power.Watts * time.TotalSeconds);
+            return Energy<T, C>.FromJoules(power.Watts * time.TotalSeconds);
         }
 
-        public static Energy operator *(TimeSpan time, Power power)
+        public static Energy<T, C> operator *(TimeSpan time, Power<T, C> power)
         {
-            return Energy.FromJoules(power.Watts * time.TotalSeconds);
+            return Energy<T, C>.FromJoules(power.Watts * time.TotalSeconds);
         }
 
-        public static Energy operator *(Power power, Duration duration)
+        public static Energy<T, C> operator *(Power<T, C> power, Duration<T, C> duration)
         {
-            return Energy.FromJoules(power.Watts * duration.Seconds);
+            return Energy<T, C>.FromJoules(power.Watts * duration.Seconds);
         }
 
-        public static Energy operator *(Duration duration, Power power)
+        public static Energy<T, C> operator *(Duration<T, C> duration, Power<T, C> power)
         {
-            return Energy.FromJoules(power.Watts * duration.Seconds);
+            return Energy<T, C>.FromJoules(power.Watts * duration.Seconds);
         }
 
-        public static Force operator /(Power power, Speed speed)
+        public static Force<T, C> operator /(Power<T, C> power, Speed<T, C> speed)
         {
-            return Force.FromNewtons(power.Watts / speed.MetersPerSecond);
+            return Force<T, C>.FromNewtons(power.Watts / speed.MetersPerSecond);
         }
 
-        public static Torque operator /(Power power, RotationalSpeed rotationalSpeed)
+        public static Torque<T, C> operator /(Power<T, C> power, RotationalSpeed<T, C> rotationalSpeed)
         {
-            return Torque.FromNewtonMeters(power.Watts / rotationalSpeed.RadiansPerSecond);
+            return Torque<T, C>.FromNewtonMeters(power.Watts / rotationalSpeed.RadiansPerSecond);
         }
 
-        public static RotationalSpeed operator /(Power power, Torque torque)
+        public static RotationalSpeed<T, C> operator /(Power<T, C> power, Torque<T, C> torque)
         {
-            return RotationalSpeed.FromRadiansPerSecond(power.Watts / torque.NewtonMeters);
+            return RotationalSpeed<T, C>.FromRadiansPerSecond(power.Watts / torque.NewtonMeters);
         }
 
-        public static MassFlow operator *(Power power, BrakeSpecificFuelConsumption bsfc)
+        public static MassFlow<T, C> operator *(Power<T, C> power, BrakeSpecificFuelConsumption<T, C> bsfc)
         {
-            return MassFlow.FromKilogramsPerSecond(bsfc.KilogramsPerJoule * power.Watts);
+            return MassFlow<T, C>.FromKilogramsPerSecond(bsfc.KilogramsPerJoule * power.Watts);
         }
 
-        public static SpecificEnergy operator /(Power power, MassFlow massFlow)
+        public static SpecificEnergy<T, C> operator /(Power<T, C> power, MassFlow<T, C> massFlow)
         {
-            return SpecificEnergy.FromJoulesPerKilogram(power.Watts / massFlow.KilogramsPerSecond);
+            return SpecificEnergy<T, C>.FromJoulesPerKilogram(power.Watts / massFlow.KilogramsPerSecond);
         }
 
-        public static MassFlow operator /(Power power, SpecificEnergy specificEnergy)
+        public static MassFlow<T, C> operator /(Power<T, C> power, SpecificEnergy<T, C> specificEnergy)
         {
-            return MassFlow.FromKilogramsPerSecond(power.Watts / specificEnergy.JoulesPerKilogram);
+            return MassFlow<T, C>.FromKilogramsPerSecond(power.Watts / specificEnergy.JoulesPerKilogram);
         }
 #endif
     }

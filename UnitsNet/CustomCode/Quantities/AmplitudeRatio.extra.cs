@@ -20,16 +20,20 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+
 #if WINDOWS_UWP
     public sealed partial class AmplitudeRatio
 #else
-    public partial struct AmplitudeRatio
+    public partial class AmplitudeRatio<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         /// <summary>
@@ -46,16 +50,16 @@ namespace UnitsNet
 #else
         public
 #endif
-            AmplitudeRatio(ElectricPotential voltage)
+            AmplitudeRatio(ElectricPotential<T, C> voltage)
             : this()
         {
-            if (voltage.Volts <= 0)
+            if ((Number<T, C>)voltage.Volts <= 0)
                 throw new ArgumentOutOfRangeException(
                     nameof(voltage),
                     "The base-10 logarithm of a number ≤ 0 is undefined. Voltage must be greater than 0 V.");
 
             // E(dBV) = 20*log10(value(V)/reference(V))
-            _decibelVolts = 20 * Math.Log10(voltage.Volts / 1);
+            _decibelVolts = 20 * Math.Log10(new C().ConvertToDouble(voltage.Volts) / 1);
         }
 
         /// <summary>
@@ -63,19 +67,19 @@ namespace UnitsNet
         ///     <see cref="ElectricPotential" />.
         /// </summary>
         /// <param name="voltage">The voltage (electric potential) relative to one volt RMS.</param>
-        public static AmplitudeRatio FromElectricPotential(ElectricPotential voltage)
+        public static AmplitudeRatio<T, C> FromElectricPotential(ElectricPotential<T, C> voltage)
         {
-            return new AmplitudeRatio(voltage);
+            return new AmplitudeRatio<T, C>(voltage);
         }
 
         /// <summary>
         ///     Gets an <see cref="ElectricPotential" /> from <see cref="AmplitudeRatio" />.
         /// </summary>
         /// <param name="voltageRatio">The voltage ratio to convert to voltage (electric potential).</param>
-        public static ElectricPotential ToElectricPotential(AmplitudeRatio voltageRatio)
+        public static ElectricPotential<T, C> ToElectricPotential(AmplitudeRatio<T, C> voltageRatio)
         {
             // E(V) = 1V * 10^(E(dBV)/20)
-            return ElectricPotential.FromVolts(Math.Pow(10, voltageRatio._decibelVolts / 20));
+            return ElectricPotential<T, C>.FromVolts(new C().ConvertToNumber(Math.Pow(10, new C().ConvertToDouble(voltageRatio._decibelVolts / 20))));
         }
 
         /// <summary>
@@ -84,10 +88,10 @@ namespace UnitsNet
         /// <param name="amplitudeRatio">The amplitude ratio to convert.</param>
         /// <param name="impedance">The input impedance of the load. This is usually 50, 75 or 600 ohms.</param>
         /// <remarks>http://www.maximintegrated.com/en/app-notes/index.mvp/id/808</remarks>
-        public static PowerRatio ToPowerRatio(AmplitudeRatio amplitudeRatio, ElectricResistance impedance)
+        public static PowerRatio<T, C> ToPowerRatio(AmplitudeRatio<T, C> amplitudeRatio, ElectricResistance<T, C> impedance)
         {
             // P(dBW) = E(dBV) - 10*log10(Z(Ω)/1)
-            return PowerRatio.FromDecibelWatts(amplitudeRatio.DecibelVolts - 10 * Math.Log10(impedance.Ohms / 1));
+            return PowerRatio<T, C>.FromDecibelWatts(amplitudeRatio.DecibelVolts - 10 * Math.Log10(new C().ConvertToDouble(impedance.Ohms) / 1));
         }
     }
 }

@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     Force change rate is the ratio of the force change to the time during which the change occurred (value of force changes per unit time).
     /// </summary>
@@ -63,1085 +64,859 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class ForceChangeRate : UnitsNet.Generic.ForceChangeRate<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class ForceChangeRate
+		public sealed partial class ForceChangeRate
 #else
-    public partial struct ForceChangeRate : IComparable, IComparable<ForceChangeRate>
+		public partial class ForceChangeRate <T, C> : IComparable, IComparable<ForceChangeRate<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of ForceChangeRate.
-        /// </summary>
-        private readonly double _newtonsPerSecond;
+		{
+			/// <summary>
+			///     Base unit of ForceChangeRate.
+			/// </summary>
+			private readonly Number<T, C> _newtonsPerSecond;
 
-        // Windows Runtime Component requires a default constructor
+			public ForceChangeRate() : this(new Number<T,C>())
+			{
+			}
+
+			public ForceChangeRate(T newtonspersecond)
+			{
+				_newtonsPerSecond = (newtonspersecond);
+			}
+
+			public ForceChangeRate(Number<T, C> newtonspersecond)
+			{
+				_newtonsPerSecond = (newtonspersecond);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.ForceChangeRate;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static ForceChangeRateUnit BaseUnit
+			{
+				get { return ForceChangeRateUnit.NewtonPerSecond; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the ForceChangeRate quantity.
+			/// </summary>
+			public static ForceChangeRateUnit[] Units { get; } = Enum.GetValues(typeof(ForceChangeRateUnit)).Cast<ForceChangeRateUnit>().ToArray();
+
+			/// <summary>
+			///     Get ForceChangeRate in CentinewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> CentinewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in DecanewtonsPerMinute.
+			/// </summary>
+			public Number<T, C> DecanewtonsPerMinute
+			{
+				get { return (_newtonsPerSecond*60) / 1e1d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in DecanewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> DecanewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e1d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in DecinewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> DecinewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in KilonewtonsPerMinute.
+			/// </summary>
+			public Number<T, C> KilonewtonsPerMinute
+			{
+				get { return (_newtonsPerSecond*60) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in KilonewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> KilonewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in MicronewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> MicronewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in MillinewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> MillinewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in NanonewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> NanonewtonsPerSecond
+			{
+				get { return (_newtonsPerSecond) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in NewtonsPerMinute.
+			/// </summary>
+			public Number<T, C> NewtonsPerMinute
+			{
+				get { return _newtonsPerSecond*60; }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate in NewtonsPerSecond.
+			/// </summary>
+			public Number<T, C> NewtonsPerSecond
+			{
+				get { return _newtonsPerSecond; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static ForceChangeRate<T, C> Zero
+			{
+				get { return new ForceChangeRate<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get ForceChangeRate from CentinewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        public ForceChangeRate() : this(0)
-        {
-        }
-#endif
-
-        public ForceChangeRate(double newtonspersecond)
-        {
-            _newtonsPerSecond = Convert.ToDouble(newtonspersecond);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromCentinewtonsPerSecond(Number<T, C> centinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) centinewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e-2d);
+			}
 #else
-        public
+			public static ForceChangeRate<T, C> FromCentinewtonsPerSecond(Number<T, C> centinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) centinewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e-2d));
+			}
 #endif
-        ForceChangeRate(long newtonspersecond)
-        {
-            _newtonsPerSecond = Convert.ToDouble(newtonspersecond);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get ForceChangeRate from DecanewtonsPerMinute.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromDecanewtonsPerMinute(Number<T, C> decanewtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) decanewtonsperminute;
+				return new ForceChangeRate<T, C>((value/60) * 1e1d);
+			}
 #else
-        public
+			public static ForceChangeRate<T, C> FromDecanewtonsPerMinute(Number<T, C> decanewtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) decanewtonsperminute;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value/60) * 1e1d));
+			}
 #endif
-        ForceChangeRate(decimal newtonspersecond)
-        {
-            _newtonsPerSecond = Convert.ToDouble(newtonspersecond);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.ForceChangeRate;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static ForceChangeRateUnit BaseUnit
-        {
-            get { return ForceChangeRateUnit.NewtonPerSecond; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the ForceChangeRate quantity.
-        /// </summary>
-        public static ForceChangeRateUnit[] Units { get; } = Enum.GetValues(typeof(ForceChangeRateUnit)).Cast<ForceChangeRateUnit>().ToArray();
-
-        /// <summary>
-        ///     Get ForceChangeRate in CentinewtonsPerSecond.
-        /// </summary>
-        public double CentinewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in DecanewtonsPerMinute.
-        /// </summary>
-        public double DecanewtonsPerMinute
-        {
-            get { return (_newtonsPerSecond*60) / 1e1d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in DecanewtonsPerSecond.
-        /// </summary>
-        public double DecanewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e1d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in DecinewtonsPerSecond.
-        /// </summary>
-        public double DecinewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in KilonewtonsPerMinute.
-        /// </summary>
-        public double KilonewtonsPerMinute
-        {
-            get { return (_newtonsPerSecond*60) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in KilonewtonsPerSecond.
-        /// </summary>
-        public double KilonewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in MicronewtonsPerSecond.
-        /// </summary>
-        public double MicronewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in MillinewtonsPerSecond.
-        /// </summary>
-        public double MillinewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in NanonewtonsPerSecond.
-        /// </summary>
-        public double NanonewtonsPerSecond
-        {
-            get { return (_newtonsPerSecond) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in NewtonsPerMinute.
-        /// </summary>
-        public double NewtonsPerMinute
-        {
-            get { return _newtonsPerSecond*60; }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate in NewtonsPerSecond.
-        /// </summary>
-        public double NewtonsPerSecond
-        {
-            get { return _newtonsPerSecond; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static ForceChangeRate Zero
-        {
-            get { return new ForceChangeRate(); }
-        }
-
-        /// <summary>
-        ///     Get ForceChangeRate from CentinewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from DecanewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromCentinewtonsPerSecond(double centinewtonspersecond)
-        {
-            double value = (double) centinewtonspersecond;
-            return new ForceChangeRate((value) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromDecanewtonsPerSecond(Number<T, C> decanewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decanewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e1d);
+			}
 #else
-        public static ForceChangeRate FromCentinewtonsPerSecond(QuantityValue centinewtonspersecond)
-        {
-            double value = (double) centinewtonspersecond;
-            return new ForceChangeRate(((value) * 1e-2d));
-        }
+			public static ForceChangeRate<T, C> FromDecanewtonsPerSecond(Number<T, C> decanewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decanewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from DecanewtonsPerMinute.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from DecinewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromDecanewtonsPerMinute(double decanewtonsperminute)
-        {
-            double value = (double) decanewtonsperminute;
-            return new ForceChangeRate((value/60) * 1e1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromDecinewtonsPerSecond(Number<T, C> decinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decinewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e-1d);
+			}
 #else
-        public static ForceChangeRate FromDecanewtonsPerMinute(QuantityValue decanewtonsperminute)
-        {
-            double value = (double) decanewtonsperminute;
-            return new ForceChangeRate(((value/60) * 1e1d));
-        }
+			public static ForceChangeRate<T, C> FromDecinewtonsPerSecond(Number<T, C> decinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) decinewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from DecanewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from KilonewtonsPerMinute.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromDecanewtonsPerSecond(double decanewtonspersecond)
-        {
-            double value = (double) decanewtonspersecond;
-            return new ForceChangeRate((value) * 1e1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromKilonewtonsPerMinute(Number<T, C> kilonewtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) kilonewtonsperminute;
+				return new ForceChangeRate<T, C>((value/60) * 1e3d);
+			}
 #else
-        public static ForceChangeRate FromDecanewtonsPerSecond(QuantityValue decanewtonspersecond)
-        {
-            double value = (double) decanewtonspersecond;
-            return new ForceChangeRate(((value) * 1e1d));
-        }
+			public static ForceChangeRate<T, C> FromKilonewtonsPerMinute(Number<T, C> kilonewtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) kilonewtonsperminute;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value/60) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from DecinewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from KilonewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromDecinewtonsPerSecond(double decinewtonspersecond)
-        {
-            double value = (double) decinewtonspersecond;
-            return new ForceChangeRate((value) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromKilonewtonsPerSecond(Number<T, C> kilonewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) kilonewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e3d);
+			}
 #else
-        public static ForceChangeRate FromDecinewtonsPerSecond(QuantityValue decinewtonspersecond)
-        {
-            double value = (double) decinewtonspersecond;
-            return new ForceChangeRate(((value) * 1e-1d));
-        }
+			public static ForceChangeRate<T, C> FromKilonewtonsPerSecond(Number<T, C> kilonewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) kilonewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from KilonewtonsPerMinute.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from MicronewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromKilonewtonsPerMinute(double kilonewtonsperminute)
-        {
-            double value = (double) kilonewtonsperminute;
-            return new ForceChangeRate((value/60) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromMicronewtonsPerSecond(Number<T, C> micronewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) micronewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e-6d);
+			}
 #else
-        public static ForceChangeRate FromKilonewtonsPerMinute(QuantityValue kilonewtonsperminute)
-        {
-            double value = (double) kilonewtonsperminute;
-            return new ForceChangeRate(((value/60) * 1e3d));
-        }
+			public static ForceChangeRate<T, C> FromMicronewtonsPerSecond(Number<T, C> micronewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) micronewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from KilonewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from MillinewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromKilonewtonsPerSecond(double kilonewtonspersecond)
-        {
-            double value = (double) kilonewtonspersecond;
-            return new ForceChangeRate((value) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromMillinewtonsPerSecond(Number<T, C> millinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) millinewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e-3d);
+			}
 #else
-        public static ForceChangeRate FromKilonewtonsPerSecond(QuantityValue kilonewtonspersecond)
-        {
-            double value = (double) kilonewtonspersecond;
-            return new ForceChangeRate(((value) * 1e3d));
-        }
+			public static ForceChangeRate<T, C> FromMillinewtonsPerSecond(Number<T, C> millinewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) millinewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from MicronewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from NanonewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromMicronewtonsPerSecond(double micronewtonspersecond)
-        {
-            double value = (double) micronewtonspersecond;
-            return new ForceChangeRate((value) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromNanonewtonsPerSecond(Number<T, C> nanonewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) nanonewtonspersecond;
+				return new ForceChangeRate<T, C>((value) * 1e-9d);
+			}
 #else
-        public static ForceChangeRate FromMicronewtonsPerSecond(QuantityValue micronewtonspersecond)
-        {
-            double value = (double) micronewtonspersecond;
-            return new ForceChangeRate(((value) * 1e-6d));
-        }
+			public static ForceChangeRate<T, C> FromNanonewtonsPerSecond(Number<T, C> nanonewtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) nanonewtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>((value) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from MillinewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from NewtonsPerMinute.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromMillinewtonsPerSecond(double millinewtonspersecond)
-        {
-            double value = (double) millinewtonspersecond;
-            return new ForceChangeRate((value) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromNewtonsPerMinute(Number<T, C> newtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) newtonsperminute;
+				return new ForceChangeRate<T, C>(value/60);
+			}
 #else
-        public static ForceChangeRate FromMillinewtonsPerSecond(QuantityValue millinewtonspersecond)
-        {
-            double value = (double) millinewtonspersecond;
-            return new ForceChangeRate(((value) * 1e-3d));
-        }
+			public static ForceChangeRate<T, C> FromNewtonsPerMinute(Number<T, C> newtonsperminute)
+			{
+				Number<T,C> value = (Number<T,C>) newtonsperminute;
+				return new ForceChangeRate<T, C>(new Number<T,C>(value/60));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from NanonewtonsPerSecond.
-        /// </summary>
+			/// <summary>
+			///     Get ForceChangeRate from NewtonsPerSecond.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromNanonewtonsPerSecond(double nanonewtonspersecond)
-        {
-            double value = (double) nanonewtonspersecond;
-            return new ForceChangeRate((value) * 1e-9d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static ForceChangeRate<T, C> FromNewtonsPerSecond(Number<T, C> newtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) newtonspersecond;
+				return new ForceChangeRate<T, C>(value);
+			}
 #else
-        public static ForceChangeRate FromNanonewtonsPerSecond(QuantityValue nanonewtonspersecond)
-        {
-            double value = (double) nanonewtonspersecond;
-            return new ForceChangeRate(((value) * 1e-9d));
-        }
+			public static ForceChangeRate<T, C> FromNewtonsPerSecond(Number<T, C> newtonspersecond)
+			{
+				Number<T,C> value = (Number<T,C>) newtonspersecond;
+				return new ForceChangeRate<T, C>(new Number<T,C>(value));
+			}
 #endif
 
-        /// <summary>
-        ///     Get ForceChangeRate from NewtonsPerMinute.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="ForceChangeRateUnit" /> to <see cref="ForceChangeRate" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>ForceChangeRate unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromNewtonsPerMinute(double newtonsperminute)
-        {
-            double value = (double) newtonsperminute;
-            return new ForceChangeRate(value/60);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static ForceChangeRate<T, C> From(double value, ForceChangeRateUnit fromUnit)
 #else
-        public static ForceChangeRate FromNewtonsPerMinute(QuantityValue newtonsperminute)
-        {
-            double value = (double) newtonsperminute;
-            return new ForceChangeRate((value/60));
-        }
+			public static ForceChangeRate<T, C> From(Number<T, C> value, ForceChangeRateUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case ForceChangeRateUnit.CentinewtonPerSecond:
+						return FromCentinewtonsPerSecond(value);
+					case ForceChangeRateUnit.DecanewtonPerMinute:
+						return FromDecanewtonsPerMinute(value);
+					case ForceChangeRateUnit.DecanewtonPerSecond:
+						return FromDecanewtonsPerSecond(value);
+					case ForceChangeRateUnit.DecinewtonPerSecond:
+						return FromDecinewtonsPerSecond(value);
+					case ForceChangeRateUnit.KilonewtonPerMinute:
+						return FromKilonewtonsPerMinute(value);
+					case ForceChangeRateUnit.KilonewtonPerSecond:
+						return FromKilonewtonsPerSecond(value);
+					case ForceChangeRateUnit.MicronewtonPerSecond:
+						return FromMicronewtonsPerSecond(value);
+					case ForceChangeRateUnit.MillinewtonPerSecond:
+						return FromMillinewtonsPerSecond(value);
+					case ForceChangeRateUnit.NanonewtonPerSecond:
+						return FromNanonewtonsPerSecond(value);
+					case ForceChangeRateUnit.NewtonPerMinute:
+						return FromNewtonsPerMinute(value);
+					case ForceChangeRateUnit.NewtonPerSecond:
+						return FromNewtonsPerSecond(value);
 
-        /// <summary>
-        ///     Get ForceChangeRate from NewtonsPerSecond.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static ForceChangeRate FromNewtonsPerSecond(double newtonspersecond)
-        {
-            double value = (double) newtonspersecond;
-            return new ForceChangeRate(value);
-        }
-#else
-        public static ForceChangeRate FromNewtonsPerSecond(QuantityValue newtonspersecond)
-        {
-            double value = (double) newtonspersecond;
-            return new ForceChangeRate((value));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(ForceChangeRateUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(ForceChangeRateUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable CentinewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromCentinewtonsPerSecond(QuantityValue? centinewtonspersecond)
-        {
-            if (centinewtonspersecond.HasValue)
-            {
-                return FromCentinewtonsPerSecond(centinewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator -(ForceChangeRate<T, C> right)
+			{
+				return new ForceChangeRate<T, C>(-right._newtonsPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable DecanewtonsPerMinute.
-        /// </summary>
-        public static ForceChangeRate? FromDecanewtonsPerMinute(QuantityValue? decanewtonsperminute)
-        {
-            if (decanewtonsperminute.HasValue)
-            {
-                return FromDecanewtonsPerMinute(decanewtonsperminute.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator +(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return new ForceChangeRate<T, C>(left._newtonsPerSecond + right._newtonsPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable DecanewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromDecanewtonsPerSecond(QuantityValue? decanewtonspersecond)
-        {
-            if (decanewtonspersecond.HasValue)
-            {
-                return FromDecanewtonsPerSecond(decanewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator -(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return new ForceChangeRate<T, C>(left._newtonsPerSecond - right._newtonsPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable DecinewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromDecinewtonsPerSecond(QuantityValue? decinewtonspersecond)
-        {
-            if (decinewtonspersecond.HasValue)
-            {
-                return FromDecinewtonsPerSecond(decinewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator *(Number<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return new ForceChangeRate<T, C>(left*right._newtonsPerSecond);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable KilonewtonsPerMinute.
-        /// </summary>
-        public static ForceChangeRate? FromKilonewtonsPerMinute(QuantityValue? kilonewtonsperminute)
-        {
-            if (kilonewtonsperminute.HasValue)
-            {
-                return FromKilonewtonsPerMinute(kilonewtonsperminute.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator *(ForceChangeRate<T, C> left, double right)
+			{
+				return new ForceChangeRate<T, C>(left._newtonsPerSecond*right);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable KilonewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromKilonewtonsPerSecond(QuantityValue? kilonewtonspersecond)
-        {
-            if (kilonewtonspersecond.HasValue)
-            {
-                return FromKilonewtonsPerSecond(kilonewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static ForceChangeRate<T, C> operator /(ForceChangeRate<T, C> left, double right)
+			{
+				return new ForceChangeRate<T, C>(left._newtonsPerSecond/right);
+			}
 
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable MicronewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromMicronewtonsPerSecond(QuantityValue? micronewtonspersecond)
-        {
-            if (micronewtonspersecond.HasValue)
-            {
-                return FromMicronewtonsPerSecond(micronewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable MillinewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromMillinewtonsPerSecond(QuantityValue? millinewtonspersecond)
-        {
-            if (millinewtonspersecond.HasValue)
-            {
-                return FromMillinewtonsPerSecond(millinewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable NanonewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromNanonewtonsPerSecond(QuantityValue? nanonewtonspersecond)
-        {
-            if (nanonewtonspersecond.HasValue)
-            {
-                return FromNanonewtonsPerSecond(nanonewtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable NewtonsPerMinute.
-        /// </summary>
-        public static ForceChangeRate? FromNewtonsPerMinute(QuantityValue? newtonsperminute)
-        {
-            if (newtonsperminute.HasValue)
-            {
-                return FromNewtonsPerMinute(newtonsperminute.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable ForceChangeRate from nullable NewtonsPerSecond.
-        /// </summary>
-        public static ForceChangeRate? FromNewtonsPerSecond(QuantityValue? newtonspersecond)
-        {
-            if (newtonspersecond.HasValue)
-            {
-                return FromNewtonsPerSecond(newtonspersecond.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return Convert.ToDouble(left._newtonsPerSecond/right._newtonsPerSecond);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="ForceChangeRateUnit" /> to <see cref="ForceChangeRate" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>ForceChangeRate unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is ForceChangeRate<T, C>)) throw new ArgumentException("Expected type ForceChangeRate.", "obj");
+				return CompareTo((ForceChangeRate<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static ForceChangeRate From(double value, ForceChangeRateUnit fromUnit)
+			internal
 #else
-        public static ForceChangeRate From(QuantityValue value, ForceChangeRateUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case ForceChangeRateUnit.CentinewtonPerSecond:
-                    return FromCentinewtonsPerSecond(value);
-                case ForceChangeRateUnit.DecanewtonPerMinute:
-                    return FromDecanewtonsPerMinute(value);
-                case ForceChangeRateUnit.DecanewtonPerSecond:
-                    return FromDecanewtonsPerSecond(value);
-                case ForceChangeRateUnit.DecinewtonPerSecond:
-                    return FromDecinewtonsPerSecond(value);
-                case ForceChangeRateUnit.KilonewtonPerMinute:
-                    return FromKilonewtonsPerMinute(value);
-                case ForceChangeRateUnit.KilonewtonPerSecond:
-                    return FromKilonewtonsPerSecond(value);
-                case ForceChangeRateUnit.MicronewtonPerSecond:
-                    return FromMicronewtonsPerSecond(value);
-                case ForceChangeRateUnit.MillinewtonPerSecond:
-                    return FromMillinewtonsPerSecond(value);
-                case ForceChangeRateUnit.NanonewtonPerSecond:
-                    return FromNanonewtonsPerSecond(value);
-                case ForceChangeRateUnit.NewtonPerMinute:
-                    return FromNewtonsPerMinute(value);
-                case ForceChangeRateUnit.NewtonPerSecond:
-                    return FromNewtonsPerSecond(value);
+			int CompareTo(ForceChangeRate<T, C> other)
+			{
+				return _newtonsPerSecond.CompareTo(other._newtonsPerSecond);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="ForceChangeRateUnit" /> to <see cref="ForceChangeRate" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>ForceChangeRate unit value.</returns>
-        public static ForceChangeRate? From(QuantityValue? value, ForceChangeRateUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case ForceChangeRateUnit.CentinewtonPerSecond:
-                    return FromCentinewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.DecanewtonPerMinute:
-                    return FromDecanewtonsPerMinute(value.Value);
-                case ForceChangeRateUnit.DecanewtonPerSecond:
-                    return FromDecanewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.DecinewtonPerSecond:
-                    return FromDecinewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.KilonewtonPerMinute:
-                    return FromKilonewtonsPerMinute(value.Value);
-                case ForceChangeRateUnit.KilonewtonPerSecond:
-                    return FromKilonewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.MicronewtonPerSecond:
-                    return FromMicronewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.MillinewtonPerSecond:
-                    return FromMillinewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.NanonewtonPerSecond:
-                    return FromNanonewtonsPerSecond(value.Value);
-                case ForceChangeRateUnit.NewtonPerMinute:
-                    return FromNewtonsPerMinute(value.Value);
-                case ForceChangeRateUnit.NewtonPerSecond:
-                    return FromNewtonsPerSecond(value.Value);
+			public static bool operator <=(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return left._newtonsPerSecond <= right._newtonsPerSecond;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return left._newtonsPerSecond >= right._newtonsPerSecond;
+			}
+
+			public static bool operator <(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return left._newtonsPerSecond < right._newtonsPerSecond;
+			}
+
+			public static bool operator >(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				return left._newtonsPerSecond > right._newtonsPerSecond;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._newtonsPerSecond == right._newtonsPerSecond;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(ForceChangeRate<T, C> left, ForceChangeRate<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._newtonsPerSecond != right._newtonsPerSecond;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(ForceChangeRateUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(ForceChangeRateUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static ForceChangeRate operator -(ForceChangeRate right)
-        {
-            return new ForceChangeRate(-right._newtonsPerSecond);
-        }
-
-        public static ForceChangeRate operator +(ForceChangeRate left, ForceChangeRate right)
-        {
-            return new ForceChangeRate(left._newtonsPerSecond + right._newtonsPerSecond);
-        }
-
-        public static ForceChangeRate operator -(ForceChangeRate left, ForceChangeRate right)
-        {
-            return new ForceChangeRate(left._newtonsPerSecond - right._newtonsPerSecond);
-        }
-
-        public static ForceChangeRate operator *(double left, ForceChangeRate right)
-        {
-            return new ForceChangeRate(left*right._newtonsPerSecond);
-        }
-
-        public static ForceChangeRate operator *(ForceChangeRate left, double right)
-        {
-            return new ForceChangeRate(left._newtonsPerSecond*(double)right);
-        }
-
-        public static ForceChangeRate operator /(ForceChangeRate left, double right)
-        {
-            return new ForceChangeRate(left._newtonsPerSecond/(double)right);
-        }
-
-        public static double operator /(ForceChangeRate left, ForceChangeRate right)
-        {
-            return Convert.ToDouble(left._newtonsPerSecond/right._newtonsPerSecond);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is ForceChangeRate)) throw new ArgumentException("Expected type ForceChangeRate.", "obj");
-            return CompareTo((ForceChangeRate) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(ForceChangeRate other)
-        {
-            return _newtonsPerSecond.CompareTo(other._newtonsPerSecond);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(ForceChangeRate left, ForceChangeRate right)
-        {
-            return left._newtonsPerSecond <= right._newtonsPerSecond;
-        }
-
-        public static bool operator >=(ForceChangeRate left, ForceChangeRate right)
-        {
-            return left._newtonsPerSecond >= right._newtonsPerSecond;
-        }
-
-        public static bool operator <(ForceChangeRate left, ForceChangeRate right)
-        {
-            return left._newtonsPerSecond < right._newtonsPerSecond;
-        }
-
-        public static bool operator >(ForceChangeRate left, ForceChangeRate right)
-        {
-            return left._newtonsPerSecond > right._newtonsPerSecond;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(ForceChangeRate left, ForceChangeRate right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._newtonsPerSecond == right._newtonsPerSecond;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(ForceChangeRate left, ForceChangeRate right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._newtonsPerSecond != right._newtonsPerSecond;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _newtonsPerSecond.Equals(((ForceChangeRate) obj)._newtonsPerSecond);
-        }
+				return _newtonsPerSecond.Equals(((ForceChangeRate<T, C>) obj)._newtonsPerSecond);
+			}
 
-        /// <summary>
-        ///     Compare equality to another ForceChangeRate by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(ForceChangeRate other, ForceChangeRate maxError)
-        {
-            return Math.Abs(_newtonsPerSecond - other._newtonsPerSecond) <= maxError._newtonsPerSecond;
-        }
+			/// <summary>
+			///     Compare equality to another ForceChangeRate by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(ForceChangeRate<T, C> other, ForceChangeRate<T, C> maxError)
+			{
+				return Math.Abs((decimal)_newtonsPerSecond - (decimal)other._newtonsPerSecond) <= maxError._newtonsPerSecond;
+			}
 
-        public override int GetHashCode()
-        {
-            return _newtonsPerSecond.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _newtonsPerSecond.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(ForceChangeRateUnit unit)
-        {
-            switch (unit)
-            {
-                case ForceChangeRateUnit.CentinewtonPerSecond:
-                    return CentinewtonsPerSecond;
-                case ForceChangeRateUnit.DecanewtonPerMinute:
-                    return DecanewtonsPerMinute;
-                case ForceChangeRateUnit.DecanewtonPerSecond:
-                    return DecanewtonsPerSecond;
-                case ForceChangeRateUnit.DecinewtonPerSecond:
-                    return DecinewtonsPerSecond;
-                case ForceChangeRateUnit.KilonewtonPerMinute:
-                    return KilonewtonsPerMinute;
-                case ForceChangeRateUnit.KilonewtonPerSecond:
-                    return KilonewtonsPerSecond;
-                case ForceChangeRateUnit.MicronewtonPerSecond:
-                    return MicronewtonsPerSecond;
-                case ForceChangeRateUnit.MillinewtonPerSecond:
-                    return MillinewtonsPerSecond;
-                case ForceChangeRateUnit.NanonewtonPerSecond:
-                    return NanonewtonsPerSecond;
-                case ForceChangeRateUnit.NewtonPerMinute:
-                    return NewtonsPerMinute;
-                case ForceChangeRateUnit.NewtonPerSecond:
-                    return NewtonsPerSecond;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(ForceChangeRateUnit unit)
+			{
+				switch (unit)
+				{
+					case ForceChangeRateUnit.CentinewtonPerSecond:
+						return CentinewtonsPerSecond;
+					case ForceChangeRateUnit.DecanewtonPerMinute:
+						return DecanewtonsPerMinute;
+					case ForceChangeRateUnit.DecanewtonPerSecond:
+						return DecanewtonsPerSecond;
+					case ForceChangeRateUnit.DecinewtonPerSecond:
+						return DecinewtonsPerSecond;
+					case ForceChangeRateUnit.KilonewtonPerMinute:
+						return KilonewtonsPerMinute;
+					case ForceChangeRateUnit.KilonewtonPerSecond:
+						return KilonewtonsPerSecond;
+					case ForceChangeRateUnit.MicronewtonPerSecond:
+						return MicronewtonsPerSecond;
+					case ForceChangeRateUnit.MillinewtonPerSecond:
+						return MillinewtonsPerSecond;
+					case ForceChangeRateUnit.NanonewtonPerSecond:
+						return NanonewtonsPerSecond;
+					case ForceChangeRateUnit.NewtonPerMinute:
+						return NewtonsPerMinute;
+					case ForceChangeRateUnit.NewtonPerSecond:
+						return NewtonsPerSecond;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static ForceChangeRate Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static ForceChangeRate<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static ForceChangeRate Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static ForceChangeRate<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<ForceChangeRate, ForceChangeRateUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    ForceChangeRateUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromNewtonsPerSecond(x.NewtonsPerSecond + y.NewtonsPerSecond));
-        }
+					return QuantityParser.Parse<ForceChangeRate<T, C>, ForceChangeRateUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						ForceChangeRateUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromNewtonsPerSecond((Number<T, C>)x.NewtonsPerSecond + y.NewtonsPerSecond));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out ForceChangeRate result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out ForceChangeRate<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out ForceChangeRate result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(ForceChangeRate);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out ForceChangeRate<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(ForceChangeRate<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static ForceChangeRateUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static ForceChangeRateUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static ForceChangeRateUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static ForceChangeRateUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static ForceChangeRateUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static ForceChangeRateUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<ForceChangeRateUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<ForceChangeRateUnit>(str.Trim());
 
-            if (unit == ForceChangeRateUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized ForceChangeRateUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == ForceChangeRateUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized ForceChangeRateUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is NewtonPerSecond
-        /// </summary>
-        public static ForceChangeRateUnit ToStringDefaultUnit { get; set; } = ForceChangeRateUnit.NewtonPerSecond;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is NewtonPerSecond
+			/// </summary>
+			public static ForceChangeRateUnit ToStringDefaultUnit { get; set; } = ForceChangeRateUnit.NewtonPerSecond;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(ForceChangeRateUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(ForceChangeRateUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(ForceChangeRateUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of ForceChangeRate
-        /// </summary>
-        public static ForceChangeRate MaxValue
-        {
-            get
-            {
-                return new ForceChangeRate(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of ForceChangeRate
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of ForceChangeRate
-        /// </summary>
-        public static ForceChangeRate MinValue
-        {
-            get
-            {
-                return new ForceChangeRate(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of ForceChangeRate
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,15 +27,17 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class DynamicViscosity
 #else
-    public partial struct DynamicViscosity
+    public partial class DynamicViscosity<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
 // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
 
-        public static KinematicViscosity operator /(DynamicViscosity dynamicViscosity, Density density)
+        public static KinematicViscosity<T, C> operator /(DynamicViscosity<T, C> dynamicViscosity, Density<T, C> density)
         {
-            return KinematicViscosity.FromSquareMetersPerSecond(dynamicViscosity.NewtonSecondsPerMeterSquared / density.KilogramsPerCubicMeter);
+            return KinematicViscosity<T, C>.FromSquareMetersPerSecond(dynamicViscosity.NewtonSecondsPerMeterSquared / density.KilogramsPerCubicMeter);
         }
 #endif
     }

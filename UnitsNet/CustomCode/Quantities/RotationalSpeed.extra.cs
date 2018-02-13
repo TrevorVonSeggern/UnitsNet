@@ -24,7 +24,7 @@ using System;
 
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -32,29 +32,31 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class RotationalSpeed
 #else
-    public partial struct RotationalSpeed
+    public partial class RotationalSpeed<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Angle operator *(RotationalSpeed rotationalSpeed, TimeSpan timeSpan)
+        public static Angle<T, C> operator *(RotationalSpeed<T, C> rotationalSpeed, TimeSpan timeSpan)
         {
-            return Angle.FromRadians(rotationalSpeed.RadiansPerSecond * timeSpan.TotalSeconds);
+            return Angle<T, C>.FromRadians(rotationalSpeed.RadiansPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Angle operator *(TimeSpan timeSpan, RotationalSpeed rotationalSpeed)
+        public static Angle<T, C> operator *(TimeSpan timeSpan, RotationalSpeed<T, C> rotationalSpeed)
         {
-            return Angle.FromRadians(rotationalSpeed.RadiansPerSecond * timeSpan.TotalSeconds);
+            return Angle<T, C>.FromRadians(rotationalSpeed.RadiansPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Angle operator *(RotationalSpeed rotationalSpeed, Duration duration)
+        public static Angle<T, C> operator *(RotationalSpeed<T, C> rotationalSpeed, Duration<T, C> duration)
         {
-            return Angle.FromRadians(rotationalSpeed.RadiansPerSecond * duration.Seconds);
+            return Angle<T, C>.FromRadians(rotationalSpeed.RadiansPerSecond * duration.Seconds);
         }
 
-        public static Angle operator *(Duration duration, RotationalSpeed rotationalSpeed)
+        public static Angle<T, C> operator *(Duration<T, C> duration, RotationalSpeed<T, C> rotationalSpeed)
         {
-            return Angle.FromRadians(rotationalSpeed.RadiansPerSecond * duration.Seconds);
+            return Angle<T, C>.FromRadians(rotationalSpeed.RadiansPerSecond * duration.Seconds);
         }
 #endif
     }

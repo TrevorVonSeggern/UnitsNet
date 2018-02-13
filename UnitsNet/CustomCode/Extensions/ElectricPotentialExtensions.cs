@@ -19,6 +19,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnitsNet.Generic;
+using UnitsNet.InternalHelpers.Calculators;
+
 namespace UnitsNet.CustomCode.Extensions
 {
     /// <summary>
@@ -36,9 +39,9 @@ namespace UnitsNet.CustomCode.Extensions
         ///         <c>var voltageRatio = voltage.ToAmplitudeRatio();</c>
         ///     </example>
         /// </remarks>
-        public static AmplitudeRatio ToAmplitudeRatio(this ElectricPotential voltage)
+        public static AmplitudeRatio<double, DoubleCalculator> ToAmplitudeRatio(this ElectricPotential voltage)
         {
-            return AmplitudeRatio.FromElectricPotential(voltage);
+            return AmplitudeRatio<double, DoubleCalculator>.FromElectricPotential(voltage);
         }
     }
 }

@@ -21,7 +21,7 @@
 
 using UnitsNet.Units;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -29,14 +29,16 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class TemperatureDelta
 #else
-    public partial struct TemperatureDelta
+    public partial class TemperatureDelta<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static LapseRate operator /(TemperatureDelta left, Length right)
+        public static LapseRate<T, C> operator /(TemperatureDelta<T, C> left, Length<T, C> right)
         {
-            return LapseRate.FromDegreesCelciusPerKilometer(left.DegreesCelsiusDelta / right.Kilometers);
+            return LapseRate<T, C>.FromDegreesCelciusPerKilometer(left.DegreesCelsius / right.Kilometers);
         }
 #endif
     }

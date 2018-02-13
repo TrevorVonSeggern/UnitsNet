@@ -24,7 +24,7 @@ using System;
 
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -32,43 +32,45 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class MassFlow
 #else
-    public partial struct MassFlow
+    public partial class MassFlow<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
 #if !WINDOWS_UWP
-        public static Mass operator *(MassFlow massFlow, TimeSpan time)
+        public static Mass<T, C> operator *(MassFlow<T, C> massFlow, TimeSpan time)
         {
-            return Mass.FromKilograms(massFlow.KilogramsPerSecond * time.TotalSeconds);
+            return Mass<T, C>.FromKilograms(massFlow.KilogramsPerSecond * time.TotalSeconds);
         }
 
-        public static Mass operator *(TimeSpan time, MassFlow massFlow)
+        public static Mass<T, C> operator *(TimeSpan time, MassFlow<T, C> massFlow)
         {
-            return Mass.FromKilograms(massFlow.KilogramsPerSecond * time.TotalSeconds);
+            return Mass<T, C>.FromKilograms(massFlow.KilogramsPerSecond * time.TotalSeconds);
         }
 
-        public static Mass operator *(MassFlow massFlow, Duration duration)
+        public static Mass<T, C> operator *(MassFlow<T, C> massFlow, Duration<T, C> duration)
         {
-            return Mass.FromKilograms(massFlow.KilogramsPerSecond * duration.Seconds);
+            return Mass<T, C>.FromKilograms(massFlow.KilogramsPerSecond * duration.Seconds);
         }
 
-        public static Mass operator *(Duration duration, MassFlow massFlow)
+        public static Mass<T, C> operator *(Duration<T, C> duration, MassFlow<T, C> massFlow)
         {
-            return Mass.FromKilograms(massFlow.KilogramsPerSecond * duration.Seconds);
+            return Mass<T, C>.FromKilograms(massFlow.KilogramsPerSecond * duration.Seconds);
         }
 
-        public static Power operator /(MassFlow massFlow, BrakeSpecificFuelConsumption bsfc)
+        public static Power<T, C> operator /(MassFlow<T, C> massFlow, BrakeSpecificFuelConsumption<T, C> bsfc)
         {
-            return Power.FromWatts(massFlow.KilogramsPerSecond / bsfc.KilogramsPerJoule);
+            return Power<T, C>.FromWatts(massFlow.KilogramsPerSecond / bsfc.KilogramsPerJoule);
         }
 
-        public static BrakeSpecificFuelConsumption operator /(MassFlow massFlow, Power power)
+        public static BrakeSpecificFuelConsumption<T, C> operator /(MassFlow<T, C> massFlow, Power<T, C> power)
         {
-            return BrakeSpecificFuelConsumption.FromKilogramsPerJoule(massFlow.KilogramsPerSecond / power.Watts);
+            return BrakeSpecificFuelConsumption<T, C>.FromKilogramsPerJoule(massFlow.KilogramsPerSecond / power.Watts);
         }
 
-        public static Power operator *(MassFlow massFlow, SpecificEnergy specificEnergy)
+        public static Power<T, C> operator *(MassFlow<T, C> massFlow, SpecificEnergy<T, C> specificEnergy)
         {
-            return Power.FromWatts(massFlow.KilogramsPerSecond * specificEnergy.JoulesPerKilogram);
+            return Power<T, C>.FromWatts(massFlow.KilogramsPerSecond * specificEnergy.JoulesPerKilogram);
         }
 #endif
     }

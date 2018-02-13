@@ -21,7 +21,7 @@
 
 using UnitsNet.Units;
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -29,7 +29,9 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Temperature
 #else
-    public partial struct Temperature
+    public partial class Temperature<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
@@ -39,9 +41,9 @@ namespace UnitsNet
         /// </summary>
         /// <remarks>Due to temperature units having different scales, the arithmetic must be performed on the same scale.</remarks>
         /// <returns>The new temperature.</returns>
-        public static Temperature operator +(Temperature left, TemperatureDelta right)
+        public static Temperature<T, C> operator +(Temperature<T, C> left, TemperatureDelta<T, C> right)
         {
-            return new Temperature(left.Kelvins + right.KelvinsDelta);
+            return new Temperature<T, C>(left.Kelvins + right.KelvinsDelta);
         }
 
         /// <summary>
@@ -49,9 +51,9 @@ namespace UnitsNet
         /// </summary>
         /// <remarks>Due to temperature units having different scales, the arithmetic must be performed on the same scale.</remarks>
         /// <returns>The new temperature.</returns>
-        public static Temperature operator +(TemperatureDelta left, Temperature right)
+        public static Temperature<T, C> operator +(TemperatureDelta<T, C> left, Temperature<T, C> right)
         {
-            return new Temperature(left.KelvinsDelta + right.Kelvins);
+            return new Temperature<T, C>(left.KelvinsDelta + right.Kelvins);
         }
 
         /// <summary>
@@ -59,9 +61,9 @@ namespace UnitsNet
         /// </summary>
         /// <remarks>Due to temperature units having different scales, the arithmetic must be performed on the same scale.</remarks>
         /// <returns>The new temperature.</returns>
-        public static Temperature operator -(Temperature left, TemperatureDelta right)
+        public static Temperature<T, C> operator -(Temperature<T, C> left, TemperatureDelta<T, C> right)
         {
-            return new Temperature(left.Kelvins - right.KelvinsDelta);
+            return new Temperature<T, C>(left.Kelvins - right.KelvinsDelta);
         }
 
         /// <summary>
@@ -69,9 +71,9 @@ namespace UnitsNet
         /// </summary>
         /// <remarks>Due to temperature units having different scales, the arithmetic must be performed on the same scale.</remarks>
         /// <returns>The delta temperature (difference).</returns>
-        public static TemperatureDelta operator -(Temperature left, Temperature right)
+        public static TemperatureDelta<T, C> operator -(Temperature<T, C> left, Temperature<T, C> right)
         {
-            return new TemperatureDelta(left.Kelvins - right.Kelvins);
+            return new TemperatureDelta<T, C>(left.Kelvins - right.Kelvins);
         }
 #endif
 
@@ -86,9 +88,9 @@ namespace UnitsNet
         /// <param name="factor">Factor to multiply by.</param>
         /// <param name="unit">Unit to perform multiplication in.</param>
         /// <returns>The resulting <see cref="Temperature" />.</returns>
-        public Temperature Multiply(double factor, TemperatureUnit unit)
+        public Temperature<T, C> Multiply(double factor, TemperatureUnit unit)
         {
-            double resultInUnit = As(unit) * factor;
+            var resultInUnit = As(unit) * factor;
             return From(resultInUnit, unit);
         }
 
@@ -104,9 +106,9 @@ namespace UnitsNet
         /// <param name="divisor">Factor to multiply by.</param>
         /// <param name="unit">Unit to perform multiplication in.</param>
         /// <returns>The resulting <see cref="Temperature" />.</returns>
-        public Temperature Divide(double divisor, TemperatureUnit unit)
+        public Temperature<T, C> Divide(double divisor, TemperatureUnit unit)
         {
-            double resultInUnit = As(unit) / divisor;
+            var resultInUnit = As(unit) / divisor;
             return From(resultInUnit, unit);
         }
     }

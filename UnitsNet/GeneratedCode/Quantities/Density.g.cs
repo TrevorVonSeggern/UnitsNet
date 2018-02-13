@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     The density, or more precisely, the volumetric mass density, of a substance is its mass per unit volume.
     /// </summary>
@@ -63,2213 +64,1579 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class Density : UnitsNet.Generic.Density<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class Density
+		public sealed partial class Density
 #else
-    public partial struct Density : IComparable, IComparable<Density>
+		public partial class Density <T, C> : IComparable, IComparable<Density<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of Density.
-        /// </summary>
-        private readonly double _kilogramsPerCubicMeter;
+		{
+			/// <summary>
+			///     Base unit of Density.
+			/// </summary>
+			private readonly Number<T, C> _kilogramsPerCubicMeter;
 
-        // Windows Runtime Component requires a default constructor
+			public Density() : this(new Number<T,C>())
+			{
+			}
+
+			public Density(T kilogramspercubicmeter)
+			{
+				_kilogramsPerCubicMeter = (kilogramspercubicmeter);
+			}
+
+			public Density(Number<T, C> kilogramspercubicmeter)
+			{
+				_kilogramsPerCubicMeter = (kilogramspercubicmeter);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.Density;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static DensityUnit BaseUnit
+			{
+				get { return DensityUnit.KilogramPerCubicMeter; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the Density quantity.
+			/// </summary>
+			public static DensityUnit[] Units { get; } = Enum.GetValues(typeof(DensityUnit)).Cast<DensityUnit>().ToArray();
+
+			/// <summary>
+			///     Get Density in CentigramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> CentigramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Density in CentigramsPerLiter.
+			/// </summary>
+			public Number<T, C> CentigramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Density in CentigramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> CentigramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-2d; }
+			}
+
+			/// <summary>
+			///     Get Density in DecigramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> DecigramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Density in DecigramsPerLiter.
+			/// </summary>
+			public Number<T, C> DecigramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Density in DecigramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> DecigramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-1d; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerCubicCentimeter.
+			/// </summary>
+			public Number<T, C> GramsPerCubicCentimeter
+			{
+				get { return _kilogramsPerCubicMeter*1e-3; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerCubicMeter.
+			/// </summary>
+			public Number<T, C> GramsPerCubicMeter
+			{
+				get { return _kilogramsPerCubicMeter*1e3; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerCubicMillimeter.
+			/// </summary>
+			public Number<T, C> GramsPerCubicMillimeter
+			{
+				get { return _kilogramsPerCubicMeter*1e-6; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> GramsPerDeciLiter
+			{
+				get { return _kilogramsPerCubicMeter*1e-1; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerLiter.
+			/// </summary>
+			public Number<T, C> GramsPerLiter
+			{
+				get { return _kilogramsPerCubicMeter*1; }
+			}
+
+			/// <summary>
+			///     Get Density in GramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> GramsPerMilliliter
+			{
+				get { return _kilogramsPerCubicMeter*1e-3; }
+			}
+
+			/// <summary>
+			///     Get Density in KilogramsPerCubicCentimeter.
+			/// </summary>
+			public Number<T, C> KilogramsPerCubicCentimeter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Density in KilogramsPerCubicMeter.
+			/// </summary>
+			public Number<T, C> KilogramsPerCubicMeter
+			{
+				get { return (_kilogramsPerCubicMeter*1e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Density in KilogramsPerCubicMillimeter.
+			/// </summary>
+			public Number<T, C> KilogramsPerCubicMillimeter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-6) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Density in KilopoundsPerCubicFoot.
+			/// </summary>
+			public Number<T, C> KilopoundsPerCubicFoot
+			{
+				get { return (_kilogramsPerCubicMeter*0.062427961) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Density in KilopoundsPerCubicInch.
+			/// </summary>
+			public Number<T, C> KilopoundsPerCubicInch
+			{
+				get { return (_kilogramsPerCubicMeter*3.6127298147753e-5) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get Density in MicrogramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> MicrogramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Density in MicrogramsPerLiter.
+			/// </summary>
+			public Number<T, C> MicrogramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Density in MicrogramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> MicrogramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-6d; }
+			}
+
+			/// <summary>
+			///     Get Density in MilligramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> MilligramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Density in MilligramsPerLiter.
+			/// </summary>
+			public Number<T, C> MilligramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Density in MilligramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> MilligramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-3d; }
+			}
+
+			/// <summary>
+			///     Get Density in NanogramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> NanogramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get Density in NanogramsPerLiter.
+			/// </summary>
+			public Number<T, C> NanogramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get Density in NanogramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> NanogramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-9d; }
+			}
+
+			/// <summary>
+			///     Get Density in PicogramsPerDeciLiter.
+			/// </summary>
+			public Number<T, C> PicogramsPerDeciLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-1) / 1e-12d; }
+			}
+
+			/// <summary>
+			///     Get Density in PicogramsPerLiter.
+			/// </summary>
+			public Number<T, C> PicogramsPerLiter
+			{
+				get { return (_kilogramsPerCubicMeter*1) / 1e-12d; }
+			}
+
+			/// <summary>
+			///     Get Density in PicogramsPerMilliliter.
+			/// </summary>
+			public Number<T, C> PicogramsPerMilliliter
+			{
+				get { return (_kilogramsPerCubicMeter*1e-3) / 1e-12d; }
+			}
+
+			/// <summary>
+			///     Get Density in PoundsPerCubicFoot.
+			/// </summary>
+			public Number<T, C> PoundsPerCubicFoot
+			{
+				get { return _kilogramsPerCubicMeter*0.062427961; }
+			}
+
+			/// <summary>
+			///     Get Density in PoundsPerCubicInch.
+			/// </summary>
+			public Number<T, C> PoundsPerCubicInch
+			{
+				get { return _kilogramsPerCubicMeter*3.6127298147753e-5; }
+			}
+
+			/// <summary>
+			///     Get Density in SlugsPerCubicFoot.
+			/// </summary>
+			public Number<T, C> SlugsPerCubicFoot
+			{
+				get { return _kilogramsPerCubicMeter*0.00194032033; }
+			}
+
+			/// <summary>
+			///     Get Density in TonnesPerCubicCentimeter.
+			/// </summary>
+			public Number<T, C> TonnesPerCubicCentimeter
+			{
+				get { return _kilogramsPerCubicMeter*1e-9; }
+			}
+
+			/// <summary>
+			///     Get Density in TonnesPerCubicMeter.
+			/// </summary>
+			public Number<T, C> TonnesPerCubicMeter
+			{
+				get { return _kilogramsPerCubicMeter*0.001; }
+			}
+
+			/// <summary>
+			///     Get Density in TonnesPerCubicMillimeter.
+			/// </summary>
+			public Number<T, C> TonnesPerCubicMillimeter
+			{
+				get { return _kilogramsPerCubicMeter*1e-12; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static Density<T, C> Zero
+			{
+				get { return new Density<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get Density from CentigramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        public Density() : this(0)
-        {
-        }
-#endif
-
-        public Density(double kilogramspercubicmeter)
-        {
-            _kilogramsPerCubicMeter = Convert.ToDouble(kilogramspercubicmeter);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromCentigramsPerDeciLiter(Number<T, C> centigramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-2d);
+			}
 #else
-        public
+			public static Density<T, C> FromCentigramsPerDeciLiter(Number<T, C> centigramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-2d));
+			}
 #endif
-        Density(long kilogramspercubicmeter)
-        {
-            _kilogramsPerCubicMeter = Convert.ToDouble(kilogramspercubicmeter);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get Density from CentigramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromCentigramsPerLiter(Number<T, C> centigramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramsperliter;
+				return new Density<T, C>((value/1) * 1e-2d);
+			}
 #else
-        public
+			public static Density<T, C> FromCentigramsPerLiter(Number<T, C> centigramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-2d));
+			}
 #endif
-        Density(decimal kilogramspercubicmeter)
-        {
-            _kilogramsPerCubicMeter = Convert.ToDouble(kilogramspercubicmeter);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.Density;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static DensityUnit BaseUnit
-        {
-            get { return DensityUnit.KilogramPerCubicMeter; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the Density quantity.
-        /// </summary>
-        public static DensityUnit[] Units { get; } = Enum.GetValues(typeof(DensityUnit)).Cast<DensityUnit>().ToArray();
-
-        /// <summary>
-        ///     Get Density in CentigramsPerDeciLiter.
-        /// </summary>
-        public double CentigramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Density in CentigramsPerLiter.
-        /// </summary>
-        public double CentigramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Density in CentigramsPerMilliliter.
-        /// </summary>
-        public double CentigramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-2d; }
-        }
-
-        /// <summary>
-        ///     Get Density in DecigramsPerDeciLiter.
-        /// </summary>
-        public double DecigramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Density in DecigramsPerLiter.
-        /// </summary>
-        public double DecigramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Density in DecigramsPerMilliliter.
-        /// </summary>
-        public double DecigramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-1d; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerCubicCentimeter.
-        /// </summary>
-        public double GramsPerCubicCentimeter
-        {
-            get { return _kilogramsPerCubicMeter*1e-3; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerCubicMeter.
-        /// </summary>
-        public double GramsPerCubicMeter
-        {
-            get { return _kilogramsPerCubicMeter*1e3; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerCubicMillimeter.
-        /// </summary>
-        public double GramsPerCubicMillimeter
-        {
-            get { return _kilogramsPerCubicMeter*1e-6; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerDeciLiter.
-        /// </summary>
-        public double GramsPerDeciLiter
-        {
-            get { return _kilogramsPerCubicMeter*1e-1; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerLiter.
-        /// </summary>
-        public double GramsPerLiter
-        {
-            get { return _kilogramsPerCubicMeter*1; }
-        }
-
-        /// <summary>
-        ///     Get Density in GramsPerMilliliter.
-        /// </summary>
-        public double GramsPerMilliliter
-        {
-            get { return _kilogramsPerCubicMeter*1e-3; }
-        }
-
-        /// <summary>
-        ///     Get Density in KilogramsPerCubicCentimeter.
-        /// </summary>
-        public double KilogramsPerCubicCentimeter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in KilogramsPerCubicMeter.
-        /// </summary>
-        public double KilogramsPerCubicMeter
-        {
-            get { return (_kilogramsPerCubicMeter*1e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in KilogramsPerCubicMillimeter.
-        /// </summary>
-        public double KilogramsPerCubicMillimeter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-6) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in KilopoundsPerCubicFoot.
-        /// </summary>
-        public double KilopoundsPerCubicFoot
-        {
-            get { return (_kilogramsPerCubicMeter*0.062427961) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in KilopoundsPerCubicInch.
-        /// </summary>
-        public double KilopoundsPerCubicInch
-        {
-            get { return (_kilogramsPerCubicMeter*3.6127298147753e-5) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MicrogramsPerDeciLiter.
-        /// </summary>
-        public double MicrogramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MicrogramsPerLiter.
-        /// </summary>
-        public double MicrogramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MicrogramsPerMilliliter.
-        /// </summary>
-        public double MicrogramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-6d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MilligramsPerDeciLiter.
-        /// </summary>
-        public double MilligramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MilligramsPerLiter.
-        /// </summary>
-        public double MilligramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in MilligramsPerMilliliter.
-        /// </summary>
-        public double MilligramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-3d; }
-        }
-
-        /// <summary>
-        ///     Get Density in NanogramsPerDeciLiter.
-        /// </summary>
-        public double NanogramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get Density in NanogramsPerLiter.
-        /// </summary>
-        public double NanogramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get Density in NanogramsPerMilliliter.
-        /// </summary>
-        public double NanogramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-9d; }
-        }
-
-        /// <summary>
-        ///     Get Density in PicogramsPerDeciLiter.
-        /// </summary>
-        public double PicogramsPerDeciLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-1) / 1e-12d; }
-        }
-
-        /// <summary>
-        ///     Get Density in PicogramsPerLiter.
-        /// </summary>
-        public double PicogramsPerLiter
-        {
-            get { return (_kilogramsPerCubicMeter*1) / 1e-12d; }
-        }
-
-        /// <summary>
-        ///     Get Density in PicogramsPerMilliliter.
-        /// </summary>
-        public double PicogramsPerMilliliter
-        {
-            get { return (_kilogramsPerCubicMeter*1e-3) / 1e-12d; }
-        }
-
-        /// <summary>
-        ///     Get Density in PoundsPerCubicFoot.
-        /// </summary>
-        public double PoundsPerCubicFoot
-        {
-            get { return _kilogramsPerCubicMeter*0.062427961; }
-        }
-
-        /// <summary>
-        ///     Get Density in PoundsPerCubicInch.
-        /// </summary>
-        public double PoundsPerCubicInch
-        {
-            get { return _kilogramsPerCubicMeter*3.6127298147753e-5; }
-        }
-
-        /// <summary>
-        ///     Get Density in SlugsPerCubicFoot.
-        /// </summary>
-        public double SlugsPerCubicFoot
-        {
-            get { return _kilogramsPerCubicMeter*0.00194032033; }
-        }
-
-        /// <summary>
-        ///     Get Density in TonnesPerCubicCentimeter.
-        /// </summary>
-        public double TonnesPerCubicCentimeter
-        {
-            get { return _kilogramsPerCubicMeter*1e-9; }
-        }
-
-        /// <summary>
-        ///     Get Density in TonnesPerCubicMeter.
-        /// </summary>
-        public double TonnesPerCubicMeter
-        {
-            get { return _kilogramsPerCubicMeter*0.001; }
-        }
-
-        /// <summary>
-        ///     Get Density in TonnesPerCubicMillimeter.
-        /// </summary>
-        public double TonnesPerCubicMillimeter
-        {
-            get { return _kilogramsPerCubicMeter*1e-12; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static Density Zero
-        {
-            get { return new Density(); }
-        }
-
-        /// <summary>
-        ///     Get Density from CentigramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from CentigramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromCentigramsPerDeciLiter(double centigramsperdeciliter)
-        {
-            double value = (double) centigramsperdeciliter;
-            return new Density((value/1e-1) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromCentigramsPerMilliliter(Number<T, C> centigramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-2d);
+			}
 #else
-        public static Density FromCentigramsPerDeciLiter(QuantityValue centigramsperdeciliter)
-        {
-            double value = (double) centigramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-2d));
-        }
+			public static Density<T, C> FromCentigramsPerMilliliter(Number<T, C> centigramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) centigramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-2d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from CentigramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from DecigramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromCentigramsPerLiter(double centigramsperliter)
-        {
-            double value = (double) centigramsperliter;
-            return new Density((value/1) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromDecigramsPerDeciLiter(Number<T, C> decigramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-1d);
+			}
 #else
-        public static Density FromCentigramsPerLiter(QuantityValue centigramsperliter)
-        {
-            double value = (double) centigramsperliter;
-            return new Density(((value/1) * 1e-2d));
-        }
+			public static Density<T, C> FromDecigramsPerDeciLiter(Number<T, C> decigramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from CentigramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from DecigramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromCentigramsPerMilliliter(double centigramspermilliliter)
-        {
-            double value = (double) centigramspermilliliter;
-            return new Density((value/1e-3) * 1e-2d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromDecigramsPerLiter(Number<T, C> decigramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramsperliter;
+				return new Density<T, C>((value/1) * 1e-1d);
+			}
 #else
-        public static Density FromCentigramsPerMilliliter(QuantityValue centigramspermilliliter)
-        {
-            double value = (double) centigramspermilliliter;
-            return new Density(((value/1e-3) * 1e-2d));
-        }
+			public static Density<T, C> FromDecigramsPerLiter(Number<T, C> decigramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from DecigramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from DecigramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromDecigramsPerDeciLiter(double decigramsperdeciliter)
-        {
-            double value = (double) decigramsperdeciliter;
-            return new Density((value/1e-1) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromDecigramsPerMilliliter(Number<T, C> decigramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-1d);
+			}
 #else
-        public static Density FromDecigramsPerDeciLiter(QuantityValue decigramsperdeciliter)
-        {
-            double value = (double) decigramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-1d));
-        }
+			public static Density<T, C> FromDecigramsPerMilliliter(Number<T, C> decigramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) decigramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-1d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from DecigramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerCubicCentimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromDecigramsPerLiter(double decigramsperliter)
-        {
-            double value = (double) decigramsperliter;
-            return new Density((value/1) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerCubicCentimeter(Number<T, C> gramspercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubiccentimeter;
+				return new Density<T, C>(value/1e-3);
+			}
 #else
-        public static Density FromDecigramsPerLiter(QuantityValue decigramsperliter)
-        {
-            double value = (double) decigramsperliter;
-            return new Density(((value/1) * 1e-1d));
-        }
+			public static Density<T, C> FromGramsPerCubicCentimeter(Number<T, C> gramspercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubiccentimeter;
+				return new Density<T, C>(new Number<T,C>(value/1e-3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from DecigramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerCubicMeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromDecigramsPerMilliliter(double decigramspermilliliter)
-        {
-            double value = (double) decigramspermilliliter;
-            return new Density((value/1e-3) * 1e-1d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerCubicMeter(Number<T, C> gramspercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubicmeter;
+				return new Density<T, C>(value/1e3);
+			}
 #else
-        public static Density FromDecigramsPerMilliliter(QuantityValue decigramspermilliliter)
-        {
-            double value = (double) decigramspermilliliter;
-            return new Density(((value/1e-3) * 1e-1d));
-        }
+			public static Density<T, C> FromGramsPerCubicMeter(Number<T, C> gramspercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubicmeter;
+				return new Density<T, C>(new Number<T,C>(value/1e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerCubicCentimeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerCubicMillimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerCubicCentimeter(double gramspercubiccentimeter)
-        {
-            double value = (double) gramspercubiccentimeter;
-            return new Density(value/1e-3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerCubicMillimeter(Number<T, C> gramspercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubicmillimeter;
+				return new Density<T, C>(value/1e-6);
+			}
 #else
-        public static Density FromGramsPerCubicCentimeter(QuantityValue gramspercubiccentimeter)
-        {
-            double value = (double) gramspercubiccentimeter;
-            return new Density((value/1e-3));
-        }
+			public static Density<T, C> FromGramsPerCubicMillimeter(Number<T, C> gramspercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspercubicmillimeter;
+				return new Density<T, C>(new Number<T,C>(value/1e-6));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerCubicMeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerCubicMeter(double gramspercubicmeter)
-        {
-            double value = (double) gramspercubicmeter;
-            return new Density(value/1e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerDeciLiter(Number<T, C> gramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramsperdeciliter;
+				return new Density<T, C>(value/1e-1);
+			}
 #else
-        public static Density FromGramsPerCubicMeter(QuantityValue gramspercubicmeter)
-        {
-            double value = (double) gramspercubicmeter;
-            return new Density((value/1e3));
-        }
+			public static Density<T, C> FromGramsPerDeciLiter(Number<T, C> gramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>(value/1e-1));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerCubicMillimeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerCubicMillimeter(double gramspercubicmillimeter)
-        {
-            double value = (double) gramspercubicmillimeter;
-            return new Density(value/1e-6);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerLiter(Number<T, C> gramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramsperliter;
+				return new Density<T, C>(value/1);
+			}
 #else
-        public static Density FromGramsPerCubicMillimeter(QuantityValue gramspercubicmillimeter)
-        {
-            double value = (double) gramspercubicmillimeter;
-            return new Density((value/1e-6));
-        }
+			public static Density<T, C> FromGramsPerLiter(Number<T, C> gramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramsperliter;
+				return new Density<T, C>(new Number<T,C>(value/1));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from GramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerDeciLiter(double gramsperdeciliter)
-        {
-            double value = (double) gramsperdeciliter;
-            return new Density(value/1e-1);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromGramsPerMilliliter(Number<T, C> gramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspermilliliter;
+				return new Density<T, C>(value/1e-3);
+			}
 #else
-        public static Density FromGramsPerDeciLiter(QuantityValue gramsperdeciliter)
-        {
-            double value = (double) gramsperdeciliter;
-            return new Density((value/1e-1));
-        }
+			public static Density<T, C> FromGramsPerMilliliter(Number<T, C> gramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) gramspermilliliter;
+				return new Density<T, C>(new Number<T,C>(value/1e-3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from KilogramsPerCubicCentimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerLiter(double gramsperliter)
-        {
-            double value = (double) gramsperliter;
-            return new Density(value/1);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromKilogramsPerCubicCentimeter(Number<T, C> kilogramspercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubiccentimeter;
+				return new Density<T, C>((value/1e-3) * 1e3d);
+			}
 #else
-        public static Density FromGramsPerLiter(QuantityValue gramsperliter)
-        {
-            double value = (double) gramsperliter;
-            return new Density((value/1));
-        }
+			public static Density<T, C> FromKilogramsPerCubicCentimeter(Number<T, C> kilogramspercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubiccentimeter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from GramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from KilogramsPerCubicMeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromGramsPerMilliliter(double gramspermilliliter)
-        {
-            double value = (double) gramspermilliliter;
-            return new Density(value/1e-3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromKilogramsPerCubicMeter(Number<T, C> kilogramspercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubicmeter;
+				return new Density<T, C>((value/1e3) * 1e3d);
+			}
 #else
-        public static Density FromGramsPerMilliliter(QuantityValue gramspermilliliter)
-        {
-            double value = (double) gramspermilliliter;
-            return new Density((value/1e-3));
-        }
+			public static Density<T, C> FromKilogramsPerCubicMeter(Number<T, C> kilogramspercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubicmeter;
+				return new Density<T, C>(new Number<T,C>((value/1e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from KilogramsPerCubicCentimeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from KilogramsPerCubicMillimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromKilogramsPerCubicCentimeter(double kilogramspercubiccentimeter)
-        {
-            double value = (double) kilogramspercubiccentimeter;
-            return new Density((value/1e-3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromKilogramsPerCubicMillimeter(Number<T, C> kilogramspercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubicmillimeter;
+				return new Density<T, C>((value/1e-6) * 1e3d);
+			}
 #else
-        public static Density FromKilogramsPerCubicCentimeter(QuantityValue kilogramspercubiccentimeter)
-        {
-            double value = (double) kilogramspercubiccentimeter;
-            return new Density(((value/1e-3) * 1e3d));
-        }
+			public static Density<T, C> FromKilogramsPerCubicMillimeter(Number<T, C> kilogramspercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) kilogramspercubicmillimeter;
+				return new Density<T, C>(new Number<T,C>((value/1e-6) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from KilogramsPerCubicMeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from KilopoundsPerCubicFoot.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromKilogramsPerCubicMeter(double kilogramspercubicmeter)
-        {
-            double value = (double) kilogramspercubicmeter;
-            return new Density((value/1e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromKilopoundsPerCubicFoot(Number<T, C> kilopoundspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspercubicfoot;
+				return new Density<T, C>((value/0.062427961) * 1e3d);
+			}
 #else
-        public static Density FromKilogramsPerCubicMeter(QuantityValue kilogramspercubicmeter)
-        {
-            double value = (double) kilogramspercubicmeter;
-            return new Density(((value/1e3) * 1e3d));
-        }
+			public static Density<T, C> FromKilopoundsPerCubicFoot(Number<T, C> kilopoundspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspercubicfoot;
+				return new Density<T, C>(new Number<T,C>((value/0.062427961) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from KilogramsPerCubicMillimeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from KilopoundsPerCubicInch.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromKilogramsPerCubicMillimeter(double kilogramspercubicmillimeter)
-        {
-            double value = (double) kilogramspercubicmillimeter;
-            return new Density((value/1e-6) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromKilopoundsPerCubicInch(Number<T, C> kilopoundspercubicinch)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspercubicinch;
+				return new Density<T, C>((value/3.6127298147753e-5) * 1e3d);
+			}
 #else
-        public static Density FromKilogramsPerCubicMillimeter(QuantityValue kilogramspercubicmillimeter)
-        {
-            double value = (double) kilogramspercubicmillimeter;
-            return new Density(((value/1e-6) * 1e3d));
-        }
+			public static Density<T, C> FromKilopoundsPerCubicInch(Number<T, C> kilopoundspercubicinch)
+			{
+				Number<T,C> value = (Number<T,C>) kilopoundspercubicinch;
+				return new Density<T, C>(new Number<T,C>((value/3.6127298147753e-5) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from KilopoundsPerCubicFoot.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MicrogramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromKilopoundsPerCubicFoot(double kilopoundspercubicfoot)
-        {
-            double value = (double) kilopoundspercubicfoot;
-            return new Density((value/0.062427961) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMicrogramsPerDeciLiter(Number<T, C> microgramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-6d);
+			}
 #else
-        public static Density FromKilopoundsPerCubicFoot(QuantityValue kilopoundspercubicfoot)
-        {
-            double value = (double) kilopoundspercubicfoot;
-            return new Density(((value/0.062427961) * 1e3d));
-        }
+			public static Density<T, C> FromMicrogramsPerDeciLiter(Number<T, C> microgramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from KilopoundsPerCubicInch.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MicrogramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromKilopoundsPerCubicInch(double kilopoundspercubicinch)
-        {
-            double value = (double) kilopoundspercubicinch;
-            return new Density((value/3.6127298147753e-5) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMicrogramsPerLiter(Number<T, C> microgramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramsperliter;
+				return new Density<T, C>((value/1) * 1e-6d);
+			}
 #else
-        public static Density FromKilopoundsPerCubicInch(QuantityValue kilopoundspercubicinch)
-        {
-            double value = (double) kilopoundspercubicinch;
-            return new Density(((value/3.6127298147753e-5) * 1e3d));
-        }
+			public static Density<T, C> FromMicrogramsPerLiter(Number<T, C> microgramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MicrogramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MicrogramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMicrogramsPerDeciLiter(double microgramsperdeciliter)
-        {
-            double value = (double) microgramsperdeciliter;
-            return new Density((value/1e-1) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMicrogramsPerMilliliter(Number<T, C> microgramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-6d);
+			}
 #else
-        public static Density FromMicrogramsPerDeciLiter(QuantityValue microgramsperdeciliter)
-        {
-            double value = (double) microgramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-6d));
-        }
+			public static Density<T, C> FromMicrogramsPerMilliliter(Number<T, C> microgramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) microgramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MicrogramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MilligramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMicrogramsPerLiter(double microgramsperliter)
-        {
-            double value = (double) microgramsperliter;
-            return new Density((value/1) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMilligramsPerDeciLiter(Number<T, C> milligramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-3d);
+			}
 #else
-        public static Density FromMicrogramsPerLiter(QuantityValue microgramsperliter)
-        {
-            double value = (double) microgramsperliter;
-            return new Density(((value/1) * 1e-6d));
-        }
+			public static Density<T, C> FromMilligramsPerDeciLiter(Number<T, C> milligramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MicrogramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MilligramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMicrogramsPerMilliliter(double microgramspermilliliter)
-        {
-            double value = (double) microgramspermilliliter;
-            return new Density((value/1e-3) * 1e-6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMilligramsPerLiter(Number<T, C> milligramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramsperliter;
+				return new Density<T, C>((value/1) * 1e-3d);
+			}
 #else
-        public static Density FromMicrogramsPerMilliliter(QuantityValue microgramspermilliliter)
-        {
-            double value = (double) microgramspermilliliter;
-            return new Density(((value/1e-3) * 1e-6d));
-        }
+			public static Density<T, C> FromMilligramsPerLiter(Number<T, C> milligramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MilligramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from MilligramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMilligramsPerDeciLiter(double milligramsperdeciliter)
-        {
-            double value = (double) milligramsperdeciliter;
-            return new Density((value/1e-1) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromMilligramsPerMilliliter(Number<T, C> milligramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-3d);
+			}
 #else
-        public static Density FromMilligramsPerDeciLiter(QuantityValue milligramsperdeciliter)
-        {
-            double value = (double) milligramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-3d));
-        }
+			public static Density<T, C> FromMilligramsPerMilliliter(Number<T, C> milligramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) milligramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MilligramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from NanogramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMilligramsPerLiter(double milligramsperliter)
-        {
-            double value = (double) milligramsperliter;
-            return new Density((value/1) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromNanogramsPerDeciLiter(Number<T, C> nanogramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-9d);
+			}
 #else
-        public static Density FromMilligramsPerLiter(QuantityValue milligramsperliter)
-        {
-            double value = (double) milligramsperliter;
-            return new Density(((value/1) * 1e-3d));
-        }
+			public static Density<T, C> FromNanogramsPerDeciLiter(Number<T, C> nanogramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from MilligramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from NanogramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromMilligramsPerMilliliter(double milligramspermilliliter)
-        {
-            double value = (double) milligramspermilliliter;
-            return new Density((value/1e-3) * 1e-3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromNanogramsPerLiter(Number<T, C> nanogramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramsperliter;
+				return new Density<T, C>((value/1) * 1e-9d);
+			}
 #else
-        public static Density FromMilligramsPerMilliliter(QuantityValue milligramspermilliliter)
-        {
-            double value = (double) milligramspermilliliter;
-            return new Density(((value/1e-3) * 1e-3d));
-        }
+			public static Density<T, C> FromNanogramsPerLiter(Number<T, C> nanogramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from NanogramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from NanogramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromNanogramsPerDeciLiter(double nanogramsperdeciliter)
-        {
-            double value = (double) nanogramsperdeciliter;
-            return new Density((value/1e-1) * 1e-9d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromNanogramsPerMilliliter(Number<T, C> nanogramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-9d);
+			}
 #else
-        public static Density FromNanogramsPerDeciLiter(QuantityValue nanogramsperdeciliter)
-        {
-            double value = (double) nanogramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-9d));
-        }
+			public static Density<T, C> FromNanogramsPerMilliliter(Number<T, C> nanogramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) nanogramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-9d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from NanogramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from PicogramsPerDeciLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromNanogramsPerLiter(double nanogramsperliter)
-        {
-            double value = (double) nanogramsperliter;
-            return new Density((value/1) * 1e-9d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromPicogramsPerDeciLiter(Number<T, C> picogramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramsperdeciliter;
+				return new Density<T, C>((value/1e-1) * 1e-12d);
+			}
 #else
-        public static Density FromNanogramsPerLiter(QuantityValue nanogramsperliter)
-        {
-            double value = (double) nanogramsperliter;
-            return new Density(((value/1) * 1e-9d));
-        }
+			public static Density<T, C> FromPicogramsPerDeciLiter(Number<T, C> picogramsperdeciliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramsperdeciliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-1) * 1e-12d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from NanogramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from PicogramsPerLiter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromNanogramsPerMilliliter(double nanogramspermilliliter)
-        {
-            double value = (double) nanogramspermilliliter;
-            return new Density((value/1e-3) * 1e-9d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromPicogramsPerLiter(Number<T, C> picogramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramsperliter;
+				return new Density<T, C>((value/1) * 1e-12d);
+			}
 #else
-        public static Density FromNanogramsPerMilliliter(QuantityValue nanogramspermilliliter)
-        {
-            double value = (double) nanogramspermilliliter;
-            return new Density(((value/1e-3) * 1e-9d));
-        }
+			public static Density<T, C> FromPicogramsPerLiter(Number<T, C> picogramsperliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramsperliter;
+				return new Density<T, C>(new Number<T,C>((value/1) * 1e-12d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from PicogramsPerDeciLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from PicogramsPerMilliliter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromPicogramsPerDeciLiter(double picogramsperdeciliter)
-        {
-            double value = (double) picogramsperdeciliter;
-            return new Density((value/1e-1) * 1e-12d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromPicogramsPerMilliliter(Number<T, C> picogramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramspermilliliter;
+				return new Density<T, C>((value/1e-3) * 1e-12d);
+			}
 #else
-        public static Density FromPicogramsPerDeciLiter(QuantityValue picogramsperdeciliter)
-        {
-            double value = (double) picogramsperdeciliter;
-            return new Density(((value/1e-1) * 1e-12d));
-        }
+			public static Density<T, C> FromPicogramsPerMilliliter(Number<T, C> picogramspermilliliter)
+			{
+				Number<T,C> value = (Number<T,C>) picogramspermilliliter;
+				return new Density<T, C>(new Number<T,C>((value/1e-3) * 1e-12d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from PicogramsPerLiter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from PoundsPerCubicFoot.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromPicogramsPerLiter(double picogramsperliter)
-        {
-            double value = (double) picogramsperliter;
-            return new Density((value/1) * 1e-12d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromPoundsPerCubicFoot(Number<T, C> poundspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) poundspercubicfoot;
+				return new Density<T, C>(value/0.062427961);
+			}
 #else
-        public static Density FromPicogramsPerLiter(QuantityValue picogramsperliter)
-        {
-            double value = (double) picogramsperliter;
-            return new Density(((value/1) * 1e-12d));
-        }
+			public static Density<T, C> FromPoundsPerCubicFoot(Number<T, C> poundspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) poundspercubicfoot;
+				return new Density<T, C>(new Number<T,C>(value/0.062427961));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from PicogramsPerMilliliter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from PoundsPerCubicInch.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromPicogramsPerMilliliter(double picogramspermilliliter)
-        {
-            double value = (double) picogramspermilliliter;
-            return new Density((value/1e-3) * 1e-12d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromPoundsPerCubicInch(Number<T, C> poundspercubicinch)
+			{
+				Number<T,C> value = (Number<T,C>) poundspercubicinch;
+				return new Density<T, C>(value/3.6127298147753e-5);
+			}
 #else
-        public static Density FromPicogramsPerMilliliter(QuantityValue picogramspermilliliter)
-        {
-            double value = (double) picogramspermilliliter;
-            return new Density(((value/1e-3) * 1e-12d));
-        }
+			public static Density<T, C> FromPoundsPerCubicInch(Number<T, C> poundspercubicinch)
+			{
+				Number<T,C> value = (Number<T,C>) poundspercubicinch;
+				return new Density<T, C>(new Number<T,C>(value/3.6127298147753e-5));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from PoundsPerCubicFoot.
-        /// </summary>
+			/// <summary>
+			///     Get Density from SlugsPerCubicFoot.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromPoundsPerCubicFoot(double poundspercubicfoot)
-        {
-            double value = (double) poundspercubicfoot;
-            return new Density(value/0.062427961);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromSlugsPerCubicFoot(Number<T, C> slugspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) slugspercubicfoot;
+				return new Density<T, C>(value*515.378818);
+			}
 #else
-        public static Density FromPoundsPerCubicFoot(QuantityValue poundspercubicfoot)
-        {
-            double value = (double) poundspercubicfoot;
-            return new Density((value/0.062427961));
-        }
+			public static Density<T, C> FromSlugsPerCubicFoot(Number<T, C> slugspercubicfoot)
+			{
+				Number<T,C> value = (Number<T,C>) slugspercubicfoot;
+				return new Density<T, C>(new Number<T,C>(value*515.378818));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from PoundsPerCubicInch.
-        /// </summary>
+			/// <summary>
+			///     Get Density from TonnesPerCubicCentimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromPoundsPerCubicInch(double poundspercubicinch)
-        {
-            double value = (double) poundspercubicinch;
-            return new Density(value/3.6127298147753e-5);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromTonnesPerCubicCentimeter(Number<T, C> tonnespercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubiccentimeter;
+				return new Density<T, C>(value/1e-9);
+			}
 #else
-        public static Density FromPoundsPerCubicInch(QuantityValue poundspercubicinch)
-        {
-            double value = (double) poundspercubicinch;
-            return new Density((value/3.6127298147753e-5));
-        }
+			public static Density<T, C> FromTonnesPerCubicCentimeter(Number<T, C> tonnespercubiccentimeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubiccentimeter;
+				return new Density<T, C>(new Number<T,C>(value/1e-9));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from SlugsPerCubicFoot.
-        /// </summary>
+			/// <summary>
+			///     Get Density from TonnesPerCubicMeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromSlugsPerCubicFoot(double slugspercubicfoot)
-        {
-            double value = (double) slugspercubicfoot;
-            return new Density(value*515.378818);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromTonnesPerCubicMeter(Number<T, C> tonnespercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubicmeter;
+				return new Density<T, C>(value/0.001);
+			}
 #else
-        public static Density FromSlugsPerCubicFoot(QuantityValue slugspercubicfoot)
-        {
-            double value = (double) slugspercubicfoot;
-            return new Density((value*515.378818));
-        }
+			public static Density<T, C> FromTonnesPerCubicMeter(Number<T, C> tonnespercubicmeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubicmeter;
+				return new Density<T, C>(new Number<T,C>(value/0.001));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from TonnesPerCubicCentimeter.
-        /// </summary>
+			/// <summary>
+			///     Get Density from TonnesPerCubicMillimeter.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromTonnesPerCubicCentimeter(double tonnespercubiccentimeter)
-        {
-            double value = (double) tonnespercubiccentimeter;
-            return new Density(value/1e-9);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static Density<T, C> FromTonnesPerCubicMillimeter(Number<T, C> tonnespercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubicmillimeter;
+				return new Density<T, C>(value/1e-12);
+			}
 #else
-        public static Density FromTonnesPerCubicCentimeter(QuantityValue tonnespercubiccentimeter)
-        {
-            double value = (double) tonnespercubiccentimeter;
-            return new Density((value/1e-9));
-        }
+			public static Density<T, C> FromTonnesPerCubicMillimeter(Number<T, C> tonnespercubicmillimeter)
+			{
+				Number<T,C> value = (Number<T,C>) tonnespercubicmillimeter;
+				return new Density<T, C>(new Number<T,C>(value/1e-12));
+			}
 #endif
 
-        /// <summary>
-        ///     Get Density from TonnesPerCubicMeter.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="DensityUnit" /> to <see cref="Density" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>Density unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromTonnesPerCubicMeter(double tonnespercubicmeter)
-        {
-            double value = (double) tonnespercubicmeter;
-            return new Density(value/0.001);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static Density<T, C> From(double value, DensityUnit fromUnit)
 #else
-        public static Density FromTonnesPerCubicMeter(QuantityValue tonnespercubicmeter)
-        {
-            double value = (double) tonnespercubicmeter;
-            return new Density((value/0.001));
-        }
+			public static Density<T, C> From(Number<T, C> value, DensityUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case DensityUnit.CentigramPerDeciliter:
+						return FromCentigramsPerDeciLiter(value);
+					case DensityUnit.CentigramPerLiter:
+						return FromCentigramsPerLiter(value);
+					case DensityUnit.CentigramPerMilliliter:
+						return FromCentigramsPerMilliliter(value);
+					case DensityUnit.DecigramPerDeciliter:
+						return FromDecigramsPerDeciLiter(value);
+					case DensityUnit.DecigramPerLiter:
+						return FromDecigramsPerLiter(value);
+					case DensityUnit.DecigramPerMilliliter:
+						return FromDecigramsPerMilliliter(value);
+					case DensityUnit.GramPerCubicCentimeter:
+						return FromGramsPerCubicCentimeter(value);
+					case DensityUnit.GramPerCubicMeter:
+						return FromGramsPerCubicMeter(value);
+					case DensityUnit.GramPerCubicMillimeter:
+						return FromGramsPerCubicMillimeter(value);
+					case DensityUnit.GramPerDeciliter:
+						return FromGramsPerDeciLiter(value);
+					case DensityUnit.GramPerLiter:
+						return FromGramsPerLiter(value);
+					case DensityUnit.GramPerMilliliter:
+						return FromGramsPerMilliliter(value);
+					case DensityUnit.KilogramPerCubicCentimeter:
+						return FromKilogramsPerCubicCentimeter(value);
+					case DensityUnit.KilogramPerCubicMeter:
+						return FromKilogramsPerCubicMeter(value);
+					case DensityUnit.KilogramPerCubicMillimeter:
+						return FromKilogramsPerCubicMillimeter(value);
+					case DensityUnit.KilopoundPerCubicFoot:
+						return FromKilopoundsPerCubicFoot(value);
+					case DensityUnit.KilopoundPerCubicInch:
+						return FromKilopoundsPerCubicInch(value);
+					case DensityUnit.MicrogramPerDeciliter:
+						return FromMicrogramsPerDeciLiter(value);
+					case DensityUnit.MicrogramPerLiter:
+						return FromMicrogramsPerLiter(value);
+					case DensityUnit.MicrogramPerMilliliter:
+						return FromMicrogramsPerMilliliter(value);
+					case DensityUnit.MilligramPerDeciliter:
+						return FromMilligramsPerDeciLiter(value);
+					case DensityUnit.MilligramPerLiter:
+						return FromMilligramsPerLiter(value);
+					case DensityUnit.MilligramPerMilliliter:
+						return FromMilligramsPerMilliliter(value);
+					case DensityUnit.NanogramPerDeciliter:
+						return FromNanogramsPerDeciLiter(value);
+					case DensityUnit.NanogramPerLiter:
+						return FromNanogramsPerLiter(value);
+					case DensityUnit.NanogramPerMilliliter:
+						return FromNanogramsPerMilliliter(value);
+					case DensityUnit.PicogramPerDeciliter:
+						return FromPicogramsPerDeciLiter(value);
+					case DensityUnit.PicogramPerLiter:
+						return FromPicogramsPerLiter(value);
+					case DensityUnit.PicogramPerMilliliter:
+						return FromPicogramsPerMilliliter(value);
+					case DensityUnit.PoundPerCubicFoot:
+						return FromPoundsPerCubicFoot(value);
+					case DensityUnit.PoundPerCubicInch:
+						return FromPoundsPerCubicInch(value);
+					case DensityUnit.SlugPerCubicFoot:
+						return FromSlugsPerCubicFoot(value);
+					case DensityUnit.TonnePerCubicCentimeter:
+						return FromTonnesPerCubicCentimeter(value);
+					case DensityUnit.TonnePerCubicMeter:
+						return FromTonnesPerCubicMeter(value);
+					case DensityUnit.TonnePerCubicMillimeter:
+						return FromTonnesPerCubicMillimeter(value);
 
-        /// <summary>
-        ///     Get Density from TonnesPerCubicMillimeter.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static Density FromTonnesPerCubicMillimeter(double tonnespercubicmillimeter)
-        {
-            double value = (double) tonnespercubicmillimeter;
-            return new Density(value/1e-12);
-        }
-#else
-        public static Density FromTonnesPerCubicMillimeter(QuantityValue tonnespercubicmillimeter)
-        {
-            double value = (double) tonnespercubicmillimeter;
-            return new Density((value/1e-12));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(DensityUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(DensityUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable Density from nullable CentigramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromCentigramsPerDeciLiter(QuantityValue? centigramsperdeciliter)
-        {
-            if (centigramsperdeciliter.HasValue)
-            {
-                return FromCentigramsPerDeciLiter(centigramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator -(Density<T, C> right)
+			{
+				return new Density<T, C>(-right._kilogramsPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable CentigramsPerLiter.
-        /// </summary>
-        public static Density? FromCentigramsPerLiter(QuantityValue? centigramsperliter)
-        {
-            if (centigramsperliter.HasValue)
-            {
-                return FromCentigramsPerLiter(centigramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator +(Density<T, C> left, Density<T, C> right)
+			{
+				return new Density<T, C>(left._kilogramsPerCubicMeter + right._kilogramsPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable CentigramsPerMilliliter.
-        /// </summary>
-        public static Density? FromCentigramsPerMilliliter(QuantityValue? centigramspermilliliter)
-        {
-            if (centigramspermilliliter.HasValue)
-            {
-                return FromCentigramsPerMilliliter(centigramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator -(Density<T, C> left, Density<T, C> right)
+			{
+				return new Density<T, C>(left._kilogramsPerCubicMeter - right._kilogramsPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable DecigramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromDecigramsPerDeciLiter(QuantityValue? decigramsperdeciliter)
-        {
-            if (decigramsperdeciliter.HasValue)
-            {
-                return FromDecigramsPerDeciLiter(decigramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator *(Number<T, C> left, Density<T, C> right)
+			{
+				return new Density<T, C>(left*right._kilogramsPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable DecigramsPerLiter.
-        /// </summary>
-        public static Density? FromDecigramsPerLiter(QuantityValue? decigramsperliter)
-        {
-            if (decigramsperliter.HasValue)
-            {
-                return FromDecigramsPerLiter(decigramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator *(Density<T, C> left, double right)
+			{
+				return new Density<T, C>(left._kilogramsPerCubicMeter*right);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable DecigramsPerMilliliter.
-        /// </summary>
-        public static Density? FromDecigramsPerMilliliter(QuantityValue? decigramspermilliliter)
-        {
-            if (decigramspermilliliter.HasValue)
-            {
-                return FromDecigramsPerMilliliter(decigramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static Density<T, C> operator /(Density<T, C> left, double right)
+			{
+				return new Density<T, C>(left._kilogramsPerCubicMeter/right);
+			}
 
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerCubicCentimeter.
-        /// </summary>
-        public static Density? FromGramsPerCubicCentimeter(QuantityValue? gramspercubiccentimeter)
-        {
-            if (gramspercubiccentimeter.HasValue)
-            {
-                return FromGramsPerCubicCentimeter(gramspercubiccentimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerCubicMeter.
-        /// </summary>
-        public static Density? FromGramsPerCubicMeter(QuantityValue? gramspercubicmeter)
-        {
-            if (gramspercubicmeter.HasValue)
-            {
-                return FromGramsPerCubicMeter(gramspercubicmeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerCubicMillimeter.
-        /// </summary>
-        public static Density? FromGramsPerCubicMillimeter(QuantityValue? gramspercubicmillimeter)
-        {
-            if (gramspercubicmillimeter.HasValue)
-            {
-                return FromGramsPerCubicMillimeter(gramspercubicmillimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromGramsPerDeciLiter(QuantityValue? gramsperdeciliter)
-        {
-            if (gramsperdeciliter.HasValue)
-            {
-                return FromGramsPerDeciLiter(gramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerLiter.
-        /// </summary>
-        public static Density? FromGramsPerLiter(QuantityValue? gramsperliter)
-        {
-            if (gramsperliter.HasValue)
-            {
-                return FromGramsPerLiter(gramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable GramsPerMilliliter.
-        /// </summary>
-        public static Density? FromGramsPerMilliliter(QuantityValue? gramspermilliliter)
-        {
-            if (gramspermilliliter.HasValue)
-            {
-                return FromGramsPerMilliliter(gramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable KilogramsPerCubicCentimeter.
-        /// </summary>
-        public static Density? FromKilogramsPerCubicCentimeter(QuantityValue? kilogramspercubiccentimeter)
-        {
-            if (kilogramspercubiccentimeter.HasValue)
-            {
-                return FromKilogramsPerCubicCentimeter(kilogramspercubiccentimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable KilogramsPerCubicMeter.
-        /// </summary>
-        public static Density? FromKilogramsPerCubicMeter(QuantityValue? kilogramspercubicmeter)
-        {
-            if (kilogramspercubicmeter.HasValue)
-            {
-                return FromKilogramsPerCubicMeter(kilogramspercubicmeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable KilogramsPerCubicMillimeter.
-        /// </summary>
-        public static Density? FromKilogramsPerCubicMillimeter(QuantityValue? kilogramspercubicmillimeter)
-        {
-            if (kilogramspercubicmillimeter.HasValue)
-            {
-                return FromKilogramsPerCubicMillimeter(kilogramspercubicmillimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable KilopoundsPerCubicFoot.
-        /// </summary>
-        public static Density? FromKilopoundsPerCubicFoot(QuantityValue? kilopoundspercubicfoot)
-        {
-            if (kilopoundspercubicfoot.HasValue)
-            {
-                return FromKilopoundsPerCubicFoot(kilopoundspercubicfoot.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable KilopoundsPerCubicInch.
-        /// </summary>
-        public static Density? FromKilopoundsPerCubicInch(QuantityValue? kilopoundspercubicinch)
-        {
-            if (kilopoundspercubicinch.HasValue)
-            {
-                return FromKilopoundsPerCubicInch(kilopoundspercubicinch.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MicrogramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromMicrogramsPerDeciLiter(QuantityValue? microgramsperdeciliter)
-        {
-            if (microgramsperdeciliter.HasValue)
-            {
-                return FromMicrogramsPerDeciLiter(microgramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MicrogramsPerLiter.
-        /// </summary>
-        public static Density? FromMicrogramsPerLiter(QuantityValue? microgramsperliter)
-        {
-            if (microgramsperliter.HasValue)
-            {
-                return FromMicrogramsPerLiter(microgramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MicrogramsPerMilliliter.
-        /// </summary>
-        public static Density? FromMicrogramsPerMilliliter(QuantityValue? microgramspermilliliter)
-        {
-            if (microgramspermilliliter.HasValue)
-            {
-                return FromMicrogramsPerMilliliter(microgramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MilligramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromMilligramsPerDeciLiter(QuantityValue? milligramsperdeciliter)
-        {
-            if (milligramsperdeciliter.HasValue)
-            {
-                return FromMilligramsPerDeciLiter(milligramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MilligramsPerLiter.
-        /// </summary>
-        public static Density? FromMilligramsPerLiter(QuantityValue? milligramsperliter)
-        {
-            if (milligramsperliter.HasValue)
-            {
-                return FromMilligramsPerLiter(milligramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable MilligramsPerMilliliter.
-        /// </summary>
-        public static Density? FromMilligramsPerMilliliter(QuantityValue? milligramspermilliliter)
-        {
-            if (milligramspermilliliter.HasValue)
-            {
-                return FromMilligramsPerMilliliter(milligramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable NanogramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromNanogramsPerDeciLiter(QuantityValue? nanogramsperdeciliter)
-        {
-            if (nanogramsperdeciliter.HasValue)
-            {
-                return FromNanogramsPerDeciLiter(nanogramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable NanogramsPerLiter.
-        /// </summary>
-        public static Density? FromNanogramsPerLiter(QuantityValue? nanogramsperliter)
-        {
-            if (nanogramsperliter.HasValue)
-            {
-                return FromNanogramsPerLiter(nanogramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable NanogramsPerMilliliter.
-        /// </summary>
-        public static Density? FromNanogramsPerMilliliter(QuantityValue? nanogramspermilliliter)
-        {
-            if (nanogramspermilliliter.HasValue)
-            {
-                return FromNanogramsPerMilliliter(nanogramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable PicogramsPerDeciLiter.
-        /// </summary>
-        public static Density? FromPicogramsPerDeciLiter(QuantityValue? picogramsperdeciliter)
-        {
-            if (picogramsperdeciliter.HasValue)
-            {
-                return FromPicogramsPerDeciLiter(picogramsperdeciliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable PicogramsPerLiter.
-        /// </summary>
-        public static Density? FromPicogramsPerLiter(QuantityValue? picogramsperliter)
-        {
-            if (picogramsperliter.HasValue)
-            {
-                return FromPicogramsPerLiter(picogramsperliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable PicogramsPerMilliliter.
-        /// </summary>
-        public static Density? FromPicogramsPerMilliliter(QuantityValue? picogramspermilliliter)
-        {
-            if (picogramspermilliliter.HasValue)
-            {
-                return FromPicogramsPerMilliliter(picogramspermilliliter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable PoundsPerCubicFoot.
-        /// </summary>
-        public static Density? FromPoundsPerCubicFoot(QuantityValue? poundspercubicfoot)
-        {
-            if (poundspercubicfoot.HasValue)
-            {
-                return FromPoundsPerCubicFoot(poundspercubicfoot.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable PoundsPerCubicInch.
-        /// </summary>
-        public static Density? FromPoundsPerCubicInch(QuantityValue? poundspercubicinch)
-        {
-            if (poundspercubicinch.HasValue)
-            {
-                return FromPoundsPerCubicInch(poundspercubicinch.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable SlugsPerCubicFoot.
-        /// </summary>
-        public static Density? FromSlugsPerCubicFoot(QuantityValue? slugspercubicfoot)
-        {
-            if (slugspercubicfoot.HasValue)
-            {
-                return FromSlugsPerCubicFoot(slugspercubicfoot.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable TonnesPerCubicCentimeter.
-        /// </summary>
-        public static Density? FromTonnesPerCubicCentimeter(QuantityValue? tonnespercubiccentimeter)
-        {
-            if (tonnespercubiccentimeter.HasValue)
-            {
-                return FromTonnesPerCubicCentimeter(tonnespercubiccentimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable TonnesPerCubicMeter.
-        /// </summary>
-        public static Density? FromTonnesPerCubicMeter(QuantityValue? tonnespercubicmeter)
-        {
-            if (tonnespercubicmeter.HasValue)
-            {
-                return FromTonnesPerCubicMeter(tonnespercubicmeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable Density from nullable TonnesPerCubicMillimeter.
-        /// </summary>
-        public static Density? FromTonnesPerCubicMillimeter(QuantityValue? tonnespercubicmillimeter)
-        {
-            if (tonnespercubicmillimeter.HasValue)
-            {
-                return FromTonnesPerCubicMillimeter(tonnespercubicmillimeter.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(Density<T, C> left, Density<T, C> right)
+			{
+				return Convert.ToDouble(left._kilogramsPerCubicMeter/right._kilogramsPerCubicMeter);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="DensityUnit" /> to <see cref="Density" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Density unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is Density<T, C>)) throw new ArgumentException("Expected type Density.", "obj");
+				return CompareTo((Density<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static Density From(double value, DensityUnit fromUnit)
+			internal
 #else
-        public static Density From(QuantityValue value, DensityUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case DensityUnit.CentigramPerDeciliter:
-                    return FromCentigramsPerDeciLiter(value);
-                case DensityUnit.CentigramPerLiter:
-                    return FromCentigramsPerLiter(value);
-                case DensityUnit.CentigramPerMilliliter:
-                    return FromCentigramsPerMilliliter(value);
-                case DensityUnit.DecigramPerDeciliter:
-                    return FromDecigramsPerDeciLiter(value);
-                case DensityUnit.DecigramPerLiter:
-                    return FromDecigramsPerLiter(value);
-                case DensityUnit.DecigramPerMilliliter:
-                    return FromDecigramsPerMilliliter(value);
-                case DensityUnit.GramPerCubicCentimeter:
-                    return FromGramsPerCubicCentimeter(value);
-                case DensityUnit.GramPerCubicMeter:
-                    return FromGramsPerCubicMeter(value);
-                case DensityUnit.GramPerCubicMillimeter:
-                    return FromGramsPerCubicMillimeter(value);
-                case DensityUnit.GramPerDeciliter:
-                    return FromGramsPerDeciLiter(value);
-                case DensityUnit.GramPerLiter:
-                    return FromGramsPerLiter(value);
-                case DensityUnit.GramPerMilliliter:
-                    return FromGramsPerMilliliter(value);
-                case DensityUnit.KilogramPerCubicCentimeter:
-                    return FromKilogramsPerCubicCentimeter(value);
-                case DensityUnit.KilogramPerCubicMeter:
-                    return FromKilogramsPerCubicMeter(value);
-                case DensityUnit.KilogramPerCubicMillimeter:
-                    return FromKilogramsPerCubicMillimeter(value);
-                case DensityUnit.KilopoundPerCubicFoot:
-                    return FromKilopoundsPerCubicFoot(value);
-                case DensityUnit.KilopoundPerCubicInch:
-                    return FromKilopoundsPerCubicInch(value);
-                case DensityUnit.MicrogramPerDeciliter:
-                    return FromMicrogramsPerDeciLiter(value);
-                case DensityUnit.MicrogramPerLiter:
-                    return FromMicrogramsPerLiter(value);
-                case DensityUnit.MicrogramPerMilliliter:
-                    return FromMicrogramsPerMilliliter(value);
-                case DensityUnit.MilligramPerDeciliter:
-                    return FromMilligramsPerDeciLiter(value);
-                case DensityUnit.MilligramPerLiter:
-                    return FromMilligramsPerLiter(value);
-                case DensityUnit.MilligramPerMilliliter:
-                    return FromMilligramsPerMilliliter(value);
-                case DensityUnit.NanogramPerDeciliter:
-                    return FromNanogramsPerDeciLiter(value);
-                case DensityUnit.NanogramPerLiter:
-                    return FromNanogramsPerLiter(value);
-                case DensityUnit.NanogramPerMilliliter:
-                    return FromNanogramsPerMilliliter(value);
-                case DensityUnit.PicogramPerDeciliter:
-                    return FromPicogramsPerDeciLiter(value);
-                case DensityUnit.PicogramPerLiter:
-                    return FromPicogramsPerLiter(value);
-                case DensityUnit.PicogramPerMilliliter:
-                    return FromPicogramsPerMilliliter(value);
-                case DensityUnit.PoundPerCubicFoot:
-                    return FromPoundsPerCubicFoot(value);
-                case DensityUnit.PoundPerCubicInch:
-                    return FromPoundsPerCubicInch(value);
-                case DensityUnit.SlugPerCubicFoot:
-                    return FromSlugsPerCubicFoot(value);
-                case DensityUnit.TonnePerCubicCentimeter:
-                    return FromTonnesPerCubicCentimeter(value);
-                case DensityUnit.TonnePerCubicMeter:
-                    return FromTonnesPerCubicMeter(value);
-                case DensityUnit.TonnePerCubicMillimeter:
-                    return FromTonnesPerCubicMillimeter(value);
+			int CompareTo(Density<T, C> other)
+			{
+				return _kilogramsPerCubicMeter.CompareTo(other._kilogramsPerCubicMeter);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="DensityUnit" /> to <see cref="Density" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>Density unit value.</returns>
-        public static Density? From(QuantityValue? value, DensityUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case DensityUnit.CentigramPerDeciliter:
-                    return FromCentigramsPerDeciLiter(value.Value);
-                case DensityUnit.CentigramPerLiter:
-                    return FromCentigramsPerLiter(value.Value);
-                case DensityUnit.CentigramPerMilliliter:
-                    return FromCentigramsPerMilliliter(value.Value);
-                case DensityUnit.DecigramPerDeciliter:
-                    return FromDecigramsPerDeciLiter(value.Value);
-                case DensityUnit.DecigramPerLiter:
-                    return FromDecigramsPerLiter(value.Value);
-                case DensityUnit.DecigramPerMilliliter:
-                    return FromDecigramsPerMilliliter(value.Value);
-                case DensityUnit.GramPerCubicCentimeter:
-                    return FromGramsPerCubicCentimeter(value.Value);
-                case DensityUnit.GramPerCubicMeter:
-                    return FromGramsPerCubicMeter(value.Value);
-                case DensityUnit.GramPerCubicMillimeter:
-                    return FromGramsPerCubicMillimeter(value.Value);
-                case DensityUnit.GramPerDeciliter:
-                    return FromGramsPerDeciLiter(value.Value);
-                case DensityUnit.GramPerLiter:
-                    return FromGramsPerLiter(value.Value);
-                case DensityUnit.GramPerMilliliter:
-                    return FromGramsPerMilliliter(value.Value);
-                case DensityUnit.KilogramPerCubicCentimeter:
-                    return FromKilogramsPerCubicCentimeter(value.Value);
-                case DensityUnit.KilogramPerCubicMeter:
-                    return FromKilogramsPerCubicMeter(value.Value);
-                case DensityUnit.KilogramPerCubicMillimeter:
-                    return FromKilogramsPerCubicMillimeter(value.Value);
-                case DensityUnit.KilopoundPerCubicFoot:
-                    return FromKilopoundsPerCubicFoot(value.Value);
-                case DensityUnit.KilopoundPerCubicInch:
-                    return FromKilopoundsPerCubicInch(value.Value);
-                case DensityUnit.MicrogramPerDeciliter:
-                    return FromMicrogramsPerDeciLiter(value.Value);
-                case DensityUnit.MicrogramPerLiter:
-                    return FromMicrogramsPerLiter(value.Value);
-                case DensityUnit.MicrogramPerMilliliter:
-                    return FromMicrogramsPerMilliliter(value.Value);
-                case DensityUnit.MilligramPerDeciliter:
-                    return FromMilligramsPerDeciLiter(value.Value);
-                case DensityUnit.MilligramPerLiter:
-                    return FromMilligramsPerLiter(value.Value);
-                case DensityUnit.MilligramPerMilliliter:
-                    return FromMilligramsPerMilliliter(value.Value);
-                case DensityUnit.NanogramPerDeciliter:
-                    return FromNanogramsPerDeciLiter(value.Value);
-                case DensityUnit.NanogramPerLiter:
-                    return FromNanogramsPerLiter(value.Value);
-                case DensityUnit.NanogramPerMilliliter:
-                    return FromNanogramsPerMilliliter(value.Value);
-                case DensityUnit.PicogramPerDeciliter:
-                    return FromPicogramsPerDeciLiter(value.Value);
-                case DensityUnit.PicogramPerLiter:
-                    return FromPicogramsPerLiter(value.Value);
-                case DensityUnit.PicogramPerMilliliter:
-                    return FromPicogramsPerMilliliter(value.Value);
-                case DensityUnit.PoundPerCubicFoot:
-                    return FromPoundsPerCubicFoot(value.Value);
-                case DensityUnit.PoundPerCubicInch:
-                    return FromPoundsPerCubicInch(value.Value);
-                case DensityUnit.SlugPerCubicFoot:
-                    return FromSlugsPerCubicFoot(value.Value);
-                case DensityUnit.TonnePerCubicCentimeter:
-                    return FromTonnesPerCubicCentimeter(value.Value);
-                case DensityUnit.TonnePerCubicMeter:
-                    return FromTonnesPerCubicMeter(value.Value);
-                case DensityUnit.TonnePerCubicMillimeter:
-                    return FromTonnesPerCubicMillimeter(value.Value);
+			public static bool operator <=(Density<T, C> left, Density<T, C> right)
+			{
+				return left._kilogramsPerCubicMeter <= right._kilogramsPerCubicMeter;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(Density<T, C> left, Density<T, C> right)
+			{
+				return left._kilogramsPerCubicMeter >= right._kilogramsPerCubicMeter;
+			}
+
+			public static bool operator <(Density<T, C> left, Density<T, C> right)
+			{
+				return left._kilogramsPerCubicMeter < right._kilogramsPerCubicMeter;
+			}
+
+			public static bool operator >(Density<T, C> left, Density<T, C> right)
+			{
+				return left._kilogramsPerCubicMeter > right._kilogramsPerCubicMeter;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(Density<T, C> left, Density<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilogramsPerCubicMeter == right._kilogramsPerCubicMeter;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(Density<T, C> left, Density<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._kilogramsPerCubicMeter != right._kilogramsPerCubicMeter;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(DensityUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(DensityUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static Density operator -(Density right)
-        {
-            return new Density(-right._kilogramsPerCubicMeter);
-        }
-
-        public static Density operator +(Density left, Density right)
-        {
-            return new Density(left._kilogramsPerCubicMeter + right._kilogramsPerCubicMeter);
-        }
-
-        public static Density operator -(Density left, Density right)
-        {
-            return new Density(left._kilogramsPerCubicMeter - right._kilogramsPerCubicMeter);
-        }
-
-        public static Density operator *(double left, Density right)
-        {
-            return new Density(left*right._kilogramsPerCubicMeter);
-        }
-
-        public static Density operator *(Density left, double right)
-        {
-            return new Density(left._kilogramsPerCubicMeter*(double)right);
-        }
-
-        public static Density operator /(Density left, double right)
-        {
-            return new Density(left._kilogramsPerCubicMeter/(double)right);
-        }
-
-        public static double operator /(Density left, Density right)
-        {
-            return Convert.ToDouble(left._kilogramsPerCubicMeter/right._kilogramsPerCubicMeter);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is Density)) throw new ArgumentException("Expected type Density.", "obj");
-            return CompareTo((Density) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(Density other)
-        {
-            return _kilogramsPerCubicMeter.CompareTo(other._kilogramsPerCubicMeter);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(Density left, Density right)
-        {
-            return left._kilogramsPerCubicMeter <= right._kilogramsPerCubicMeter;
-        }
-
-        public static bool operator >=(Density left, Density right)
-        {
-            return left._kilogramsPerCubicMeter >= right._kilogramsPerCubicMeter;
-        }
-
-        public static bool operator <(Density left, Density right)
-        {
-            return left._kilogramsPerCubicMeter < right._kilogramsPerCubicMeter;
-        }
-
-        public static bool operator >(Density left, Density right)
-        {
-            return left._kilogramsPerCubicMeter > right._kilogramsPerCubicMeter;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(Density left, Density right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilogramsPerCubicMeter == right._kilogramsPerCubicMeter;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(Density left, Density right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._kilogramsPerCubicMeter != right._kilogramsPerCubicMeter;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _kilogramsPerCubicMeter.Equals(((Density) obj)._kilogramsPerCubicMeter);
-        }
+				return _kilogramsPerCubicMeter.Equals(((Density<T, C>) obj)._kilogramsPerCubicMeter);
+			}
 
-        /// <summary>
-        ///     Compare equality to another Density by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(Density other, Density maxError)
-        {
-            return Math.Abs(_kilogramsPerCubicMeter - other._kilogramsPerCubicMeter) <= maxError._kilogramsPerCubicMeter;
-        }
+			/// <summary>
+			///     Compare equality to another Density by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(Density<T, C> other, Density<T, C> maxError)
+			{
+				return Math.Abs((decimal)_kilogramsPerCubicMeter - (decimal)other._kilogramsPerCubicMeter) <= maxError._kilogramsPerCubicMeter;
+			}
 
-        public override int GetHashCode()
-        {
-            return _kilogramsPerCubicMeter.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _kilogramsPerCubicMeter.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(DensityUnit unit)
-        {
-            switch (unit)
-            {
-                case DensityUnit.CentigramPerDeciliter:
-                    return CentigramsPerDeciLiter;
-                case DensityUnit.CentigramPerLiter:
-                    return CentigramsPerLiter;
-                case DensityUnit.CentigramPerMilliliter:
-                    return CentigramsPerMilliliter;
-                case DensityUnit.DecigramPerDeciliter:
-                    return DecigramsPerDeciLiter;
-                case DensityUnit.DecigramPerLiter:
-                    return DecigramsPerLiter;
-                case DensityUnit.DecigramPerMilliliter:
-                    return DecigramsPerMilliliter;
-                case DensityUnit.GramPerCubicCentimeter:
-                    return GramsPerCubicCentimeter;
-                case DensityUnit.GramPerCubicMeter:
-                    return GramsPerCubicMeter;
-                case DensityUnit.GramPerCubicMillimeter:
-                    return GramsPerCubicMillimeter;
-                case DensityUnit.GramPerDeciliter:
-                    return GramsPerDeciLiter;
-                case DensityUnit.GramPerLiter:
-                    return GramsPerLiter;
-                case DensityUnit.GramPerMilliliter:
-                    return GramsPerMilliliter;
-                case DensityUnit.KilogramPerCubicCentimeter:
-                    return KilogramsPerCubicCentimeter;
-                case DensityUnit.KilogramPerCubicMeter:
-                    return KilogramsPerCubicMeter;
-                case DensityUnit.KilogramPerCubicMillimeter:
-                    return KilogramsPerCubicMillimeter;
-                case DensityUnit.KilopoundPerCubicFoot:
-                    return KilopoundsPerCubicFoot;
-                case DensityUnit.KilopoundPerCubicInch:
-                    return KilopoundsPerCubicInch;
-                case DensityUnit.MicrogramPerDeciliter:
-                    return MicrogramsPerDeciLiter;
-                case DensityUnit.MicrogramPerLiter:
-                    return MicrogramsPerLiter;
-                case DensityUnit.MicrogramPerMilliliter:
-                    return MicrogramsPerMilliliter;
-                case DensityUnit.MilligramPerDeciliter:
-                    return MilligramsPerDeciLiter;
-                case DensityUnit.MilligramPerLiter:
-                    return MilligramsPerLiter;
-                case DensityUnit.MilligramPerMilliliter:
-                    return MilligramsPerMilliliter;
-                case DensityUnit.NanogramPerDeciliter:
-                    return NanogramsPerDeciLiter;
-                case DensityUnit.NanogramPerLiter:
-                    return NanogramsPerLiter;
-                case DensityUnit.NanogramPerMilliliter:
-                    return NanogramsPerMilliliter;
-                case DensityUnit.PicogramPerDeciliter:
-                    return PicogramsPerDeciLiter;
-                case DensityUnit.PicogramPerLiter:
-                    return PicogramsPerLiter;
-                case DensityUnit.PicogramPerMilliliter:
-                    return PicogramsPerMilliliter;
-                case DensityUnit.PoundPerCubicFoot:
-                    return PoundsPerCubicFoot;
-                case DensityUnit.PoundPerCubicInch:
-                    return PoundsPerCubicInch;
-                case DensityUnit.SlugPerCubicFoot:
-                    return SlugsPerCubicFoot;
-                case DensityUnit.TonnePerCubicCentimeter:
-                    return TonnesPerCubicCentimeter;
-                case DensityUnit.TonnePerCubicMeter:
-                    return TonnesPerCubicMeter;
-                case DensityUnit.TonnePerCubicMillimeter:
-                    return TonnesPerCubicMillimeter;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(DensityUnit unit)
+			{
+				switch (unit)
+				{
+					case DensityUnit.CentigramPerDeciliter:
+						return CentigramsPerDeciLiter;
+					case DensityUnit.CentigramPerLiter:
+						return CentigramsPerLiter;
+					case DensityUnit.CentigramPerMilliliter:
+						return CentigramsPerMilliliter;
+					case DensityUnit.DecigramPerDeciliter:
+						return DecigramsPerDeciLiter;
+					case DensityUnit.DecigramPerLiter:
+						return DecigramsPerLiter;
+					case DensityUnit.DecigramPerMilliliter:
+						return DecigramsPerMilliliter;
+					case DensityUnit.GramPerCubicCentimeter:
+						return GramsPerCubicCentimeter;
+					case DensityUnit.GramPerCubicMeter:
+						return GramsPerCubicMeter;
+					case DensityUnit.GramPerCubicMillimeter:
+						return GramsPerCubicMillimeter;
+					case DensityUnit.GramPerDeciliter:
+						return GramsPerDeciLiter;
+					case DensityUnit.GramPerLiter:
+						return GramsPerLiter;
+					case DensityUnit.GramPerMilliliter:
+						return GramsPerMilliliter;
+					case DensityUnit.KilogramPerCubicCentimeter:
+						return KilogramsPerCubicCentimeter;
+					case DensityUnit.KilogramPerCubicMeter:
+						return KilogramsPerCubicMeter;
+					case DensityUnit.KilogramPerCubicMillimeter:
+						return KilogramsPerCubicMillimeter;
+					case DensityUnit.KilopoundPerCubicFoot:
+						return KilopoundsPerCubicFoot;
+					case DensityUnit.KilopoundPerCubicInch:
+						return KilopoundsPerCubicInch;
+					case DensityUnit.MicrogramPerDeciliter:
+						return MicrogramsPerDeciLiter;
+					case DensityUnit.MicrogramPerLiter:
+						return MicrogramsPerLiter;
+					case DensityUnit.MicrogramPerMilliliter:
+						return MicrogramsPerMilliliter;
+					case DensityUnit.MilligramPerDeciliter:
+						return MilligramsPerDeciLiter;
+					case DensityUnit.MilligramPerLiter:
+						return MilligramsPerLiter;
+					case DensityUnit.MilligramPerMilliliter:
+						return MilligramsPerMilliliter;
+					case DensityUnit.NanogramPerDeciliter:
+						return NanogramsPerDeciLiter;
+					case DensityUnit.NanogramPerLiter:
+						return NanogramsPerLiter;
+					case DensityUnit.NanogramPerMilliliter:
+						return NanogramsPerMilliliter;
+					case DensityUnit.PicogramPerDeciliter:
+						return PicogramsPerDeciLiter;
+					case DensityUnit.PicogramPerLiter:
+						return PicogramsPerLiter;
+					case DensityUnit.PicogramPerMilliliter:
+						return PicogramsPerMilliliter;
+					case DensityUnit.PoundPerCubicFoot:
+						return PoundsPerCubicFoot;
+					case DensityUnit.PoundPerCubicInch:
+						return PoundsPerCubicInch;
+					case DensityUnit.SlugPerCubicFoot:
+						return SlugsPerCubicFoot;
+					case DensityUnit.TonnePerCubicCentimeter:
+						return TonnesPerCubicCentimeter;
+					case DensityUnit.TonnePerCubicMeter:
+						return TonnesPerCubicMeter;
+					case DensityUnit.TonnePerCubicMillimeter:
+						return TonnesPerCubicMillimeter;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Density Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Density<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static Density Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static Density<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<Density, DensityUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    DensityUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromKilogramsPerCubicMeter(x.KilogramsPerCubicMeter + y.KilogramsPerCubicMeter));
-        }
+					return QuantityParser.Parse<Density<T, C>, DensityUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						DensityUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromKilogramsPerCubicMeter((Number<T, C>)x.KilogramsPerCubicMeter + y.KilogramsPerCubicMeter));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out Density result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out Density<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Density result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(Density);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out Density<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(Density<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static DensityUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static DensityUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static DensityUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static DensityUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static DensityUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static DensityUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<DensityUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<DensityUnit>(str.Trim());
 
-            if (unit == DensityUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized DensityUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == DensityUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized DensityUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is KilogramPerCubicMeter
-        /// </summary>
-        public static DensityUnit ToStringDefaultUnit { get; set; } = DensityUnit.KilogramPerCubicMeter;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is KilogramPerCubicMeter
+			/// </summary>
+			public static DensityUnit ToStringDefaultUnit { get; set; } = DensityUnit.KilogramPerCubicMeter;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(DensityUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(DensityUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(DensityUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(DensityUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(DensityUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(DensityUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(DensityUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(DensityUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of Density
-        /// </summary>
-        public static Density MaxValue
-        {
-            get
-            {
-                return new Density(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of Density
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of Density
-        /// </summary>
-        public static Density MinValue
-        {
-            get
-            {
-                return new Density(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of Density
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

@@ -24,7 +24,7 @@ using System;
 
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -32,39 +32,41 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class KinematicViscosity
 #else
-    public partial struct KinematicViscosity
+    public partial class KinematicViscosity<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Speed operator /(KinematicViscosity kinematicViscosity, Length length)
+        public static Speed<T, C> operator /(KinematicViscosity<T, C> kinematicViscosity, Length<T, C> length)
         {
-            return Speed.FromMetersPerSecond(kinematicViscosity.SquareMetersPerSecond / length.Meters);
+            return Speed<T, C>.FromMetersPerSecond(kinematicViscosity.SquareMetersPerSecond / length.Meters);
         }
 
-        public static Area operator *(KinematicViscosity kinematicViscosity, TimeSpan timeSpan)
+        public static Area<T, C> operator *(KinematicViscosity<T, C> kinematicViscosity, TimeSpan timeSpan)
         {
-            return Area.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * timeSpan.TotalSeconds);
+            return Area<T, C>.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Area operator *(TimeSpan timeSpan, KinematicViscosity kinematicViscosity)
+        public static Area<T, C> operator *(TimeSpan timeSpan, KinematicViscosity<T, C> kinematicViscosity)
         {
-            return Area.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * timeSpan.TotalSeconds);
+            return Area<T, C>.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * timeSpan.TotalSeconds);
         }
 
-        public static Area operator *(KinematicViscosity kinematicViscosity, Duration duration)
+        public static Area<T, C> operator *(KinematicViscosity<T, C> kinematicViscosity, Duration<T, C> duration)
         {
-            return Area.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * duration.Seconds);
+            return Area<T, C>.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * duration.Seconds);
         }
 
-        public static Area operator *(Duration duration, KinematicViscosity kinematicViscosity)
+        public static Area<T, C> operator *(Duration duration, KinematicViscosity<T, C> kinematicViscosity)
         {
-            return Area.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * duration.Seconds);
+            return Area<T, C>.FromSquareMeters(kinematicViscosity.SquareMetersPerSecond * duration.Seconds);
         }
 
-        public static DynamicViscosity operator *(KinematicViscosity kinematicViscosity, Density density)
+        public static DynamicViscosity<T, C> operator *(KinematicViscosity<T, C> kinematicViscosity, Density<T, C> density)
         {
-            return DynamicViscosity.FromNewtonSecondsPerMeterSquared(kinematicViscosity.SquareMetersPerSecond * density.KilogramsPerCubicMeter);
+            return DynamicViscosity<T, C>.FromNewtonSecondsPerMeterSquared(kinematicViscosity.SquareMetersPerSecond * density.KilogramsPerCubicMeter);
         }
 #endif
     }

@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,68 +48,38 @@ namespace UnitsNet.Extensions.NumberToPowerRatio
         #region DecibelMilliwatt
 
         /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
-        public static PowerRatio DecibelMilliwatts(this int value) => PowerRatio.FromDecibelMilliwatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double?)"/>
-        public static PowerRatio? DecibelMilliwatts(this int? value) => PowerRatio.FromDecibelMilliwatts(value);
+        public static PowerRatio DecibelMilliwatts(this int value) => (PowerRatio)PowerRatio.FromDecibelMilliwatts(value);
+	
+        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
+        public static PowerRatio DecibelMilliwatts(this long value) => (PowerRatio)PowerRatio.FromDecibelMilliwatts(value);
 
         /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
-        public static PowerRatio DecibelMilliwatts(this long value) => PowerRatio.FromDecibelMilliwatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double?)"/>
-        public static PowerRatio? DecibelMilliwatts(this long? value) => PowerRatio.FromDecibelMilliwatts(value);
+        public static PowerRatio DecibelMilliwatts(this double value) => (PowerRatio)PowerRatio.FromDecibelMilliwatts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
-        public static PowerRatio DecibelMilliwatts(this double value) => PowerRatio.FromDecibelMilliwatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double?)"/>
-        public static PowerRatio? DecibelMilliwatts(this double? value) => PowerRatio.FromDecibelMilliwatts(value);
+        public static PowerRatio DecibelMilliwatts(this float value) => (PowerRatio)PowerRatio.FromDecibelMilliwatts(value);
 
         /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
-        public static PowerRatio DecibelMilliwatts(this float value) => PowerRatio.FromDecibelMilliwatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double?)"/>
-        public static PowerRatio? DecibelMilliwatts(this float? value) => PowerRatio.FromDecibelMilliwatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double)"/>
-        public static PowerRatio DecibelMilliwatts(this decimal value) => PowerRatio.FromDecibelMilliwatts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelMilliwatts(double?)"/>
-        public static PowerRatio? DecibelMilliwatts(this decimal? value) => PowerRatio.FromDecibelMilliwatts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static PowerRatio DecibelMilliwatts(this decimal value) => (PowerRatio)PowerRatio.FromDecibelMilliwatts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region DecibelWatt
 
         /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
-        public static PowerRatio DecibelWatts(this int value) => PowerRatio.FromDecibelWatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double?)"/>
-        public static PowerRatio? DecibelWatts(this int? value) => PowerRatio.FromDecibelWatts(value);
+        public static PowerRatio DecibelWatts(this int value) => (PowerRatio)PowerRatio.FromDecibelWatts(value);
+	
+        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
+        public static PowerRatio DecibelWatts(this long value) => (PowerRatio)PowerRatio.FromDecibelWatts(value);
 
         /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
-        public static PowerRatio DecibelWatts(this long value) => PowerRatio.FromDecibelWatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double?)"/>
-        public static PowerRatio? DecibelWatts(this long? value) => PowerRatio.FromDecibelWatts(value);
+        public static PowerRatio DecibelWatts(this double value) => (PowerRatio)PowerRatio.FromDecibelWatts(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
-        public static PowerRatio DecibelWatts(this double value) => PowerRatio.FromDecibelWatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double?)"/>
-        public static PowerRatio? DecibelWatts(this double? value) => PowerRatio.FromDecibelWatts(value);
+        public static PowerRatio DecibelWatts(this float value) => (PowerRatio)PowerRatio.FromDecibelWatts(value);
 
         /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
-        public static PowerRatio DecibelWatts(this float value) => PowerRatio.FromDecibelWatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double?)"/>
-        public static PowerRatio? DecibelWatts(this float? value) => PowerRatio.FromDecibelWatts(value);
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double)"/>
-        public static PowerRatio DecibelWatts(this decimal value) => PowerRatio.FromDecibelWatts(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="PowerRatio.FromDecibelWatts(double?)"/>
-        public static PowerRatio? DecibelWatts(this decimal? value) => PowerRatio.FromDecibelWatts(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static PowerRatio DecibelWatts(this decimal value) => (PowerRatio)PowerRatio.FromDecibelWatts(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

@@ -20,7 +20,7 @@
 // THE SOFTWARE.
 
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -28,19 +28,21 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Torque
 #else
-    public partial struct Torque
+    public partial class Torque<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Force operator /(Torque torque, Length length)
+        public static Force<T, C> operator /(Torque<T, C> torque, Length<T, C> length)
         {
-            return Force.FromNewtons(torque.NewtonMeters / length.Meters);
+            return Force<T, C>.FromNewtons(torque.NewtonMeters / length.Meters);
         }
 
-        public static Length operator /(Torque torque, Force force)
+        public static Length<T, C> operator /(Torque<T, C> torque, Force<T, C> force)
         {
-            return Length.FromMeters(torque.NewtonMeters / force.Newtons);
+            return Length<T, C>.FromMeters(torque.NewtonMeters / force.Newtons);
         }
 #endif
     }

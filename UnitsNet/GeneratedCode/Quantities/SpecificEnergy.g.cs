@@ -52,9 +52,10 @@ using Culture = System.IFormatProvider;
 #endif
 
 // ReSharper disable once CheckNamespace
-
 namespace UnitsNet
 {
+    using UnitsNet.InternalHelpers.Calculators;
+
     /// <summary>
     ///     The SpecificEnergy
     /// </summary>
@@ -63,944 +64,769 @@ namespace UnitsNet
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
     // Public classes must be sealed (NotInheritable in Visual Basic). If your programming model requires polymorphism, you can create a public interface and implement that interface on the classes that must be polymorphic.
+	public partial class SpecificEnergy : UnitsNet.Generic.SpecificEnergy<double, UnitsNet.InternalHelpers.Calculators.DoubleCalculator> { }
+
+	namespace Generic
+	{
 #if WINDOWS_UWP
-    public sealed partial class SpecificEnergy
+		public sealed partial class SpecificEnergy
 #else
-    public partial struct SpecificEnergy : IComparable, IComparable<SpecificEnergy>
+		public partial class SpecificEnergy <T, C> : IComparable, IComparable<SpecificEnergy<T, C>>
+			where T : struct
+			where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
-    {
-        /// <summary>
-        ///     Base unit of SpecificEnergy.
-        /// </summary>
-        private readonly double _joulesPerKilogram;
+		{
+			/// <summary>
+			///     Base unit of SpecificEnergy.
+			/// </summary>
+			private readonly Number<T, C> _joulesPerKilogram;
 
-        // Windows Runtime Component requires a default constructor
+			public SpecificEnergy() : this(new Number<T,C>())
+			{
+			}
+
+			public SpecificEnergy(T joulesperkilogram)
+			{
+				_joulesPerKilogram = (joulesperkilogram);
+			}
+
+			public SpecificEnergy(Number<T, C> joulesperkilogram)
+			{
+				_joulesPerKilogram = (joulesperkilogram);
+			}
+
+			#region Properties
+
+			/// <summary>
+			///     The <see cref="QuantityType" /> of this quantity.
+			/// </summary>
+			public static QuantityType QuantityType => QuantityType.SpecificEnergy;
+
+			/// <summary>
+			///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
+			/// </summary>
+			public static SpecificEnergyUnit BaseUnit
+			{
+				get { return SpecificEnergyUnit.JoulePerKilogram; }
+			}
+
+			/// <summary>
+			///     All units of measurement for the SpecificEnergy quantity.
+			/// </summary>
+			public static SpecificEnergyUnit[] Units { get; } = Enum.GetValues(typeof(SpecificEnergyUnit)).Cast<SpecificEnergyUnit>().ToArray();
+
+			/// <summary>
+			///     Get SpecificEnergy in CaloriesPerGram.
+			/// </summary>
+			public Number<T, C> CaloriesPerGram
+			{
+				get { return _joulesPerKilogram/4.184e3; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in JoulesPerKilogram.
+			/// </summary>
+			public Number<T, C> JoulesPerKilogram
+			{
+				get { return _joulesPerKilogram; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in KilocaloriesPerGram.
+			/// </summary>
+			public Number<T, C> KilocaloriesPerGram
+			{
+				get { return (_joulesPerKilogram/4.184e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in KilojoulesPerKilogram.
+			/// </summary>
+			public Number<T, C> KilojoulesPerKilogram
+			{
+				get { return (_joulesPerKilogram) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in KilowattHoursPerKilogram.
+			/// </summary>
+			public Number<T, C> KilowattHoursPerKilogram
+			{
+				get { return (_joulesPerKilogram/3.6e3) / 1e3d; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in MegajoulesPerKilogram.
+			/// </summary>
+			public Number<T, C> MegajoulesPerKilogram
+			{
+				get { return (_joulesPerKilogram) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in MegawattHoursPerKilogram.
+			/// </summary>
+			public Number<T, C> MegawattHoursPerKilogram
+			{
+				get { return (_joulesPerKilogram/3.6e3) / 1e6d; }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy in WattHoursPerKilogram.
+			/// </summary>
+			public Number<T, C> WattHoursPerKilogram
+			{
+				get { return _joulesPerKilogram/3.6e3; }
+			}
+
+			#endregion
+
+			#region Static
+
+			public static SpecificEnergy<T, C> Zero
+			{
+				get { return new SpecificEnergy<T, C>(); }
+			}
+
+			/// <summary>
+			///     Get SpecificEnergy from CaloriesPerGram.
+			/// </summary>
 #if WINDOWS_UWP
-        public SpecificEnergy() : this(0)
-        {
-        }
-#endif
-
-        public SpecificEnergy(double joulesperkilogram)
-        {
-            _joulesPerKilogram = Convert.ToDouble(joulesperkilogram);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromCaloriesPerGram(Number<T, C> caloriespergram)
+			{
+				Number<T,C> value = (Number<T,C>) caloriespergram;
+				return new SpecificEnergy<T, C>(value*4.184e3);
+			}
 #else
-        public
+			public static SpecificEnergy<T, C> FromCaloriesPerGram(Number<T, C> caloriespergram)
+			{
+				Number<T,C> value = (Number<T,C>) caloriespergram;
+				return new SpecificEnergy<T, C>(new Number<T,C>(value*4.184e3));
+			}
 #endif
-        SpecificEnergy(long joulesperkilogram)
-        {
-            _joulesPerKilogram = Convert.ToDouble(joulesperkilogram);
-        }
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-        // Windows Runtime Component does not support decimal type
+			/// <summary>
+			///     Get SpecificEnergy from JoulesPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        private
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromJoulesPerKilogram(Number<T, C> joulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) joulesperkilogram;
+				return new SpecificEnergy<T, C>(value);
+			}
 #else
-        public
+			public static SpecificEnergy<T, C> FromJoulesPerKilogram(Number<T, C> joulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) joulesperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>(value));
+			}
 #endif
-        SpecificEnergy(decimal joulesperkilogram)
-        {
-            _joulesPerKilogram = Convert.ToDouble(joulesperkilogram);
-        }
 
-        #region Properties
-
-        /// <summary>
-        ///     The <see cref="QuantityType" /> of this quantity.
-        /// </summary>
-        public static QuantityType QuantityType => QuantityType.SpecificEnergy;
-
-        /// <summary>
-        ///     The base unit representation of this quantity for the numeric value stored internally. All conversions go via this value.
-        /// </summary>
-        public static SpecificEnergyUnit BaseUnit
-        {
-            get { return SpecificEnergyUnit.JoulePerKilogram; }
-        }
-
-        /// <summary>
-        ///     All units of measurement for the SpecificEnergy quantity.
-        /// </summary>
-        public static SpecificEnergyUnit[] Units { get; } = Enum.GetValues(typeof(SpecificEnergyUnit)).Cast<SpecificEnergyUnit>().ToArray();
-
-        /// <summary>
-        ///     Get SpecificEnergy in CaloriesPerGram.
-        /// </summary>
-        public double CaloriesPerGram
-        {
-            get { return _joulesPerKilogram/4.184e3; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in JoulesPerKilogram.
-        /// </summary>
-        public double JoulesPerKilogram
-        {
-            get { return _joulesPerKilogram; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in KilocaloriesPerGram.
-        /// </summary>
-        public double KilocaloriesPerGram
-        {
-            get { return (_joulesPerKilogram/4.184e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in KilojoulesPerKilogram.
-        /// </summary>
-        public double KilojoulesPerKilogram
-        {
-            get { return (_joulesPerKilogram) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in KilowattHoursPerKilogram.
-        /// </summary>
-        public double KilowattHoursPerKilogram
-        {
-            get { return (_joulesPerKilogram/3.6e3) / 1e3d; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in MegajoulesPerKilogram.
-        /// </summary>
-        public double MegajoulesPerKilogram
-        {
-            get { return (_joulesPerKilogram) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in MegawattHoursPerKilogram.
-        /// </summary>
-        public double MegawattHoursPerKilogram
-        {
-            get { return (_joulesPerKilogram/3.6e3) / 1e6d; }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy in WattHoursPerKilogram.
-        /// </summary>
-        public double WattHoursPerKilogram
-        {
-            get { return _joulesPerKilogram/3.6e3; }
-        }
-
-        #endregion
-
-        #region Static
-
-        public static SpecificEnergy Zero
-        {
-            get { return new SpecificEnergy(); }
-        }
-
-        /// <summary>
-        ///     Get SpecificEnergy from CaloriesPerGram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from KilocaloriesPerGram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromCaloriesPerGram(double caloriespergram)
-        {
-            double value = (double) caloriespergram;
-            return new SpecificEnergy(value*4.184e3);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromKilocaloriesPerGram(Number<T, C> kilocaloriespergram)
+			{
+				Number<T,C> value = (Number<T,C>) kilocaloriespergram;
+				return new SpecificEnergy<T, C>((value*4.184e3) * 1e3d);
+			}
 #else
-        public static SpecificEnergy FromCaloriesPerGram(QuantityValue caloriespergram)
-        {
-            double value = (double) caloriespergram;
-            return new SpecificEnergy((value*4.184e3));
-        }
+			public static SpecificEnergy<T, C> FromKilocaloriesPerGram(Number<T, C> kilocaloriespergram)
+			{
+				Number<T,C> value = (Number<T,C>) kilocaloriespergram;
+				return new SpecificEnergy<T, C>(new Number<T,C>((value*4.184e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from JoulesPerKilogram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from KilojoulesPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromJoulesPerKilogram(double joulesperkilogram)
-        {
-            double value = (double) joulesperkilogram;
-            return new SpecificEnergy(value);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromKilojoulesPerKilogram(Number<T, C> kilojoulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) kilojoulesperkilogram;
+				return new SpecificEnergy<T, C>((value) * 1e3d);
+			}
 #else
-        public static SpecificEnergy FromJoulesPerKilogram(QuantityValue joulesperkilogram)
-        {
-            double value = (double) joulesperkilogram;
-            return new SpecificEnergy((value));
-        }
+			public static SpecificEnergy<T, C> FromKilojoulesPerKilogram(Number<T, C> kilojoulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) kilojoulesperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>((value) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from KilocaloriesPerGram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from KilowattHoursPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromKilocaloriesPerGram(double kilocaloriespergram)
-        {
-            double value = (double) kilocaloriespergram;
-            return new SpecificEnergy((value*4.184e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromKilowattHoursPerKilogram(Number<T, C> kilowatthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) kilowatthoursperkilogram;
+				return new SpecificEnergy<T, C>((value*3.6e3) * 1e3d);
+			}
 #else
-        public static SpecificEnergy FromKilocaloriesPerGram(QuantityValue kilocaloriespergram)
-        {
-            double value = (double) kilocaloriespergram;
-            return new SpecificEnergy(((value*4.184e3) * 1e3d));
-        }
+			public static SpecificEnergy<T, C> FromKilowattHoursPerKilogram(Number<T, C> kilowatthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) kilowatthoursperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>((value*3.6e3) * 1e3d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from KilojoulesPerKilogram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from MegajoulesPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromKilojoulesPerKilogram(double kilojoulesperkilogram)
-        {
-            double value = (double) kilojoulesperkilogram;
-            return new SpecificEnergy((value) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromMegajoulesPerKilogram(Number<T, C> megajoulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) megajoulesperkilogram;
+				return new SpecificEnergy<T, C>((value) * 1e6d);
+			}
 #else
-        public static SpecificEnergy FromKilojoulesPerKilogram(QuantityValue kilojoulesperkilogram)
-        {
-            double value = (double) kilojoulesperkilogram;
-            return new SpecificEnergy(((value) * 1e3d));
-        }
+			public static SpecificEnergy<T, C> FromMegajoulesPerKilogram(Number<T, C> megajoulesperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) megajoulesperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>((value) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from KilowattHoursPerKilogram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from MegawattHoursPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromKilowattHoursPerKilogram(double kilowatthoursperkilogram)
-        {
-            double value = (double) kilowatthoursperkilogram;
-            return new SpecificEnergy((value*3.6e3) * 1e3d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromMegawattHoursPerKilogram(Number<T, C> megawatthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) megawatthoursperkilogram;
+				return new SpecificEnergy<T, C>((value*3.6e3) * 1e6d);
+			}
 #else
-        public static SpecificEnergy FromKilowattHoursPerKilogram(QuantityValue kilowatthoursperkilogram)
-        {
-            double value = (double) kilowatthoursperkilogram;
-            return new SpecificEnergy(((value*3.6e3) * 1e3d));
-        }
+			public static SpecificEnergy<T, C> FromMegawattHoursPerKilogram(Number<T, C> megawatthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) megawatthoursperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>((value*3.6e3) * 1e6d));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from MegajoulesPerKilogram.
-        /// </summary>
+			/// <summary>
+			///     Get SpecificEnergy from WattHoursPerKilogram.
+			/// </summary>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromMegajoulesPerKilogram(double megajoulesperkilogram)
-        {
-            double value = (double) megajoulesperkilogram;
-            return new SpecificEnergy((value) * 1e6d);
-        }
+			[Windows.Foundation.Metadata.DefaultOverload]
+			public static SpecificEnergy<T, C> FromWattHoursPerKilogram(Number<T, C> watthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) watthoursperkilogram;
+				return new SpecificEnergy<T, C>(value*3.6e3);
+			}
 #else
-        public static SpecificEnergy FromMegajoulesPerKilogram(QuantityValue megajoulesperkilogram)
-        {
-            double value = (double) megajoulesperkilogram;
-            return new SpecificEnergy(((value) * 1e6d));
-        }
+			public static SpecificEnergy<T, C> FromWattHoursPerKilogram(Number<T, C> watthoursperkilogram)
+			{
+				Number<T,C> value = (Number<T,C>) watthoursperkilogram;
+				return new SpecificEnergy<T, C>(new Number<T,C>(value*3.6e3));
+			}
 #endif
 
-        /// <summary>
-        ///     Get SpecificEnergy from MegawattHoursPerKilogram.
-        /// </summary>
+
+
+			/// <summary>
+			///     Dynamically convert from value and unit enum <see cref="SpecificEnergyUnit" /> to <see cref="SpecificEnergy" />.
+			/// </summary>
+			/// <param name="value">Value to convert from.</param>
+			/// <param name="fromUnit">Unit to convert from.</param>
+			/// <returns>SpecificEnergy unit value.</returns>
 #if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromMegawattHoursPerKilogram(double megawatthoursperkilogram)
-        {
-            double value = (double) megawatthoursperkilogram;
-            return new SpecificEnergy((value*3.6e3) * 1e6d);
-        }
+			// Fix name conflict with parameter "value"
+			[return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
+			public static SpecificEnergy<T, C> From(double value, SpecificEnergyUnit fromUnit)
 #else
-        public static SpecificEnergy FromMegawattHoursPerKilogram(QuantityValue megawatthoursperkilogram)
-        {
-            double value = (double) megawatthoursperkilogram;
-            return new SpecificEnergy(((value*3.6e3) * 1e6d));
-        }
+			public static SpecificEnergy<T, C> From(Number<T, C> value, SpecificEnergyUnit fromUnit)
 #endif
+			{
+				switch (fromUnit)
+				{
+					case SpecificEnergyUnit.CaloriePerGram:
+						return FromCaloriesPerGram(value);
+					case SpecificEnergyUnit.JoulePerKilogram:
+						return FromJoulesPerKilogram(value);
+					case SpecificEnergyUnit.KilocaloriePerGram:
+						return FromKilocaloriesPerGram(value);
+					case SpecificEnergyUnit.KilojoulePerKilogram:
+						return FromKilojoulesPerKilogram(value);
+					case SpecificEnergyUnit.KilowattHourPerKilogram:
+						return FromKilowattHoursPerKilogram(value);
+					case SpecificEnergyUnit.MegajoulePerKilogram:
+						return FromMegajoulesPerKilogram(value);
+					case SpecificEnergyUnit.MegawattHourPerKilogram:
+						return FromMegawattHoursPerKilogram(value);
+					case SpecificEnergyUnit.WattHourPerKilogram:
+						return FromWattHoursPerKilogram(value);
 
-        /// <summary>
-        ///     Get SpecificEnergy from WattHoursPerKilogram.
-        /// </summary>
-#if WINDOWS_UWP
-        [Windows.Foundation.Metadata.DefaultOverload]
-        public static SpecificEnergy FromWattHoursPerKilogram(double watthoursperkilogram)
-        {
-            double value = (double) watthoursperkilogram;
-            return new SpecificEnergy(value*3.6e3);
-        }
-#else
-        public static SpecificEnergy FromWattHoursPerKilogram(QuantityValue watthoursperkilogram)
-        {
-            double value = (double) watthoursperkilogram;
-            return new SpecificEnergy((value*3.6e3));
-        }
-#endif
+					default:
+						throw new NotImplementedException("fromUnit: " + fromUnit);
+				}
+			}
 
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(SpecificEnergyUnit unit)
+			{
+				return GetAbbreviation(unit, null);
+			}
+
+			/// <summary>
+			///     Get unit abbreviation string.
+			/// </summary>
+			/// <param name="unit">Unit to get abbreviation for.</param>
+			/// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
+			/// <returns>Unit abbreviation string.</returns>
+			[UsedImplicitly]
+			public static string GetAbbreviation(SpecificEnergyUnit unit, [CanBeNull] Culture culture)
+			{
+				return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
+			}
+
+			#endregion
+
+			#region Arithmetic Operators
+
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable CaloriesPerGram.
-        /// </summary>
-        public static SpecificEnergy? FromCaloriesPerGram(QuantityValue? caloriespergram)
-        {
-            if (caloriespergram.HasValue)
-            {
-                return FromCaloriesPerGram(caloriespergram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator -(SpecificEnergy<T, C> right)
+			{
+				return new SpecificEnergy<T, C>(-right._joulesPerKilogram);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable JoulesPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromJoulesPerKilogram(QuantityValue? joulesperkilogram)
-        {
-            if (joulesperkilogram.HasValue)
-            {
-                return FromJoulesPerKilogram(joulesperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator +(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return new SpecificEnergy<T, C>(left._joulesPerKilogram + right._joulesPerKilogram);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable KilocaloriesPerGram.
-        /// </summary>
-        public static SpecificEnergy? FromKilocaloriesPerGram(QuantityValue? kilocaloriespergram)
-        {
-            if (kilocaloriespergram.HasValue)
-            {
-                return FromKilocaloriesPerGram(kilocaloriespergram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator -(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return new SpecificEnergy<T, C>(left._joulesPerKilogram - right._joulesPerKilogram);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable KilojoulesPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromKilojoulesPerKilogram(QuantityValue? kilojoulesperkilogram)
-        {
-            if (kilojoulesperkilogram.HasValue)
-            {
-                return FromKilojoulesPerKilogram(kilojoulesperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator *(Number<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return new SpecificEnergy<T, C>(left*right._joulesPerKilogram);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable KilowattHoursPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromKilowattHoursPerKilogram(QuantityValue? kilowatthoursperkilogram)
-        {
-            if (kilowatthoursperkilogram.HasValue)
-            {
-                return FromKilowattHoursPerKilogram(kilowatthoursperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator *(SpecificEnergy<T, C> left, double right)
+			{
+				return new SpecificEnergy<T, C>(left._joulesPerKilogram*right);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable MegajoulesPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromMegajoulesPerKilogram(QuantityValue? megajoulesperkilogram)
-        {
-            if (megajoulesperkilogram.HasValue)
-            {
-                return FromMegajoulesPerKilogram(megajoulesperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
+			public static SpecificEnergy<T, C> operator /(SpecificEnergy<T, C> left, double right)
+			{
+				return new SpecificEnergy<T, C>(left._joulesPerKilogram/right);
+			}
 
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable MegawattHoursPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromMegawattHoursPerKilogram(QuantityValue? megawatthoursperkilogram)
-        {
-            if (megawatthoursperkilogram.HasValue)
-            {
-                return FromMegawattHoursPerKilogram(megawatthoursperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///     Get nullable SpecificEnergy from nullable WattHoursPerKilogram.
-        /// </summary>
-        public static SpecificEnergy? FromWattHoursPerKilogram(QuantityValue? watthoursperkilogram)
-        {
-            if (watthoursperkilogram.HasValue)
-            {
-                return FromWattHoursPerKilogram(watthoursperkilogram.Value);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+			public static double operator /(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return Convert.ToDouble(left._joulesPerKilogram/right._joulesPerKilogram);
+			}
 #endif
 
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="SpecificEnergyUnit" /> to <see cref="SpecificEnergy" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>SpecificEnergy unit value.</returns>
+			#endregion
+
+			#region Equality / IComparable
+
+			public int CompareTo(object obj)
+			{
+				if (obj == null) throw new ArgumentNullException("obj");
+				if (!(obj is SpecificEnergy<T, C>)) throw new ArgumentException("Expected type SpecificEnergy.", "obj");
+				return CompareTo((SpecificEnergy<T, C>) obj);
+			}
+
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        // Fix name conflict with parameter "value"
-        [return: System.Runtime.InteropServices.WindowsRuntime.ReturnValueName("returnValue")]
-        public static SpecificEnergy From(double value, SpecificEnergyUnit fromUnit)
+			internal
 #else
-        public static SpecificEnergy From(QuantityValue value, SpecificEnergyUnit fromUnit)
+			public
 #endif
-        {
-            switch (fromUnit)
-            {
-                case SpecificEnergyUnit.CaloriePerGram:
-                    return FromCaloriesPerGram(value);
-                case SpecificEnergyUnit.JoulePerKilogram:
-                    return FromJoulesPerKilogram(value);
-                case SpecificEnergyUnit.KilocaloriePerGram:
-                    return FromKilocaloriesPerGram(value);
-                case SpecificEnergyUnit.KilojoulePerKilogram:
-                    return FromKilojoulesPerKilogram(value);
-                case SpecificEnergyUnit.KilowattHourPerKilogram:
-                    return FromKilowattHoursPerKilogram(value);
-                case SpecificEnergyUnit.MegajoulePerKilogram:
-                    return FromMegajoulesPerKilogram(value);
-                case SpecificEnergyUnit.MegawattHourPerKilogram:
-                    return FromMegawattHoursPerKilogram(value);
-                case SpecificEnergyUnit.WattHourPerKilogram:
-                    return FromWattHoursPerKilogram(value);
+			int CompareTo(SpecificEnergy<T, C> other)
+			{
+				return _joulesPerKilogram.CompareTo(other._joulesPerKilogram);
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
-
-        // Windows Runtime Component does not support nullable types (double?): https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        /// <summary>
-        ///     Dynamically convert from value and unit enum <see cref="SpecificEnergyUnit" /> to <see cref="SpecificEnergy" />.
-        /// </summary>
-        /// <param name="value">Value to convert from.</param>
-        /// <param name="fromUnit">Unit to convert from.</param>
-        /// <returns>SpecificEnergy unit value.</returns>
-        public static SpecificEnergy? From(QuantityValue? value, SpecificEnergyUnit fromUnit)
-        {
-            if (!value.HasValue)
-            {
-                return null;
-            }
-            switch (fromUnit)
-            {
-                case SpecificEnergyUnit.CaloriePerGram:
-                    return FromCaloriesPerGram(value.Value);
-                case SpecificEnergyUnit.JoulePerKilogram:
-                    return FromJoulesPerKilogram(value.Value);
-                case SpecificEnergyUnit.KilocaloriePerGram:
-                    return FromKilocaloriesPerGram(value.Value);
-                case SpecificEnergyUnit.KilojoulePerKilogram:
-                    return FromKilojoulesPerKilogram(value.Value);
-                case SpecificEnergyUnit.KilowattHourPerKilogram:
-                    return FromKilowattHoursPerKilogram(value.Value);
-                case SpecificEnergyUnit.MegajoulePerKilogram:
-                    return FromMegajoulesPerKilogram(value.Value);
-                case SpecificEnergyUnit.MegawattHourPerKilogram:
-                    return FromMegawattHoursPerKilogram(value.Value);
-                case SpecificEnergyUnit.WattHourPerKilogram:
-                    return FromWattHoursPerKilogram(value.Value);
+			public static bool operator <=(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return left._joulesPerKilogram <= right._joulesPerKilogram;
+			}
 
-                default:
-                    throw new NotImplementedException("fromUnit: " + fromUnit);
-            }
-        }
+			public static bool operator >=(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return left._joulesPerKilogram >= right._joulesPerKilogram;
+			}
+
+			public static bool operator <(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return left._joulesPerKilogram < right._joulesPerKilogram;
+			}
+
+			public static bool operator >(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				return left._joulesPerKilogram > right._joulesPerKilogram;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator ==(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._joulesPerKilogram == right._joulesPerKilogram;
+			}
+
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+        public static bool operator !=(SpecificEnergy<T, C> left, SpecificEnergy<T, C> right)
+			{
+				// ReSharper disable once CompareOfFloatsByEqualityOperator
+				return left._joulesPerKilogram != right._joulesPerKilogram;
+			}
 #endif
 
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(SpecificEnergyUnit unit)
-        {
-            return GetAbbreviation(unit, null);
-        }
-
-        /// <summary>
-        ///     Get unit abbreviation string.
-        /// </summary>
-        /// <param name="unit">Unit to get abbreviation for.</param>
-        /// <param name="culture">Culture to use for localization. Defaults to Thread.CurrentUICulture.</param>
-        /// <returns>Unit abbreviation string.</returns>
-        [UsedImplicitly]
-        public static string GetAbbreviation(SpecificEnergyUnit unit, [CanBeNull] Culture culture)
-        {
-            return UnitSystem.GetCached(culture).GetDefaultAbbreviation(unit);
-        }
-
-        #endregion
-
-        #region Arithmetic Operators
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static SpecificEnergy operator -(SpecificEnergy right)
-        {
-            return new SpecificEnergy(-right._joulesPerKilogram);
-        }
-
-        public static SpecificEnergy operator +(SpecificEnergy left, SpecificEnergy right)
-        {
-            return new SpecificEnergy(left._joulesPerKilogram + right._joulesPerKilogram);
-        }
-
-        public static SpecificEnergy operator -(SpecificEnergy left, SpecificEnergy right)
-        {
-            return new SpecificEnergy(left._joulesPerKilogram - right._joulesPerKilogram);
-        }
-
-        public static SpecificEnergy operator *(double left, SpecificEnergy right)
-        {
-            return new SpecificEnergy(left*right._joulesPerKilogram);
-        }
-
-        public static SpecificEnergy operator *(SpecificEnergy left, double right)
-        {
-            return new SpecificEnergy(left._joulesPerKilogram*(double)right);
-        }
-
-        public static SpecificEnergy operator /(SpecificEnergy left, double right)
-        {
-            return new SpecificEnergy(left._joulesPerKilogram/(double)right);
-        }
-
-        public static double operator /(SpecificEnergy left, SpecificEnergy right)
-        {
-            return Convert.ToDouble(left._joulesPerKilogram/right._joulesPerKilogram);
-        }
-#endif
-
-        #endregion
-
-        #region Equality / IComparable
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            if (!(obj is SpecificEnergy)) throw new ArgumentException("Expected type SpecificEnergy.", "obj");
-            return CompareTo((SpecificEnergy) obj);
-        }
-
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
-#if WINDOWS_UWP
-        internal
-#else
-        public
-#endif
-        int CompareTo(SpecificEnergy other)
-        {
-            return _joulesPerKilogram.CompareTo(other._joulesPerKilogram);
-        }
-
-        // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
-#if !WINDOWS_UWP
-        public static bool operator <=(SpecificEnergy left, SpecificEnergy right)
-        {
-            return left._joulesPerKilogram <= right._joulesPerKilogram;
-        }
-
-        public static bool operator >=(SpecificEnergy left, SpecificEnergy right)
-        {
-            return left._joulesPerKilogram >= right._joulesPerKilogram;
-        }
-
-        public static bool operator <(SpecificEnergy left, SpecificEnergy right)
-        {
-            return left._joulesPerKilogram < right._joulesPerKilogram;
-        }
-
-        public static bool operator >(SpecificEnergy left, SpecificEnergy right)
-        {
-            return left._joulesPerKilogram > right._joulesPerKilogram;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator ==(SpecificEnergy left, SpecificEnergy right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._joulesPerKilogram == right._joulesPerKilogram;
-        }
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
-        public static bool operator !=(SpecificEnergy left, SpecificEnergy right)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return left._joulesPerKilogram != right._joulesPerKilogram;
-        }
-#endif
-
-        [Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
+			[Obsolete("It is not safe to compare equality due to using System.Double as the internal representation. It is very easy to get slightly different values due to floating point operations. Instead use Equals(other, maxError) to provide the max allowed error.")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
+			{
+				if (obj == null || GetType() != obj.GetType())
+				{
+					return false;
+				}
 
-            return _joulesPerKilogram.Equals(((SpecificEnergy) obj)._joulesPerKilogram);
-        }
+				return _joulesPerKilogram.Equals(((SpecificEnergy<T, C>) obj)._joulesPerKilogram);
+			}
 
-        /// <summary>
-        ///     Compare equality to another SpecificEnergy by specifying a max allowed difference.
-        ///     Note that it is advised against specifying zero difference, due to the nature
-        ///     of floating point operations and using System.Double internally.
-        /// </summary>
-        /// <param name="other">Other quantity to compare to.</param>
-        /// <param name="maxError">Max error allowed.</param>
-        /// <returns>True if the difference between the two values is not greater than the specified max.</returns>
-        public bool Equals(SpecificEnergy other, SpecificEnergy maxError)
-        {
-            return Math.Abs(_joulesPerKilogram - other._joulesPerKilogram) <= maxError._joulesPerKilogram;
-        }
+			/// <summary>
+			///     Compare equality to another SpecificEnergy by specifying a max allowed difference.
+			///     Note that it is advised against specifying zero difference, due to the nature
+			///     of floating point operations and using System.Double internally.
+			/// </summary>
+			/// <param name="other">Other quantity to compare to.</param>
+			/// <param name="maxError">Max error allowed.</param>
+			/// <returns>True if the difference between the two values is not greater than the specified max.</returns>
+			public bool Equals(SpecificEnergy<T, C> other, SpecificEnergy<T, C> maxError)
+			{
+				return Math.Abs((decimal)_joulesPerKilogram - (decimal)other._joulesPerKilogram) <= maxError._joulesPerKilogram;
+			}
 
-        public override int GetHashCode()
-        {
-            return _joulesPerKilogram.GetHashCode();
-        }
+			public override int GetHashCode()
+			{
+				return _joulesPerKilogram.GetHashCode();
+			}
 
-        #endregion
+			#endregion
 
-        #region Conversion
+			#region Conversion
 
-        /// <summary>
-        ///     Convert to the unit representation <paramref name="unit" />.
-        /// </summary>
-        /// <returns>Value in new unit if successful, exception otherwise.</returns>
-        /// <exception cref="NotImplementedException">If conversion was not successful.</exception>
-        public double As(SpecificEnergyUnit unit)
-        {
-            switch (unit)
-            {
-                case SpecificEnergyUnit.CaloriePerGram:
-                    return CaloriesPerGram;
-                case SpecificEnergyUnit.JoulePerKilogram:
-                    return JoulesPerKilogram;
-                case SpecificEnergyUnit.KilocaloriePerGram:
-                    return KilocaloriesPerGram;
-                case SpecificEnergyUnit.KilojoulePerKilogram:
-                    return KilojoulesPerKilogram;
-                case SpecificEnergyUnit.KilowattHourPerKilogram:
-                    return KilowattHoursPerKilogram;
-                case SpecificEnergyUnit.MegajoulePerKilogram:
-                    return MegajoulesPerKilogram;
-                case SpecificEnergyUnit.MegawattHourPerKilogram:
-                    return MegawattHoursPerKilogram;
-                case SpecificEnergyUnit.WattHourPerKilogram:
-                    return WattHoursPerKilogram;
+			/// <summary>
+			///     Convert to the unit representation <paramref name="unit" />.
+			/// </summary>
+			/// <returns>Value in new unit if successful, exception otherwise.</returns>
+			/// <exception cref="NotImplementedException">If conversion was not successful.</exception>
+			public Number<T, C> As(SpecificEnergyUnit unit)
+			{
+				switch (unit)
+				{
+					case SpecificEnergyUnit.CaloriePerGram:
+						return CaloriesPerGram;
+					case SpecificEnergyUnit.JoulePerKilogram:
+						return JoulesPerKilogram;
+					case SpecificEnergyUnit.KilocaloriePerGram:
+						return KilocaloriesPerGram;
+					case SpecificEnergyUnit.KilojoulePerKilogram:
+						return KilojoulesPerKilogram;
+					case SpecificEnergyUnit.KilowattHourPerKilogram:
+						return KilowattHoursPerKilogram;
+					case SpecificEnergyUnit.MegajoulePerKilogram:
+						return MegajoulesPerKilogram;
+					case SpecificEnergyUnit.MegawattHourPerKilogram:
+						return MegawattHoursPerKilogram;
+					case SpecificEnergyUnit.WattHourPerKilogram:
+						return WattHoursPerKilogram;
 
-                default:
-                    throw new NotImplementedException("unit: " + unit);
-            }
-        }
+					default:
+						throw new NotImplementedException("unit: " + unit);
+				}
+			}
 
-        #endregion
+			#endregion
 
-        #region Parsing
+			#region Parsing
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static SpecificEnergy Parse(string str)
-        {
-            return Parse(str, null);
-        }
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static SpecificEnergy<T, C> Parse(string str)
+			{
+				return Parse(str, null);
+			}
 
-        /// <summary>
-        ///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="ArgumentException">
-        ///     Expected string to have one or two pairs of quantity and unit in the format
-        ///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
-        /// </exception>
-        /// <exception cref="AmbiguousUnitParseException">
-        ///     More than one unit is represented by the specified unit abbreviation.
-        ///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
-        ///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
-        /// </exception>
-        /// <exception cref="UnitsNetException">
-        ///     If anything else goes wrong, typically due to a bug or unhandled case.
-        ///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
-        ///     Units.NET exceptions from other exceptions.
-        /// </exception>
-        public static SpecificEnergy Parse(string str, [CanBeNull] Culture culture)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			/// <summary>
+			///     Parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="ArgumentException">
+			///     Expected string to have one or two pairs of quantity and unit in the format
+			///     "&lt;quantity&gt; &lt;unit&gt;". Eg. "5.5 m" or "1ft 2in"
+			/// </exception>
+			/// <exception cref="AmbiguousUnitParseException">
+			///     More than one unit is represented by the specified unit abbreviation.
+			///     Example: Volume.Parse("1 cup") will throw, because it can refer to any of
+			///     <see cref="VolumeUnit.MetricCup" />, <see cref="VolumeUnit.UsLegalCup" /> and <see cref="VolumeUnit.UsCustomaryCup" />.
+			/// </exception>
+			/// <exception cref="UnitsNetException">
+			///     If anything else goes wrong, typically due to a bug or unhandled case.
+			///     We wrap exceptions in <see cref="UnitsNetException" /> to allow you to distinguish
+			///     Units.NET exceptions from other exceptions.
+			/// </exception>
+			public static SpecificEnergy<T, C> Parse(string str, [CanBeNull] Culture culture)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            return QuantityParser.Parse<SpecificEnergy, SpecificEnergyUnit>(str, formatProvider,
-                delegate(string value, string unit, IFormatProvider formatProvider2)
-                {
-                    double parsedValue = double.Parse(value, formatProvider2);
-                    SpecificEnergyUnit parsedUnit = ParseUnit(unit, formatProvider2);
-                    return From(parsedValue, parsedUnit);
-                }, (x, y) => FromJoulesPerKilogram(x.JoulesPerKilogram + y.JoulesPerKilogram));
-        }
+					return QuantityParser.Parse<SpecificEnergy<T, C>, SpecificEnergyUnit>(str, formatProvider,
+					delegate(string value, string unit, IFormatProvider formatProvider2)
+					{
+						double parsedValue = double.Parse(value, formatProvider2);
+						SpecificEnergyUnit parsedUnit = ParseUnit(unit, formatProvider2);
+						return From(new C().ConvertToNumber(parsedValue), parsedUnit);
+					}, (x, y) => FromJoulesPerKilogram((Number<T, C>)x.JoulesPerKilogram + y.JoulesPerKilogram));
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, out SpecificEnergy result)
-        {
-            return TryParse(str, null, out result);
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, out SpecificEnergy<T, C> result)
+			{
+				return TryParse(str, null, out result);
+			}
 
-        /// <summary>
-        ///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
-        /// </summary>
-        /// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
-        /// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
-        /// <param name="result">Resulting unit quantity if successful.</param>
-        /// <example>
-        ///     Length.Parse("5.5 m", new CultureInfo("en-US"));
-        /// </example>
-        public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out SpecificEnergy result)
-        {
-            try
-            {
-                result = Parse(str, culture);
-                return true;
-            }
-            catch
-            {
-                result = default(SpecificEnergy);
-                return false;
-            }
-        }
+			/// <summary>
+			///     Try to parse a string with one or two quantities of the format "&lt;quantity&gt; &lt;unit&gt;".
+			/// </summary>
+			/// <param name="str">String to parse. Typically in the form: {number} {unit}</param>
+			/// <param name="culture">Format to use when parsing number and unit. If it is null, it defaults to <see cref="NumberFormatInfo.CurrentInfo"/> for parsing the number and <see cref="CultureInfo.CurrentUICulture"/> for parsing the unit abbreviation by culture/language.</param>
+			/// <param name="result">Resulting unit quantity if successful.</param>
+			/// <example>
+			///     Length.Parse("5.5 m", new CultureInfo("en-US"));
+			/// </example>
+			public static bool TryParse([CanBeNull] string str, [CanBeNull] Culture culture, out SpecificEnergy<T, C> result)
+			{
+				try
+				{
+					result = Parse(str, culture);
+					return true;
+				}
+				catch
+				{
+					result = default(SpecificEnergy<T, C>);
+					return false;
+				}
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static SpecificEnergyUnit ParseUnit(string str)
-        {
-            return ParseUnit(str, (IFormatProvider)null);
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static SpecificEnergyUnit ParseUnit(string str)
+			{
+				return ParseUnit(str, (IFormatProvider)null);
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
-        public static SpecificEnergyUnit ParseUnit(string str, [CanBeNull] string cultureName)
-        {
-            return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
-        }
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
+			public static SpecificEnergyUnit ParseUnit(string str, [CanBeNull] string cultureName)
+			{
+				return ParseUnit(str, cultureName == null ? null : new CultureInfo(cultureName));
+			}
 
-        /// <summary>
-        ///     Parse a unit string.
-        /// </summary>
-        /// <example>
-        ///     Length.ParseUnit("m", new CultureInfo("en-US"));
-        /// </example>
-        /// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
-        /// <exception cref="UnitsNetException">Error parsing string.</exception>
+			/// <summary>
+			///     Parse a unit string.
+			/// </summary>
+			/// <example>
+			///     Length.ParseUnit("m", new CultureInfo("en-US"));
+			/// </example>
+			/// <exception cref="ArgumentNullException">The value of 'str' cannot be null. </exception>
+			/// <exception cref="UnitsNetException">Error parsing string.</exception>
 
-        // Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
+			// Windows Runtime Component does not allow public methods/ctors with same number of parameters: https://msdn.microsoft.com/en-us/library/br230301.aspx#Overloaded methods
 #if WINDOWS_UWP
-        internal
+			internal
 #else
-        public
+			public
 #endif
-        static SpecificEnergyUnit ParseUnit(string str, IFormatProvider formatProvider = null)
-        {
-            if (str == null) throw new ArgumentNullException("str");
+			static SpecificEnergyUnit ParseUnit(string str, IFormatProvider formatProvider = null)
+			{
+				if (str == null) throw new ArgumentNullException("str");
 
-            var unitSystem = UnitSystem.GetCached(formatProvider);
-            var unit = unitSystem.Parse<SpecificEnergyUnit>(str.Trim());
+				var unitSystem = UnitSystem.GetCached(formatProvider);
+				var unit = unitSystem.Parse<SpecificEnergyUnit>(str.Trim());
 
-            if (unit == SpecificEnergyUnit.Undefined)
-            {
-                var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized SpecificEnergyUnit.");
-                newEx.Data["input"] = str;
-                newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
-                throw newEx;
-            }
+				if (unit == SpecificEnergyUnit.Undefined)
+				{
+					var newEx = new UnitsNetException("Error parsing string. The unit is not a recognized SpecificEnergyUnit.");
+					newEx.Data["input"] = str;
+					newEx.Data["formatprovider"] = formatProvider?.ToString() ?? "(null)";
+					throw newEx;
+				}
 
-            return unit;
-        }
+				return unit;
+			}
 
-        #endregion
+			#endregion
 
-        /// <summary>
-        ///     Set the default unit used by ToString(). Default is JoulePerKilogram
-        /// </summary>
-        public static SpecificEnergyUnit ToStringDefaultUnit { get; set; } = SpecificEnergyUnit.JoulePerKilogram;
+			/// <summary>
+			///     Set the default unit used by ToString(). Default is JoulePerKilogram
+			/// </summary>
+			public static SpecificEnergyUnit ToStringDefaultUnit { get; set; } = SpecificEnergyUnit.JoulePerKilogram;
 
-        /// <summary>
-        ///     Get default string representation of value and unit.
-        /// </summary>
-        /// <returns>String representation.</returns>
-        public override string ToString()
-        {
-            return ToString(ToStringDefaultUnit);
-        }
+			/// <summary>
+			///     Get default string representation of value and unit.
+			/// </summary>
+			/// <returns>String representation.</returns>
+			public override string ToString()
+			{
+				return ToString(ToStringDefaultUnit);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(SpecificEnergyUnit unit)
-        {
-            return ToString(unit, null, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using current UI culture and two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(SpecificEnergyUnit unit)
+			{
+				return ToString(unit, null, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit. Using two significant digits after radix.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <returns>String representation.</returns>
-        public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture)
-        {
-            return ToString(unit, culture, 2);
-        }
+			/// <summary>
+			///     Get string representation of value and unit. Using two significant digits after radix.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <returns>String representation.</returns>
+			public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture)
+			{
+				return ToString(unit, culture, 2);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
-        {
-            double value = As(unit);
-            string format = UnitFormatter.GetFormat(value, significantDigitsAfterRadix);
-            return ToString(unit, culture, format);
-        }
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="significantDigitsAfterRadix">The number of significant digits after the radix point.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture, int significantDigitsAfterRadix)
+			{
+				Number<T, C>  value = As(unit);
+				string format = UnitFormatter.GetFormat((double)value, significantDigitsAfterRadix);
+				return ToString(unit, culture, format);
+			}
 
-        /// <summary>
-        ///     Get string representation of value and unit.
-        /// </summary>
-        /// <param name="culture">Culture to use for localization and number formatting.</param>
-        /// <param name="unit">Unit representation to use.</param>
-        /// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
-        /// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
-        /// <returns>String representation.</returns>
-        [UsedImplicitly]
-        public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
-            [NotNull] params object[] args)
-        {
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+			/// <summary>
+			///     Get string representation of value and unit.
+			/// </summary>
+			/// <param name="culture">Culture to use for localization and number formatting.</param>
+			/// <param name="unit">Unit representation to use.</param>
+			/// <param name="format">String format to use. Default:  "{0:0.##} {1} for value and unit abbreviation respectively."</param>
+			/// <param name="args">Arguments for string format. Value and unit are implictly included as arguments 0 and 1.</param>
+			/// <returns>String representation.</returns>
+			[UsedImplicitly]
+			public string ToString(SpecificEnergyUnit unit, [CanBeNull] Culture culture, [NotNull] string format,
+				[NotNull] params object[] args)
+			{
+				if (format == null) throw new ArgumentNullException(nameof(format));
+				if (args == null) throw new ArgumentNullException(nameof(args));
 
-        // Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
+			// Windows Runtime Component does not support CultureInfo type, so use culture name string for public methods instead: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if WINDOWS_UWP
-            IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
+				IFormatProvider formatProvider = culture == null ? null : new CultureInfo(culture);
 #else
-            IFormatProvider formatProvider = culture;
+				IFormatProvider formatProvider = culture;
 #endif
-            double value = As(unit);
-            object[] formatArgs = UnitFormatter.GetFormatArgs(unit, value, formatProvider, args);
-            return string.Format(formatProvider, format, formatArgs);
-        }
+				Number<T, C>  value = As(unit);
+				object[] formatArgs = UnitFormatter.GetFormatArgs(unit, (double)value, formatProvider, args);
+				return string.Format(formatProvider, format, formatArgs);
+			}
 
-        /// <summary>
-        /// Represents the largest possible value of SpecificEnergy
-        /// </summary>
-        public static SpecificEnergy MaxValue
-        {
-            get
-            {
-                return new SpecificEnergy(double.MaxValue);
-            }
-        }
+			/// <summary>
+			/// Represents the largest possible value of SpecificEnergy
+			/// </summary>
+			public static Number<T, C> MaxValue
+			{
+				get
+				{
+					return Number<T, C>.MaxValue;
+				}
+			}
 
-        /// <summary>
-        /// Represents the smallest possible value of SpecificEnergy
-        /// </summary>
-        public static SpecificEnergy MinValue
-        {
-            get
-            {
-                return new SpecificEnergy(double.MinValue);
-            }
-        }
-    }
+			/// <summary>
+			/// Represents the smallest possible value of SpecificEnergy
+			/// </summary>
+			public static Number<T, C> MinValue
+			{
+				get
+				{
+					return Number<T, C>.MinValue;
+				}
+			}
+		}
+	}
 }

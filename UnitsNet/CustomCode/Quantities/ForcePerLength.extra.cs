@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -27,24 +27,26 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class ForcePerLength
 #else
-    public partial struct ForcePerLength
+    public partial class ForcePerLength<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static Force operator *(ForcePerLength forcePerLength, Length length)
+        public static Force<T, C> operator *(ForcePerLength<T, C> forcePerLength, Length<T, C> length)
         {
-            return Force.FromNewtons(forcePerLength.NewtonsPerMeter * length.Meters);
+            return Force<T, C>.FromNewtons(forcePerLength.NewtonsPerMeter * length.Meters);
         }
 
-        public static Length operator /(Force force, ForcePerLength forcePerLength)
+        public static Length<T, C> operator /(Force<T, C> force, ForcePerLength<T, C> forcePerLength)
         {
-            return Length.FromMeters(force.Newtons / forcePerLength.NewtonsPerMeter);
+            return Length<T, C>.FromMeters(force.Newtons / forcePerLength.NewtonsPerMeter);
         }
 
-        public static Pressure operator /(ForcePerLength forcePerLength, Length length)
+        public static Pressure<T, C> operator /(ForcePerLength<T, C> forcePerLength, Length<T, C> length)
         {
-            return Pressure.FromNewtonsPerSquareMeter(forcePerLength.NewtonsPerMeter / length.Meters);
+            return Pressure<T, C>.FromNewtonsPerSquareMeter(forcePerLength.NewtonsPerMeter / length.Meters);
         }
 #endif
     }

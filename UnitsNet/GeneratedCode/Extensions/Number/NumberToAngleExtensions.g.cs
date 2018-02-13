@@ -37,6 +37,7 @@
 // THE SOFTWARE.
 
 using System;
+using UnitsNet.InternalHelpers.Calculators;
 
 // Windows Runtime Component does not support extension methods and method overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
@@ -47,442 +48,247 @@ namespace UnitsNet.Extensions.NumberToAngle
         #region Arcminute
 
         /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
-        public static Angle Arcminutes(this int value) => Angle.FromArcminutes(value);
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double?)"/>
-        public static Angle? Arcminutes(this int? value) => Angle.FromArcminutes(value);
+        public static Angle Arcminutes(this int value) => (Angle)Angle.FromArcminutes(value);
+	
+        /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
+        public static Angle Arcminutes(this long value) => (Angle)Angle.FromArcminutes(value);
 
         /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
-        public static Angle Arcminutes(this long value) => Angle.FromArcminutes(value);
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double?)"/>
-        public static Angle? Arcminutes(this long? value) => Angle.FromArcminutes(value);
+        public static Angle Arcminutes(this double value) => (Angle)Angle.FromArcminutes(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
-        public static Angle Arcminutes(this double value) => Angle.FromArcminutes(value);
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double?)"/>
-        public static Angle? Arcminutes(this double? value) => Angle.FromArcminutes(value);
+        public static Angle Arcminutes(this float value) => (Angle)Angle.FromArcminutes(value);
 
         /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
-        public static Angle Arcminutes(this float value) => Angle.FromArcminutes(value);
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double?)"/>
-        public static Angle? Arcminutes(this float? value) => Angle.FromArcminutes(value);
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double)"/>
-        public static Angle Arcminutes(this decimal value) => Angle.FromArcminutes(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromArcminutes(double?)"/>
-        public static Angle? Arcminutes(this decimal? value) => Angle.FromArcminutes(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Arcminutes(this decimal value) => (Angle)Angle.FromArcminutes(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Arcsecond
 
         /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
-        public static Angle Arcseconds(this int value) => Angle.FromArcseconds(value);
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double?)"/>
-        public static Angle? Arcseconds(this int? value) => Angle.FromArcseconds(value);
+        public static Angle Arcseconds(this int value) => (Angle)Angle.FromArcseconds(value);
+	
+        /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
+        public static Angle Arcseconds(this long value) => (Angle)Angle.FromArcseconds(value);
 
         /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
-        public static Angle Arcseconds(this long value) => Angle.FromArcseconds(value);
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double?)"/>
-        public static Angle? Arcseconds(this long? value) => Angle.FromArcseconds(value);
+        public static Angle Arcseconds(this double value) => (Angle)Angle.FromArcseconds(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
-        public static Angle Arcseconds(this double value) => Angle.FromArcseconds(value);
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double?)"/>
-        public static Angle? Arcseconds(this double? value) => Angle.FromArcseconds(value);
+        public static Angle Arcseconds(this float value) => (Angle)Angle.FromArcseconds(value);
 
         /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
-        public static Angle Arcseconds(this float value) => Angle.FromArcseconds(value);
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double?)"/>
-        public static Angle? Arcseconds(this float? value) => Angle.FromArcseconds(value);
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double)"/>
-        public static Angle Arcseconds(this decimal value) => Angle.FromArcseconds(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromArcseconds(double?)"/>
-        public static Angle? Arcseconds(this decimal? value) => Angle.FromArcseconds(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Arcseconds(this decimal value) => (Angle)Angle.FromArcseconds(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Centiradian
 
         /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
-        public static Angle Centiradians(this int value) => Angle.FromCentiradians(value);
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double?)"/>
-        public static Angle? Centiradians(this int? value) => Angle.FromCentiradians(value);
+        public static Angle Centiradians(this int value) => (Angle)Angle.FromCentiradians(value);
+	
+        /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
+        public static Angle Centiradians(this long value) => (Angle)Angle.FromCentiradians(value);
 
         /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
-        public static Angle Centiradians(this long value) => Angle.FromCentiradians(value);
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double?)"/>
-        public static Angle? Centiradians(this long? value) => Angle.FromCentiradians(value);
+        public static Angle Centiradians(this double value) => (Angle)Angle.FromCentiradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
-        public static Angle Centiradians(this double value) => Angle.FromCentiradians(value);
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double?)"/>
-        public static Angle? Centiradians(this double? value) => Angle.FromCentiradians(value);
+        public static Angle Centiradians(this float value) => (Angle)Angle.FromCentiradians(value);
 
         /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
-        public static Angle Centiradians(this float value) => Angle.FromCentiradians(value);
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double?)"/>
-        public static Angle? Centiradians(this float? value) => Angle.FromCentiradians(value);
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double)"/>
-        public static Angle Centiradians(this decimal value) => Angle.FromCentiradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromCentiradians(double?)"/>
-        public static Angle? Centiradians(this decimal? value) => Angle.FromCentiradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Centiradians(this decimal value) => (Angle)Angle.FromCentiradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Deciradian
 
         /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
-        public static Angle Deciradians(this int value) => Angle.FromDeciradians(value);
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double?)"/>
-        public static Angle? Deciradians(this int? value) => Angle.FromDeciradians(value);
+        public static Angle Deciradians(this int value) => (Angle)Angle.FromDeciradians(value);
+	
+        /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
+        public static Angle Deciradians(this long value) => (Angle)Angle.FromDeciradians(value);
 
         /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
-        public static Angle Deciradians(this long value) => Angle.FromDeciradians(value);
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double?)"/>
-        public static Angle? Deciradians(this long? value) => Angle.FromDeciradians(value);
+        public static Angle Deciradians(this double value) => (Angle)Angle.FromDeciradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
-        public static Angle Deciradians(this double value) => Angle.FromDeciradians(value);
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double?)"/>
-        public static Angle? Deciradians(this double? value) => Angle.FromDeciradians(value);
+        public static Angle Deciradians(this float value) => (Angle)Angle.FromDeciradians(value);
 
         /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
-        public static Angle Deciradians(this float value) => Angle.FromDeciradians(value);
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double?)"/>
-        public static Angle? Deciradians(this float? value) => Angle.FromDeciradians(value);
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double)"/>
-        public static Angle Deciradians(this decimal value) => Angle.FromDeciradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromDeciradians(double?)"/>
-        public static Angle? Deciradians(this decimal? value) => Angle.FromDeciradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Deciradians(this decimal value) => (Angle)Angle.FromDeciradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Degree
 
         /// <inheritdoc cref="Angle.FromDegrees(double)"/>
-        public static Angle Degrees(this int value) => Angle.FromDegrees(value);
-
-        /// <inheritdoc cref="Angle.FromDegrees(double?)"/>
-        public static Angle? Degrees(this int? value) => Angle.FromDegrees(value);
+        public static Angle Degrees(this int value) => (Angle)Angle.FromDegrees(value);
+	
+        /// <inheritdoc cref="Angle.FromDegrees(double)"/>
+        public static Angle Degrees(this long value) => (Angle)Angle.FromDegrees(value);
 
         /// <inheritdoc cref="Angle.FromDegrees(double)"/>
-        public static Angle Degrees(this long value) => Angle.FromDegrees(value);
-
-        /// <inheritdoc cref="Angle.FromDegrees(double?)"/>
-        public static Angle? Degrees(this long? value) => Angle.FromDegrees(value);
+        public static Angle Degrees(this double value) => (Angle)Angle.FromDegrees(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromDegrees(double)"/>
-        public static Angle Degrees(this double value) => Angle.FromDegrees(value);
-
-        /// <inheritdoc cref="Angle.FromDegrees(double?)"/>
-        public static Angle? Degrees(this double? value) => Angle.FromDegrees(value);
+        public static Angle Degrees(this float value) => (Angle)Angle.FromDegrees(value);
 
         /// <inheritdoc cref="Angle.FromDegrees(double)"/>
-        public static Angle Degrees(this float value) => Angle.FromDegrees(value);
-
-        /// <inheritdoc cref="Angle.FromDegrees(double?)"/>
-        public static Angle? Degrees(this float? value) => Angle.FromDegrees(value);
-
-        /// <inheritdoc cref="Angle.FromDegrees(double)"/>
-        public static Angle Degrees(this decimal value) => Angle.FromDegrees(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromDegrees(double?)"/>
-        public static Angle? Degrees(this decimal? value) => Angle.FromDegrees(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Degrees(this decimal value) => (Angle)Angle.FromDegrees(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Gradian
 
         /// <inheritdoc cref="Angle.FromGradians(double)"/>
-        public static Angle Gradians(this int value) => Angle.FromGradians(value);
-
-        /// <inheritdoc cref="Angle.FromGradians(double?)"/>
-        public static Angle? Gradians(this int? value) => Angle.FromGradians(value);
+        public static Angle Gradians(this int value) => (Angle)Angle.FromGradians(value);
+	
+        /// <inheritdoc cref="Angle.FromGradians(double)"/>
+        public static Angle Gradians(this long value) => (Angle)Angle.FromGradians(value);
 
         /// <inheritdoc cref="Angle.FromGradians(double)"/>
-        public static Angle Gradians(this long value) => Angle.FromGradians(value);
-
-        /// <inheritdoc cref="Angle.FromGradians(double?)"/>
-        public static Angle? Gradians(this long? value) => Angle.FromGradians(value);
+        public static Angle Gradians(this double value) => (Angle)Angle.FromGradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromGradians(double)"/>
-        public static Angle Gradians(this double value) => Angle.FromGradians(value);
-
-        /// <inheritdoc cref="Angle.FromGradians(double?)"/>
-        public static Angle? Gradians(this double? value) => Angle.FromGradians(value);
+        public static Angle Gradians(this float value) => (Angle)Angle.FromGradians(value);
 
         /// <inheritdoc cref="Angle.FromGradians(double)"/>
-        public static Angle Gradians(this float value) => Angle.FromGradians(value);
-
-        /// <inheritdoc cref="Angle.FromGradians(double?)"/>
-        public static Angle? Gradians(this float? value) => Angle.FromGradians(value);
-
-        /// <inheritdoc cref="Angle.FromGradians(double)"/>
-        public static Angle Gradians(this decimal value) => Angle.FromGradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromGradians(double?)"/>
-        public static Angle? Gradians(this decimal? value) => Angle.FromGradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Gradians(this decimal value) => (Angle)Angle.FromGradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Microdegree
 
         /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
-        public static Angle Microdegrees(this int value) => Angle.FromMicrodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double?)"/>
-        public static Angle? Microdegrees(this int? value) => Angle.FromMicrodegrees(value);
+        public static Angle Microdegrees(this int value) => (Angle)Angle.FromMicrodegrees(value);
+	
+        /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
+        public static Angle Microdegrees(this long value) => (Angle)Angle.FromMicrodegrees(value);
 
         /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
-        public static Angle Microdegrees(this long value) => Angle.FromMicrodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double?)"/>
-        public static Angle? Microdegrees(this long? value) => Angle.FromMicrodegrees(value);
+        public static Angle Microdegrees(this double value) => (Angle)Angle.FromMicrodegrees(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
-        public static Angle Microdegrees(this double value) => Angle.FromMicrodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double?)"/>
-        public static Angle? Microdegrees(this double? value) => Angle.FromMicrodegrees(value);
+        public static Angle Microdegrees(this float value) => (Angle)Angle.FromMicrodegrees(value);
 
         /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
-        public static Angle Microdegrees(this float value) => Angle.FromMicrodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double?)"/>
-        public static Angle? Microdegrees(this float? value) => Angle.FromMicrodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double)"/>
-        public static Angle Microdegrees(this decimal value) => Angle.FromMicrodegrees(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromMicrodegrees(double?)"/>
-        public static Angle? Microdegrees(this decimal? value) => Angle.FromMicrodegrees(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Microdegrees(this decimal value) => (Angle)Angle.FromMicrodegrees(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Microradian
 
         /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
-        public static Angle Microradians(this int value) => Angle.FromMicroradians(value);
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double?)"/>
-        public static Angle? Microradians(this int? value) => Angle.FromMicroradians(value);
+        public static Angle Microradians(this int value) => (Angle)Angle.FromMicroradians(value);
+	
+        /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
+        public static Angle Microradians(this long value) => (Angle)Angle.FromMicroradians(value);
 
         /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
-        public static Angle Microradians(this long value) => Angle.FromMicroradians(value);
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double?)"/>
-        public static Angle? Microradians(this long? value) => Angle.FromMicroradians(value);
+        public static Angle Microradians(this double value) => (Angle)Angle.FromMicroradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
-        public static Angle Microradians(this double value) => Angle.FromMicroradians(value);
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double?)"/>
-        public static Angle? Microradians(this double? value) => Angle.FromMicroradians(value);
+        public static Angle Microradians(this float value) => (Angle)Angle.FromMicroradians(value);
 
         /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
-        public static Angle Microradians(this float value) => Angle.FromMicroradians(value);
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double?)"/>
-        public static Angle? Microradians(this float? value) => Angle.FromMicroradians(value);
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double)"/>
-        public static Angle Microradians(this decimal value) => Angle.FromMicroradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromMicroradians(double?)"/>
-        public static Angle? Microradians(this decimal? value) => Angle.FromMicroradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Microradians(this decimal value) => (Angle)Angle.FromMicroradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Millidegree
 
         /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
-        public static Angle Millidegrees(this int value) => Angle.FromMillidegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double?)"/>
-        public static Angle? Millidegrees(this int? value) => Angle.FromMillidegrees(value);
+        public static Angle Millidegrees(this int value) => (Angle)Angle.FromMillidegrees(value);
+	
+        /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
+        public static Angle Millidegrees(this long value) => (Angle)Angle.FromMillidegrees(value);
 
         /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
-        public static Angle Millidegrees(this long value) => Angle.FromMillidegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double?)"/>
-        public static Angle? Millidegrees(this long? value) => Angle.FromMillidegrees(value);
+        public static Angle Millidegrees(this double value) => (Angle)Angle.FromMillidegrees(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
-        public static Angle Millidegrees(this double value) => Angle.FromMillidegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double?)"/>
-        public static Angle? Millidegrees(this double? value) => Angle.FromMillidegrees(value);
+        public static Angle Millidegrees(this float value) => (Angle)Angle.FromMillidegrees(value);
 
         /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
-        public static Angle Millidegrees(this float value) => Angle.FromMillidegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double?)"/>
-        public static Angle? Millidegrees(this float? value) => Angle.FromMillidegrees(value);
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double)"/>
-        public static Angle Millidegrees(this decimal value) => Angle.FromMillidegrees(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromMillidegrees(double?)"/>
-        public static Angle? Millidegrees(this decimal? value) => Angle.FromMillidegrees(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Millidegrees(this decimal value) => (Angle)Angle.FromMillidegrees(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Milliradian
 
         /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
-        public static Angle Milliradians(this int value) => Angle.FromMilliradians(value);
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double?)"/>
-        public static Angle? Milliradians(this int? value) => Angle.FromMilliradians(value);
+        public static Angle Milliradians(this int value) => (Angle)Angle.FromMilliradians(value);
+	
+        /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
+        public static Angle Milliradians(this long value) => (Angle)Angle.FromMilliradians(value);
 
         /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
-        public static Angle Milliradians(this long value) => Angle.FromMilliradians(value);
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double?)"/>
-        public static Angle? Milliradians(this long? value) => Angle.FromMilliradians(value);
+        public static Angle Milliradians(this double value) => (Angle)Angle.FromMilliradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
-        public static Angle Milliradians(this double value) => Angle.FromMilliradians(value);
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double?)"/>
-        public static Angle? Milliradians(this double? value) => Angle.FromMilliradians(value);
+        public static Angle Milliradians(this float value) => (Angle)Angle.FromMilliradians(value);
 
         /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
-        public static Angle Milliradians(this float value) => Angle.FromMilliradians(value);
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double?)"/>
-        public static Angle? Milliradians(this float? value) => Angle.FromMilliradians(value);
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double)"/>
-        public static Angle Milliradians(this decimal value) => Angle.FromMilliradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromMilliradians(double?)"/>
-        public static Angle? Milliradians(this decimal? value) => Angle.FromMilliradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Milliradians(this decimal value) => (Angle)Angle.FromMilliradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanodegree
 
         /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
-        public static Angle Nanodegrees(this int value) => Angle.FromNanodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double?)"/>
-        public static Angle? Nanodegrees(this int? value) => Angle.FromNanodegrees(value);
+        public static Angle Nanodegrees(this int value) => (Angle)Angle.FromNanodegrees(value);
+	
+        /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
+        public static Angle Nanodegrees(this long value) => (Angle)Angle.FromNanodegrees(value);
 
         /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
-        public static Angle Nanodegrees(this long value) => Angle.FromNanodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double?)"/>
-        public static Angle? Nanodegrees(this long? value) => Angle.FromNanodegrees(value);
+        public static Angle Nanodegrees(this double value) => (Angle)Angle.FromNanodegrees(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
-        public static Angle Nanodegrees(this double value) => Angle.FromNanodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double?)"/>
-        public static Angle? Nanodegrees(this double? value) => Angle.FromNanodegrees(value);
+        public static Angle Nanodegrees(this float value) => (Angle)Angle.FromNanodegrees(value);
 
         /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
-        public static Angle Nanodegrees(this float value) => Angle.FromNanodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double?)"/>
-        public static Angle? Nanodegrees(this float? value) => Angle.FromNanodegrees(value);
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double)"/>
-        public static Angle Nanodegrees(this decimal value) => Angle.FromNanodegrees(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromNanodegrees(double?)"/>
-        public static Angle? Nanodegrees(this decimal? value) => Angle.FromNanodegrees(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Nanodegrees(this decimal value) => (Angle)Angle.FromNanodegrees(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Nanoradian
 
         /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
-        public static Angle Nanoradians(this int value) => Angle.FromNanoradians(value);
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double?)"/>
-        public static Angle? Nanoradians(this int? value) => Angle.FromNanoradians(value);
+        public static Angle Nanoradians(this int value) => (Angle)Angle.FromNanoradians(value);
+	
+        /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
+        public static Angle Nanoradians(this long value) => (Angle)Angle.FromNanoradians(value);
 
         /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
-        public static Angle Nanoradians(this long value) => Angle.FromNanoradians(value);
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double?)"/>
-        public static Angle? Nanoradians(this long? value) => Angle.FromNanoradians(value);
+        public static Angle Nanoradians(this double value) => (Angle)Angle.FromNanoradians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
-        public static Angle Nanoradians(this double value) => Angle.FromNanoradians(value);
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double?)"/>
-        public static Angle? Nanoradians(this double? value) => Angle.FromNanoradians(value);
+        public static Angle Nanoradians(this float value) => (Angle)Angle.FromNanoradians(value);
 
         /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
-        public static Angle Nanoradians(this float value) => Angle.FromNanoradians(value);
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double?)"/>
-        public static Angle? Nanoradians(this float? value) => Angle.FromNanoradians(value);
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double)"/>
-        public static Angle Nanoradians(this decimal value) => Angle.FromNanoradians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromNanoradians(double?)"/>
-        public static Angle? Nanoradians(this decimal? value) => Angle.FromNanoradians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Nanoradians(this decimal value) => (Angle)Angle.FromNanoradians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 
         #region Radian
 
         /// <inheritdoc cref="Angle.FromRadians(double)"/>
-        public static Angle Radians(this int value) => Angle.FromRadians(value);
-
-        /// <inheritdoc cref="Angle.FromRadians(double?)"/>
-        public static Angle? Radians(this int? value) => Angle.FromRadians(value);
+        public static Angle Radians(this int value) => (Angle)Angle.FromRadians(value);
+	
+        /// <inheritdoc cref="Angle.FromRadians(double)"/>
+        public static Angle Radians(this long value) => (Angle)Angle.FromRadians(value);
 
         /// <inheritdoc cref="Angle.FromRadians(double)"/>
-        public static Angle Radians(this long value) => Angle.FromRadians(value);
-
-        /// <inheritdoc cref="Angle.FromRadians(double?)"/>
-        public static Angle? Radians(this long? value) => Angle.FromRadians(value);
+        public static Angle Radians(this double value) => (Angle)Angle.FromRadians(new Number<double, DoubleCalculator>(value));
 
         /// <inheritdoc cref="Angle.FromRadians(double)"/>
-        public static Angle Radians(this double value) => Angle.FromRadians(value);
-
-        /// <inheritdoc cref="Angle.FromRadians(double?)"/>
-        public static Angle? Radians(this double? value) => Angle.FromRadians(value);
+        public static Angle Radians(this float value) => (Angle)Angle.FromRadians(value);
 
         /// <inheritdoc cref="Angle.FromRadians(double)"/>
-        public static Angle Radians(this float value) => Angle.FromRadians(value);
-
-        /// <inheritdoc cref="Angle.FromRadians(double?)"/>
-        public static Angle? Radians(this float? value) => Angle.FromRadians(value);
-
-        /// <inheritdoc cref="Angle.FromRadians(double)"/>
-        public static Angle Radians(this decimal value) => Angle.FromRadians(Convert.ToDouble(value));
-
-        /// <inheritdoc cref="Angle.FromRadians(double?)"/>
-        public static Angle? Radians(this decimal? value) => Angle.FromRadians(value == null ? (double?)null : Convert.ToDouble(value.Value));
+        public static Angle Radians(this decimal value) => (Angle)Angle.FromRadians(new Number<double, DoubleCalculator>(Decimal.ToDouble(value)));
 
         #endregion
 

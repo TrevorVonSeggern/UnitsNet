@@ -21,6 +21,7 @@
 
 using System;
 using JetBrains.Annotations;
+using UnitsNet.InternalHelpers.Calculators;
 using UnitsNet.Units;
 
 #if WINDOWS_UWP
@@ -29,7 +30,7 @@ using Culture = System.String;
 using Culture = System.IFormatProvider;
 #endif
 
-namespace UnitsNet
+namespace UnitsNet.Generic
 {
     // Windows Runtime Component has constraints on public types: https://msdn.microsoft.com/en-us/library/br230301.aspx#Declaring types in Windows Runtime Components
     // Public structures can't have any members other than public fields, and those fields must be value types or strings.
@@ -37,12 +38,14 @@ namespace UnitsNet
 #if WINDOWS_UWP
     public sealed partial class Mass
 #else
-    public partial struct Mass
+    public partial class Mass<T, C>
+            where T : struct
+            where C : InternalHelpers.Calculators.INumberCalculator<T>, new()
 #endif
     {
-        public static Mass FromGravitationalForce(Force f)
+        public static Mass<T, C> FromGravitationalForce(Force<T, C> f)
         {
-            return new Mass(f.KilogramsForce);
+            return new Mass<T, C>(f.KilogramsForce);
         }
 
         /// <summary>
@@ -58,52 +61,52 @@ namespace UnitsNet
         {
             get
             {
-                double totalPounds = Pounds;
-                double wholeStone = Math.Floor(totalPounds/StoneToPounds);
-                double pounds = totalPounds%StoneToPounds;
+                var totalPounds = Pounds;
+                var wholeStone = new C().Floor(totalPounds/StoneToPounds);
+                var pounds = totalPounds % StoneToPounds;
 
-                return new StonePounds(wholeStone, pounds);
+                return new StonePounds(new C().ConvertToDouble(wholeStone), new C().ConvertToDouble(pounds));
             }
         }
 
         /// <summary>
         ///     Get Mass from combination of stone and pounds.
         /// </summary>
-        public static Mass FromStonePounds(double stone, double pounds)
+        public static Mass<T, C> FromStonePounds(double stone, double pounds)
         {
             return FromPounds(StoneToPounds*stone + pounds);
         }
 
         // Windows Runtime Component does not allow operator overloads: https://msdn.microsoft.com/en-us/library/br230301.aspx
 #if !WINDOWS_UWP
-        public static MassFlow operator /(Mass mass, TimeSpan timeSpan)
+        public static MassFlow<T, C> operator /(Mass<T, C> mass, TimeSpan timeSpan)
         {
-            return MassFlow.FromKilogramsPerSecond(mass.Kilograms/timeSpan.TotalSeconds);
+            return MassFlow<T, C>.FromKilogramsPerSecond(mass.Kilograms/timeSpan.TotalSeconds);
         }
 
-        public static MassFlow operator /(Mass mass, Duration duration)
+        public static MassFlow<T, C> operator /(Mass<T, C> mass, Duration<T, C> duration)
         {
-            return MassFlow.FromKilogramsPerSecond(mass.Kilograms/duration.Seconds);
+            return MassFlow<T, C>.FromKilogramsPerSecond(mass.Kilograms/duration.Seconds);
         }
 
-        public static Density operator /(Mass mass, Volume volume)
+        public static Density<T, C> operator /(Mass<T, C> mass, Volume<T, C> volume)
         {
-            return Density.FromKilogramsPerCubicMeter(mass.Kilograms/volume.CubicMeters);
+            return Density<T, C>.FromKilogramsPerCubicMeter(mass.Kilograms/volume.CubicMeters);
         }
 
-        public static Volume operator /(Mass mass, Density density)
+        public static Volume<T, C> operator /(Mass<T, C> mass, Density<T, C> density)
         {
-            return Volume.FromCubicMeters(mass.Kilograms / density.KilogramsPerCubicMeter);
+            return Volume<T, C>.FromCubicMeters(mass.Kilograms / density.KilogramsPerCubicMeter);
         }
 
-        public static Force operator *(Mass mass, Acceleration acceleration)
+        public static Force<T, C> operator *(Mass<T, C> mass, Acceleration<T, C> acceleration)
         {
-            return Force.FromNewtons(mass.Kilograms*acceleration.MeterPerSecondSquared);
+            return Force<T, C>.FromNewtons(mass.Kilograms*acceleration.MeterPerSecondSquared);
         }
 
-        public static Force operator *(Acceleration acceleration, Mass mass)
+        public static Force<T, C> operator *(Acceleration<T, C> acceleration, Mass<T, C> mass)
         {
-            return Force.FromNewtons(mass.Kilograms*acceleration.MeterPerSecondSquared);
+            return Force<T, C>.FromNewtons(mass.Kilograms*acceleration.MeterPerSecondSquared);
         }
 #endif
     }
